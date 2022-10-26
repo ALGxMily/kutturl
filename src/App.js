@@ -9,6 +9,7 @@ import {
   Link,
   Routes
 } from "react-router-dom";
+import { MdContentPaste } from "react-icons/md";
 
 function App() {
   return (
@@ -22,30 +23,36 @@ function App() {
 }
 function Home() {
   const [text, setText] = React.useState('');
-  console.log(text)
+
   return(
     <>
     <div className="App" >
       <div className="App-header">
-        <p>shareshort</p>
+        <img src='logo-center.svg'/>
         <div className='inputWrap'>
-          <li><a href='/api'>API</a></li>
-          <li><a href='/about'>Contact</a></li>
+          <li><a href='/api'>My Urls</a></li>
+          <li><a href='/about'>Log In</a></li>
         </div>
     </div>
-
     </div>
         <div className='contentWrap'>
         <div className='content'>
-          <h1>URL Shortner</h1>
-          <p>The easy way to shorten your links and share them with your friends</p>
+          <h2>Easy, convenient, prettier</h2>
+          <p>Shorten your URL's like a boss.</p>
+          </div>
           <div className='inputWrap'>
-            <input onChange={(text)=> setText(text.target.value) } type='text' placeholder='Paste your link here'/>
-              <ButtonShort text={text}/>
-            </div>
+            <input onChange={(text)=> setText(text.target.value) } type='text' placeholder='Paste your link here'></input>              <ButtonShort text={text}/>
             </div>
             
             </div>
+            <footer>
+              <div className='footerWrap'>
+                <div className='footerContent'>
+                  {/* <img src='logo-center.svg'/> */}
+                  </div>
+                  <p>&copy; 2022 kuturl.xyz</p>
+                  </div>
+            </footer>
 </>
            )}
 function Api() {

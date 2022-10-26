@@ -4,6 +4,7 @@ import loadingAnimation from "./loading.json";
 import "../App.css";
 import { CSpinner } from "@coreui/react";
 import { Tooltip } from "rsuite";
+
 import {
     BrowserRouter as Router,
     Switch,
@@ -36,13 +37,31 @@ export default function ButtonLoader ({text}) {
             pathname: `/finalpage`,
             search:createSearchParams({url: url}).toString()
         })
+        fetch(`localhost:5005/short?url=${url}`, {
+            method: "GET",
+            headers: {
+                "Access-Control-Allow-Origin" : "*",
+            }
+    })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log("data", data)
+                    
+                })
+    .catch(err => {
+        console.log('error',err)
+        setLoading(false);
+        
+    })
     }
 
     const fetchData = () => {
+
       setLoading(true);
     const button = document.querySelector('.button');
      
     loading === true ? button.style.display = 'none' : button.style.display = 'flex';
+        
     fetch(`https://shrtlnk.dev/api/v2/link`,{
         method: 'POST',
         headers: {
@@ -62,15 +81,15 @@ export default function ButtonLoader ({text}) {
         setLoading(false);
         setUrl(res.shrtlnk);
         setKey(res.key);
+
     })
     .catch(err => {
-        console.log('error',err)
-        this.setState({ loading: false, url: 'err' });
+        console.log(err)
     })
-    };
+    }
       return (
         <>
-        <div className="button" style={{ marginTop: "20px" }}>
+        <div className="buttonWrap" >
           <button className="button" onClick={fetchData} disabled={loading}>
             {loading && (
                 <div>
@@ -78,7 +97,7 @@ export default function ButtonLoader ({text}) {
                 </div>
             )}
             {loading && <span></span>}
-            {!loading && <span>Shorten link</span>}
+            {!loading && <span>Shorten</span>}
           </button>
 
         </div>
@@ -105,7 +124,7 @@ export default function ButtonLoader ({text}) {
     }
     return (
         <div className="finalPage">
-            <h1>Your link is <Tooltip title="Click to copy"><a href="#" onClick={()=>copy()}>{url}</a></Tooltip></h1>            
+            <h1>Your link is <Tooltip title="Click to copy"><a href="#" onClick={()=>copy()}>{url}</a></Tooltip></h1>
         </div>
     );
 }
