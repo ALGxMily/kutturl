@@ -27,6 +27,7 @@ export default function ButtonLoader ({text,buttonRef}) {
 
         fetch(`https://custom-urlshortner-backend.herokuapp.com/shorturladd?url=${text}`, {
             method: "GET",
+            mode: "cors",
             headers: {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
