@@ -24,7 +24,7 @@ export default function ButtonLoader ({text,buttonRef}) {
 
 
     function openLinklink() {
-        fetch(`https://cors-anywhere.herokuapp.com/https://custom-urlshortner-backend.herokuapp.com/shorturladd?url=${text}`, {
+        fetch(`https://cors-anywhere.herokuapp.com/https://kuturl.herokuapp.com/shorturladd?url=${text}`, {
             method: "GET",
             headers: {
                 "Allow-Access-Control-Methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -83,7 +83,7 @@ export default function ButtonLoader ({text,buttonRef}) {
     setUrl(searchParams.get('url'))
         console.log(searchParams.get('url'))
     }, [searchParams])
-    const shorturl = `https://custom-urlshortner-backend.herokuapp.com/?i=${url}`
+    const shorturl = `https://kuturl.herokuapp.com/?i=${url}`
     const copy = () => {
         navigator.clipboard.writeText(shorturl);
     }
