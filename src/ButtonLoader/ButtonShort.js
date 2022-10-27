@@ -38,16 +38,16 @@ export default function ButtonLoader ({text,buttonRef}) {
     setUrl(response.url)
     setKey(response.key)
     setLoading(true)
-    // navigateto({
-    //     pathname: `/finalpage`,
-    //     search:createSearchParams({url: url}).toString()
-    // })
+
 
 })
-// .finally(() => {
-//     setLoading(false);
-//     navigateto('/finalpage')
-// })
+.finally(() => {
+    setLoading(false);
+        navigateto({
+        pathname: `/finalpage`,
+        search:createSearchParams({url: url}).toString()
+    })
+})
     .catch(err => {
         console.log('error',err)
         console.trace(err)
@@ -130,7 +130,7 @@ export default function ButtonLoader ({text,buttonRef}) {
 
     return (
         <div className="finalPage">
-            <h1>Your link is <Tooltip title="Click to copy"><a href="#" onClick={()=>copy()}>{url}</a></Tooltip></h1>
+            <h1>Click to copy<Tooltip title="Click to copy"><a href="#" onClick={()=>copy()}>{url}</a></Tooltip></h1>
             <button className="finalpageURLButton" onClick={redirectToProfile}>Your URLs</button>
 
         </div>
