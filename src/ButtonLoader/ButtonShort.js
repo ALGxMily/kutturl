@@ -18,7 +18,7 @@ import {
 export default function ButtonLoader ({text,buttonRef}) {
     const [loading, setLoading] = React.useState(false);
     const [url, setUrl] = React.useState(null);
-    const [key, setKey] = React.useState(null);
+    const [key, setKey] = React.useState("");
     const navigateto = useNavigate()
 
 
@@ -37,6 +37,7 @@ export default function ButtonLoader ({text,buttonRef}) {
     console.log(response)
     setUrl(response.url)
     setKey(response.key)
+    console.log(response.key)
     setLoading(true)
 
 
