@@ -43,10 +43,11 @@ export default function ButtonLoader ({text,buttonRef}) {
 })
 .finally(() => {
     setLoading(false);
-        navigateto({
+    navigateto({
         pathname: `/finalpage`,
         search:createSearchParams({url: key}).toString()
     })
+    console.log("key",key)
 })
     .catch(err => {
         console.log('error',err)
@@ -56,40 +57,6 @@ export default function ButtonLoader ({text,buttonRef}) {
     })
     }
 
- function fetchData() {
-
-      setLoading(true);
-    const button = document.querySelector('.button');
-     
-        
-    fetch(`https://shrtlnk.dev/api/v2/link`,{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            "Accept": "application/json",
-            "api-key": "zTru6ZSXtP0vhPTJwm3qqTvp4qiUtpJGn7t13zV4EbZPr"
-        },
-        body: JSON.stringify({
-            "url": text
-        })
-    }).then(res => res.json())
-    .then(res => {
-        console.log(res)
-        //set button style display none
-        button.style.display = 'none';
-
-        setLoading(false);
-        setUrl(res.shrtlnk);
-        setKey(res.key)
-        navigateto({
-            pathname: `/finalpage`,
-            search:createSearchParams({url: url}).toString()
-        })
-    })
-    .catch(err => {
-        console.log(err)
-    })
-    }
       return (
         <>
         <div className="buttonWrap" >
@@ -116,7 +83,7 @@ export default function ButtonLoader ({text,buttonRef}) {
     const navigateto = useNavigate()
     useEffect(() => {
     setUrl(searchParams.get('url'))
-    
+        console.log(searchParams.get('url'))
     }, [searchParams])
     
     const copy = () => {
