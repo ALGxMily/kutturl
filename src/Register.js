@@ -17,7 +17,7 @@ export default function Register() {
           },
           {
             data: {
-              username,
+              username: username,
             },
           }
         )
