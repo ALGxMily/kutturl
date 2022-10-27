@@ -24,11 +24,10 @@ export default function ButtonLoader ({text,buttonRef}) {
 
 
     function openLinklink() {
-
-        fetch(`https://custom-urlshortner-backend.herokuapp.com/shorturladd?url=${text}`, {
+        fetch(`https://cors-anywhere.herokuapp.com/https://custom-urlshortner-backend.herokuapp.com/shorturladd?url=${text}`, {
             method: "GET",
-            mode: "cors",
             headers: {
+                "Allow-Access-Control-Methods": "GET, POST, PUT, DELETE, OPTIONS",
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
             },
@@ -51,6 +50,7 @@ export default function ButtonLoader ({text,buttonRef}) {
 // })
     .catch(err => {
         console.log('error',err)
+        console.trace(err)
         setLoading(false);
         
     })
