@@ -45,7 +45,7 @@ export default function ButtonLoader ({text,buttonRef}) {
     setLoading(false);
         navigateto({
         pathname: `/finalpage`,
-        search:createSearchParams({url: url}).toString()
+        search:createSearchParams({url: key}).toString()
     })
 })
     .catch(err => {
@@ -127,10 +127,10 @@ export default function ButtonLoader ({text,buttonRef}) {
             pathname: `/urls`,
         })
     }
-
+    const shorturl = `https://custom-urlshortner-backend.herokuapp.com/?i=${key}`
     return (
         <div className="finalPage">
-            <h1>Click to copy<Tooltip title="Click to copy"><a href="#" onClick={()=>copy()}>{url}</a></Tooltip></h1>
+            <h1>Click to copy<Tooltip title="Click to copy"><a href="#" onClick={()=>copy()}>{shorturl}</a></Tooltip></h1>
             <button className="finalpageURLButton" onClick={redirectToProfile}>Your URLs</button>
 
         </div>
