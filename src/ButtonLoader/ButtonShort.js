@@ -24,21 +24,31 @@ export default function ButtonLoader ({text,buttonRef}) {
 
 
     function openLinklink() {
-        navigateto({
-            pathname: `/finalpage`,
-            search:createSearchParams({url: url}).toString()
-        })
-        fetch(`localhost:5005/short?url=${url}`, {
+
+        fetch(`https://custom-urlshortner-backend.herokuapp.com/shorturladd?url=${text}`, {
             method: "GET",
+            mode: "no-cors",
             headers: {
-                "Access-Control-Allow-Origin" : "*",
-            }
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+            },
     })
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log("data", data)
-                    
-                })
+    .then(response => response.json())
+.then(response => {
+    console.log(response)
+    setUrl(response.url)
+    setKey(response.key)
+    setLoading(true)
+    // navigateto({
+    //     pathname: `/finalpage`,
+    //     search:createSearchParams({url: url}).toString()
+    // })
+
+})
+// .finally(() => {
+//     setLoading(false);
+//     navigateto('/finalpage')
+// })
     .catch(err => {
         console.log('error',err)
         setLoading(false);
@@ -80,18 +90,10 @@ export default function ButtonLoader ({text,buttonRef}) {
         console.log(err)
     })
     }
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: "./loading.json",
-        rendererSettings: {
-          preserveAspectRatio: "xMidYMid slice"
-        }
-      };
       return (
         <>
         <div className="buttonWrap" >
-          <button ref={buttonRef} className="button" onClick= {fetchData} disabled={loading}>
+          <button ref={buttonRef} className="button" onClick= {openLinklink} disabled={loading}>
             {loading && (
 
                 <span>Loading...</span>
@@ -106,12 +108,12 @@ export default function ButtonLoader ({text,buttonRef}) {
       );
 
   }
-
  export function FinalPage() {
 
     const [searchParams] = useSearchParams()
     const [url, setUrl] = React.useState("LOADING");
     const[tooltip, setTooltip] = React.useState(false)
+    const navigateto = useNavigate()
     useEffect(() => {
     setUrl(searchParams.get('url'))
     
@@ -120,9 +122,17 @@ export default function ButtonLoader ({text,buttonRef}) {
     const copy = () => {
         navigator.clipboard.writeText(url);
     }
+    const redirectToProfile = () => {
+        navigateto({
+            pathname: `/urls`,
+        })
+    }
+
     return (
         <div className="finalPage">
             <h1>Your link is <Tooltip title="Click to copy"><a href="#" onClick={()=>copy()}>{url}</a></Tooltip></h1>
+            <button className="finalpageURLButton" onClick={redirectToProfile}>Your URLs</button>
+
         </div>
     );
 }
