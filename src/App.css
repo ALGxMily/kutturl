@@ -292,6 +292,7 @@
     align-items: center;
     flex-direction: column;
   }
+
   .finalPage h1{
     font-size: 2rem;
     font-weight: 400;
@@ -341,4 +342,124 @@
   .contentWrap input{
     font-size: 1rem;
   }
+}
+
+
+
+
+/* Login loading class */
+.loading_before{
+  display: none;
+}
+
+.loading{
+  animation: fade 2s ease-in;
+  display: flex;
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, -50%);
+  right: inherit;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  z-index: 999;
+}
+.split_loading{
+  animation: fade 1s ease-in;
+
+}
+@keyframes fade{
+  0%{
+    opacity: 0%;
+  }
+  50%{
+    opacity: 80%;
+  }
+  100%{
+    opacity: 100%;
+  }
+}
+.form-group_loading{
+  display:none;
+}
+.left_loading{
+  height: 100vh;
+  width: 100%;
+  align-self: center;
+  background-color: #121212;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.right_loading{
+  display: none;
+  width: 0%;
+}
+
+/* Login page */
+.split{
+  display: flex;
+  flex-direction: row;
+}
+.left{
+  width: 50%;
+  height: 100vh;
+  background-color: #121212;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+.left img{
+  width: 35%;
+  height: 50%;
+}
+.right{
+  width: 50%;
+  height: 100vh;
+  background-color: #121212;
+  display:flex;
+}
+.form-group{
+  display:flex;
+  flex-direction: column;
+}
+.error{
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.right form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.registerButton{
+  width: 10vw;
+}
+
+.logout{
+  margin-left: 1.3vw;
+  cursor: pointer;
+}
+/* Homepage loading */
+
+.container_loading{
+  display: none;
+}
+.header_loading{
+  display: none;
+}
+.logo_loading{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
 }
