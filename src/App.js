@@ -15,23 +15,57 @@ function App() {
   return (
     <Routes>
       <Route path="*" element={<Home />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/api" element={<Api />} />
+      <Route path="/urls" element={<Urls />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/finalpage" element={<FinalPage />} />
     </Routes>
     );
 }
 function Home() {
   const [text, setText] = React.useState('');
+  const focused = React.useRef(null);
+  const refButton = React.useRef(null);
+  const handleKeyPress = React.useCallback((event) => {
+    // check if the Shift key is pressed
+    if (event.ctrlKey === true && event.key === 'v') {
+      // do something
+      focused.current.focus();
+      navigator.clipboard.readText()
+      .then(text => {
+        setText(text)
+        console.log('Pasted content: ', text);
+        if(refButton.current){
+          refButton.current.click()
+        }else{
+          console.log('no ref')
+        }
 
+        
+      })
+      .catch(err => {
+        console.error('Failed to read clipboard contents: ', err);
+      });
+    }
+  }, []);
+
+  React.useEffect(() => {
+
+    // attach the event listener
+    document.addEventListener('keydown', handleKeyPress);
+
+    // remove the event listener
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
   return(
     <>
     <div className="App" >
       <div className="App-header">
         <img src='logo-center.svg'/>
         <div className='inputWrap'>
-          <li><a href='/api'>My Urls</a></li>
-          <li><a href='/about'>Log In</a></li>
+          <li><a href='/urls'>My Urls</a></li>
+          <li><a href='/login'>Log In</a></li>
         </div>
     </div>
     </div>
@@ -41,9 +75,9 @@ function Home() {
           <p>Shorten your URL's like a boss.</p>
           </div>
           <div className='inputWrap'>
-            <input onChange={(text)=> setText(text.target.value) } type='text' placeholder='Paste your link here'></input>              <ButtonShort text={text}/>
+            <input ref={focused} onChange={(text)=> setText(text.target.value) } type='text' placeholder='Paste your link here'></input>
+            <ButtonShort text={text} buttonRef={refButton}/>
             </div>
-            
             </div>
             <footer>
               <div className='footerWrap'>
@@ -55,7 +89,7 @@ function Home() {
             </footer>
 </>
            )}
-function Api() {
+function Urls() {
   return(
     <div className='apiWrap'>
       <h1>API</h1>
@@ -63,7 +97,7 @@ function Api() {
       </div>
   )
 }
-function About() {
+function Login() {
   return(
     <div className='aboutWrap'>
       <h1>Contact</h1>

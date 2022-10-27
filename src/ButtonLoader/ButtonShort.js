@@ -15,22 +15,13 @@ import {
     useSearchParams,
     useParams, useOutletContext ,createSearchParams, useNavigate
   } from "react-router-dom";
-export default function ButtonLoader ({text}) {
-    console.log("text button", text)
+export default function ButtonLoader ({text,buttonRef}) {
     const [loading, setLoading] = React.useState(false);
     const [url, setUrl] = React.useState(null);
     const [key, setKey] = React.useState(null);
     const navigateto = useNavigate()
-    //useeffect in class component
-    React.useEffect(() => {
-        const result = document.querySelector('.result');
-        result.style.display = 'none';
-    }, []);
 
-    const link = () => {
-        const result = document.querySelector('.result');
-        result.style.display = 'block';
-    }
+
 
     function openLinklink() {
         navigateto({
@@ -55,12 +46,11 @@ export default function ButtonLoader ({text}) {
     })
     }
 
-    const fetchData = () => {
+ function fetchData() {
 
       setLoading(true);
     const button = document.querySelector('.button');
      
-    loading === true ? button.style.display = 'none' : button.style.display = 'flex';
         
     fetch(`https://shrtlnk.dev/api/v2/link`,{
         method: 'POST',
@@ -77,32 +67,40 @@ export default function ButtonLoader ({text}) {
         console.log(res)
         //set button style display none
         button.style.display = 'none';
-        link();
+
         setLoading(false);
         setUrl(res.shrtlnk);
-        setKey(res.key);
-
+        setKey(res.key)
+        navigateto({
+            pathname: `/finalpage`,
+            search:createSearchParams({url: url}).toString()
+        })
     })
     .catch(err => {
         console.log(err)
     })
     }
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: "./loading.json",
+        rendererSettings: {
+          preserveAspectRatio: "xMidYMid slice"
+        }
+      };
       return (
         <>
         <div className="buttonWrap" >
-          <button className="button" onClick={fetchData} disabled={loading}>
+          <button ref={buttonRef} className="button" onClick= {fetchData} disabled={loading}>
             {loading && (
-                <div>
-                <CSpinner color="dark"/>
-                </div>
+
+                <span>Loading...</span>
+
             )}
             {loading && <span></span>}
             {!loading && <span>Shorten</span>}
           </button>
 
-        </div>
-        <div className='result'>
-                <button onClick={openLinklink}>Link is ready</button>
         </div>
         </>
       );
