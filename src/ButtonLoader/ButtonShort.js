@@ -37,18 +37,15 @@ export default function ButtonLoader ({text,buttonRef}) {
     console.log(response)
     setUrl(response.url)
     setKey(response.key)
-    console.log(response.key)
     setLoading(true)
-
+    navigateto({
+        pathname: `/finalpage`,
+        search:createSearchParams({url: response.key}).toString()
+    })
 
 })
 .finally(() => {
     setLoading(false);
-    navigateto({
-        pathname: `/finalpage`,
-        search:createSearchParams({url: key}).toString()
-    })
-    console.log("key",key)
 })
     .catch(err => {
         console.log('error',err)
