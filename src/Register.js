@@ -9,8 +9,8 @@ export default function Register() {
   const login = async (e) => {
     e.preventDefault();
     try {
-      const { user, session, error } = await supabase()
-        .auth.signUp(
+      const { user, session, error } = await supabase.auth
+        .signUp(
           {
             email: email,
             password: password,

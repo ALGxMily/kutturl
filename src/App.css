@@ -443,7 +443,51 @@
 .registerButton{
   width: 10vw;
 }
+@media screen and (max-width: 768px){
+  .split{
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+  }
+  .left{
+    width: 100%;
+    height: 30vh;
+  }
+  .left img{
+    width: 50%;
+    height: 50%;
+  }
+  .right{
+    width: 100%;
+    height: 50vh;
+  }
+  .right form{
+    width: 100%;
+    height: 100%;
+  }
+  .form-group{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+  .form-group input{
+
+    width: 70%;
+    height: 20%;
+  }
+  .form-group button{
+    width: 30%;
+    height: 10%;
+  }
+  .registerButton{
+    width: 100%;
+  }
+
+  
+}
 .logout{
   margin-left: 1.3vw;
   cursor: pointer;
