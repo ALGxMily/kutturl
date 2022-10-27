@@ -83,16 +83,15 @@ export default function ButtonLoader ({text,buttonRef}) {
     setUrl(searchParams.get('url'))
         console.log(searchParams.get('url'))
     }, [searchParams])
-    
+    const shorturl = `https://custom-urlshortner-backend.herokuapp.com/?i=${url}`
     const copy = () => {
-        navigator.clipboard.writeText(url);
+        navigator.clipboard.writeText(shorturl);
     }
     const redirectToProfile = () => {
         navigateto({
             pathname: `/urls`,
         })
     }
-    const shorturl = `https://custom-urlshortner-backend.herokuapp.com/?i=${url}`
     return (
         <div className="finalPage">
             <h1>Click to copy<Tooltip title="Click to copy"><a href="#" onClick={()=>copy()}>{shorturl}</a></Tooltip></h1>
