@@ -30,6 +30,7 @@
     "test": "react-scripts start",
     "eject": "react-scripts eject"
   },
+  "proxy": "https://kgkwqmhmalhgrmxdqpwx.supabase.co",
   "eslintConfig": {
     "extends": [
       "react-app",
