@@ -27,11 +27,6 @@ export default function ButtonLoader({ text, buttonRef }) {
   function openLinklink() {
     fetch(`https://kuturl.herokuapp.com/shorturladd?url=${text}`, {
       method: "GET",
-      headers: {
-        "Allow-Access-Control-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
     })
       .then((response) => response.json())
       .then((response) => {
