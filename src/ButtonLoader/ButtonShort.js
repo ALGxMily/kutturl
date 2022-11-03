@@ -25,17 +25,14 @@ export default function ButtonLoader({ text, buttonRef }) {
   const navigateto = useNavigate();
 
   function openLinklink() {
-    fetch(
-      `https://cors-anywhere.herokuapp.com/https://kuturl.herokuapp.com/shorturladd?url=${text}`,
-      {
-        method: "GET",
-        headers: {
-          "Allow-Access-Control-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      }
-    )
+    fetch(`https://kuturl.herokuapp.com/shorturladd?url=${text}`, {
+      method: "GET",
+      headers: {
+        "Allow-Access-Control-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
