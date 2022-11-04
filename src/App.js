@@ -14,7 +14,6 @@ import {
 import Login from "./Login";
 import { MdContentPaste } from "react-icons/md";
 import Register from "./Register";
-import { supabase } from "./supabaseClient";
 import Dashboard from "./Dashboard";
 import Lottie from "lottie-react";
 import firebase from "firebase/compat/app";
@@ -46,6 +45,22 @@ function Home() {
   const notifyError = () => {
     try {
       toast.error("Please enter a valid URL!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const notifyErrorGlobal = (error) => {
+    try {
+      toast.error(`Error-${error}`, {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
@@ -120,6 +135,7 @@ function Home() {
         })
         .catch((err) => {
           console.error("Failed to read clipboard contents: ", err);
+          notifyErrorGlobal(err);
         });
     }
   }, []);
@@ -144,14 +160,22 @@ function Home() {
         setLoading(false);
       } catch (error) {
         console.log("error " + error);
+        setSession(false);
         setLoading(false);
       }
     });
   }, []);
   const logout = async () => {
-    await auth.signOut();
-    window.location.reload();
-    navigateTo("/");
+    setLoading(true);
+    auth
+      .signOut()
+      .then(() => {
+        window.location.reload();
+      })
+      .finally(() => {
+        navigateTo("/");
+        setLoading(false);
+      });
   };
   React.useEffect(() => {
     // attach the event listener
@@ -186,7 +210,7 @@ function Home() {
           )}
           <div className="inputWrap" id="header">
             <li>
-              <a href="/urls">My URLs</a>
+              <a href={!session ? "/login" : "/dashboard"}>My URLs</a>
             </li>
             <li>
               {!session ? (
@@ -210,7 +234,7 @@ function Home() {
           ) : null}
         </div>
       </div>
-      <div className="contentWrap" id="container">
+      <div className="contentWrapApp" id="container">
         <div className="content">
           <h2>Easy, convenient, prettier</h2>
           <p>Shorten your URLs like a boss.</p>

@@ -18,14 +18,26 @@ import {
   createSearchParams,
   useNavigate,
 } from "react-router-dom";
+import { auth } from "../firebaseConfig";
+
 export default function ButtonLoader({ text, buttonRef }) {
   const [loading, setLoading] = React.useState(false);
   const [url, setUrl] = React.useState(null);
   const [key, setKey] = React.useState("");
+  const [username, setUsername] = React.useState("");
+  const [session, setSession] = React.useState(false);
+  const [userUUID, setUserUUID] = React.useState("");
+  const isDev = process.env.NODE_ENV === "development";
+  const public_url = isDev
+    ? "http://localhost:5005"
+    : "https://kuturl.herokuapp.com";
+
   const navigateto = useNavigate();
 
   function openLinklink() {
-    fetch(`https://kuturl.herokuapp.com/shorturladd?url=${text}`, {
+    const user = auth.currentUser;
+    const uuid = user.uid;
+    fetch(`${public_url}/shorturladd?url=${text}&uuid=${uuid}`, {
       method: "GET",
     })
       .then((response) => response.json())
