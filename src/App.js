@@ -148,6 +148,11 @@ function Home() {
       }
     });
   }, []);
+  const logout = async () => {
+    await auth.signOut();
+    window.location.reload();
+    navigateTo("/");
+  };
   React.useEffect(() => {
     // attach the event listener
     document.addEventListener("keydown", handleKeyPress);
@@ -165,6 +170,20 @@ function Home() {
       <div className="App">
         <div className="App-header" id="logoHeader">
           <img src="logo-center.svg" />
+          {session ? (
+            <a className="mobileUsername">Logged in as {username}</a>
+          ) : (
+            <a
+              style={{
+                textDecoration: "underline",
+                color: "white",
+              }}
+              href="/login"
+              className="mobileUsername"
+            >
+              Click here to login
+            </a>
+          )}
           <div className="inputWrap" id="header">
             <li>
               <a href="/urls">My URLs</a>
@@ -184,6 +203,11 @@ function Home() {
               )}
             </li>
           </div>
+          {session ? (
+            <a className="mobileLogout" onClick={logout}>
+              Logout
+            </a>
+          ) : null}
         </div>
       </div>
       <div className="contentWrap" id="container">
@@ -207,7 +231,6 @@ function Home() {
         <img src="logo-center.svg" />
       </div>
       <footer>
-        <div className="mobile-menu">fdsfs</div>
         <div className="footerWrap">
           <div className="footerContent">
             {/* <img src='logo-center.svg'/> */}
