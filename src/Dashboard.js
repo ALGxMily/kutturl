@@ -122,15 +122,25 @@ export default function Dashboard() {
       },
     },
   });
+  const [userUID, setUserUID] = React.useState("");
+  React.useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUserUID(user.uid);
+      }
+    });
+    return unsubscribe;
+  }, []);
+
   const isDev = process.env.NODE_ENV === "development";
   const public_url = isDev
     ? "http://localhost:5005"
     : "https://kuturl.herokuapp.com";
+
   React.useEffect(() => {
     grid.render(wrapperRef.current);
-    const user = auth.currentUser;
-    const uuid = user.uid;
-    fetch(`${public_url}/shorturl?uuid=${uuid}`, {
+
+    fetch(`${public_url}/shorturl?uuid=${userUID}`, {
       method: "GET",
     }).then((res) => {
       console.log(res);

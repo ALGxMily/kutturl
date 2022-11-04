@@ -156,6 +156,7 @@ function Home() {
     auth.onAuthStateChanged((user) => {
       try {
         setUsername(user.displayName);
+
         setSession(!!user);
         setLoading(false);
       } catch (error) {
