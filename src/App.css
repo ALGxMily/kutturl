@@ -10,6 +10,46 @@
   max-height: 100vh;
   
 }
+.mobile-menu{
+  display: none;
+
+}
+@media screen and (max-width: 768px){
+  .mobile-menu{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    border-top: 1px solid red;
+  }
+}
+.drop-down {
+  font-family: "Barlow", sans-serif;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 3rem;
+  margin-right: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+.drop-down li {
+  list-style: none;
+  padding: 10px 0;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #fff;
+
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  background-color: #c29a2d;
+  padding: 0.5rem 1rem;
+
+}
+.drop-down li a{
+color: #fff;
+text-decoration: none;
+}
 .App-header{
   background-color:#121212;
   width:100%;

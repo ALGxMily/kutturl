@@ -2,7 +2,9 @@ import React from "react";
 import "./App.css";
 import Lottie from "lottie-react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "./supabaseClient";
+
+import "firebase/compat/auth";
+import { auth } from "./firebaseConfig";
 
 export default function Login() {
   const [loading, setLoading] = React.useState(false);
@@ -11,33 +13,32 @@ export default function Login() {
   const [error, setError] = React.useState("");
   const loadingRef = React.useRef(null);
   const navigateTo = useNavigate();
+
   const login = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { user, session, error } = await supabase.auth
-        .signInWithPassword({
-          email: email,
-          password: password,
-        })
+      auth
+        .signInWithEmailAndPassword(email, password)
         .catch((error) => {
-          setError(error.error);
+          console.log(error);
           setLoading(false);
+          setError(error);
         })
         .then((response) => {
-          console.log(response);
-          try {
-            if (response.data.user.aud === "authenticated") {
-              navigateTo("/");
-            }
-          } catch (error) {
-            console.log(error);
+          if (response.user) {
+            setLoading(false);
+            navigateTo("/");
           }
         });
     } catch (error) {
       console.log(error);
       setLoading(false);
+      setError(error);
     }
+  };
+  const goToHome = () => {
+    navigateTo("/", { state: { message: "Logged in successfully" } });
   };
   React.useEffect(() => {
     const split = document.getElementById("screen");
@@ -55,7 +56,12 @@ export default function Login() {
     <>
       <div className="split" id="screen">
         <div className="left" id="left">
-          <img draggable={false} src="logo-center.svg" />
+          <img
+            style={{ cursor: "pointer" }}
+            onClick={goToHome}
+            draggable={false}
+            src="logo-center.svg"
+          />
         </div>
         <div className="right">
           <form>

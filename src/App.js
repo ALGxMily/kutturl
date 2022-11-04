@@ -9,6 +9,7 @@ import {
   Link,
   Routes,
   useNavigate,
+  useLocation,
 } from "react-router-dom";
 import Login from "./Login";
 import { MdContentPaste } from "react-icons/md";
@@ -16,6 +17,12 @@ import Register from "./Register";
 import { supabase } from "./supabaseClient";
 import Dashboard from "./Dashboard";
 import Lottie from "lottie-react";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import { auth } from "./firebaseConfig";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { signOut } from "firebase/auth";
 
 function App() {
   return (
@@ -35,6 +42,23 @@ function Home() {
   const [session, setSession] = React.useState(false);
   const loadingRef = React.useRef(null);
   const navigateTo = useNavigate();
+  const location = useLocation();
+  const notifyError = () => {
+    try {
+      toast.error("Please enter a valid URL!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   React.useEffect(() => {
     if (loading) {
       const header = document.getElementById("header");
@@ -64,46 +88,24 @@ function Home() {
       logo.style.display = "none";
     }
   }, [loading]);
-  const logout = async () => {
-    await supabase.auth.signOut();
-    navigateTo("/login");
-  };
-  const userLogin = async () => {
-    console.log("login");
-    supabase.auth.getSession().then((session) => {
-      console.log(session);
-      if (session.data.session === null) {
-        setSession(false);
-        setLoading(false);
-      } else {
-        setLoading(false);
-        setSession(true);
-        getUser(session.data.session.user.id);
-      }
-    });
-  };
-  const getUser = async (id) => {
-    const userID = id;
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("username")
-      .eq("id", userID)
-      .single();
-    if (data) {
-      console.log(data);
-      setUsername(data.username);
-      setLoading(false);
-      setSession(true);
-    }
-  };
 
   const [text, setText] = React.useState("");
   const focused = React.useRef(null);
   const refButton = React.useRef(null);
+  const [popUpMenu, setPopUpMenu] = React.useState(false);
+  const user = auth.currentUser;
   const handleKeyPress = React.useCallback((event) => {
-    // check if the Shift key is pressed
     if (event.ctrlKey === true && event.key === "v") {
-      // do something
+      toast.success(`Link pasted!`, {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
       focused.current.focus();
       navigator.clipboard
         .readText()
@@ -121,8 +123,30 @@ function Home() {
         });
     }
   }, []);
+  const goToLogin = () => {
+    setLoading(true);
+    navigateTo("/login");
+  };
+  const loadURL = async () => {
+    if (!text) {
+      setLoading(false);
+      notifyError();
+      return;
+    }
+    setLoading(true);
+  };
   React.useEffect(() => {
-    userLogin();
+    setLoading(true);
+    auth.onAuthStateChanged((user) => {
+      try {
+        setUsername(user.displayName);
+        setSession(!!user);
+        setLoading(false);
+      } catch (error) {
+        console.log("error " + error);
+        setLoading(false);
+      }
+    });
   }, []);
   React.useEffect(() => {
     // attach the event listener
@@ -133,6 +157,9 @@ function Home() {
       document.removeEventListener("keydown", handleKeyPress);
     };
   }, [handleKeyPress]);
+  const menu = () => {
+    setPopUpMenu(!popUpMenu);
+  };
   return (
     <>
       <div className="App">
@@ -144,13 +171,15 @@ function Home() {
             </li>
             <li>
               {!session ? (
-                <a href="/login">Log-in</a>
+                <a style={{ cursor: "pointer" }} onClick={goToLogin}>
+                  Log-in
+                </a>
               ) : (
                 <>
-                  <a href="/dashboard">{username} </a>
-                  <a id="logout" className="logout" onClick={logout}>
-                    Log-out
+                  <a style={{ cursor: "pointer" }} onClick={() => menu()}>
+                    {username}
                   </a>
+                  {popUpMenu && PopUpMenu()}
                 </>
               )}
             </li>
@@ -169,13 +198,16 @@ function Home() {
             type="text"
             placeholder="Paste your link here"
           ></input>
-          <ButtonShort text={text} buttonRef={refButton} />
+          <a onClick={loadURL}>
+            <ButtonShort text={text} buttonRef={refButton} />
+          </a>
         </div>
       </div>
       <div id="logo">
         <img src="logo-center.svg" />
       </div>
       <footer>
+        <div className="mobile-menu">fdsfs</div>
         <div className="footerWrap">
           <div className="footerContent">
             {/* <img src='logo-center.svg'/> */}
@@ -191,7 +223,32 @@ function Home() {
         width={100}
         height={100}
       />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="dark"
+      />
     </>
+  );
+}
+function PopUpMenu() {
+  const logout = async () => {
+    await auth.signOut();
+  };
+  return (
+    <ul className="drop-down">
+      <li>
+        <a style={{ color: "white" }} onClick={logout}>
+          Log out
+        </a>
+      </li>
+    </ul>
   );
 }
 function Urls() {
