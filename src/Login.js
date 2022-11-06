@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import "firebase/compat/auth";
 import { auth } from "./firebaseConfig";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Login() {
   const [loading, setLoading] = React.useState(false);
@@ -13,7 +14,38 @@ export default function Login() {
   const [error, setError] = React.useState("");
   const loadingRef = React.useRef(null);
   const navigateTo = useNavigate();
-
+  const notifyErrorGlobal = (error) => {
+    try {
+      toast.error(`Error- ${error}`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const notifySuccessful = (message) => {
+    try {
+      toast.success(`${message}`, {
+        position: "top-center",
+        autoClose: 1400,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const login = async (e) => {
     e.preventDefault();
     try {
@@ -21,20 +53,36 @@ export default function Login() {
       auth
         .signInWithEmailAndPassword(email, password)
         .catch((error) => {
-          console.log(error);
+          error.message === "INVALID_EMAIL" ||
+          "EMAIL_NOT_FOUND" ||
+          "INVALID_PASSWORD" ||
+          "USER_DISABLED"
+            ? notifyErrorGlobal("Invalid Email or Password")
+            : notifyErrorGlobal("Something went wrong");
+          notifyErrorGlobal(error.message);
           setLoading(false);
-          setError(error);
+          setLoading(true);
+          navigateTo("/login");
         })
         .then((response) => {
           if (response.user) {
             setLoading(false);
-            navigateTo("/");
+            notifySuccessful("Login Successful");
+            navigateTo("/dashboard");
           }
         });
     } catch (error) {
       console.log(error);
       setLoading(false);
-      setError(error);
+      error.message === "INVALID_EMAIL" ||
+      "EMAIL_NOT_FOUND" ||
+      "INVALID_PASSWORD" ||
+      "USER_DISABLED"
+        ? notifyErrorGlobal("Invalid Email or Password")
+        : notifyErrorGlobal("Something went wrong");
+      notifyErrorGlobal(error.message);
+      setLoading(true);
+      navigateTo("/login");
     }
   };
   const goToHome = () => {
@@ -112,6 +160,17 @@ export default function Login() {
         animationData={require("./loading.json")}
         width={100}
         height={100}
+      />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="dark"
       />
     </>
   );

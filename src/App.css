@@ -149,7 +149,7 @@ text-decoration: none;
   margin-bottom: 10px;
   display:flex;
   justify-content:center;
-  align-items:flex-end;
+  align-items:center;
 }
 .inputWrap input{
   width: 100%;
@@ -651,7 +651,11 @@ text-decoration: none;
   align-items: center;
 }
 @media screen and (max-width: 768px){
-
+  .tableContainer{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
   .notFound{
     display:flex;
     justify-content: center;
