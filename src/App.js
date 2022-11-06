@@ -23,6 +23,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signOut } from "firebase/auth";
 import NotFound from "./404";
+import { Button } from "@mui/material";
 
 function App() {
   return (
@@ -213,7 +214,7 @@ function Home() {
           )}
           <div className="inputWrap" id="header">
             <li>
-              <a href={!session ? "/login" : "/dashboard"}>My URLs</a>
+              <a href={!session ? "/login" : "/dashboard"}>Dashboard</a>
             </li>
             <li>
               {!session ? (
@@ -230,11 +231,6 @@ function Home() {
               )}
             </li>
           </div>
-          {session ? (
-            <a className="mobileLogout" onClick={logout}>
-              Logout
-            </a>
-          ) : null}
         </div>
       </div>
       <div className="contentWrapApp" id="container">
@@ -244,6 +240,7 @@ function Home() {
         </div>
         <div className="inputWrap">
           <input
+            itemType="url"
             ref={focused}
             onChange={(text) => setText(text.target.value)}
             type="text"
@@ -256,6 +253,10 @@ function Home() {
       </div>
       <div id="logo">
         <img src="logo-center.svg" />
+      </div>
+      <div className="upperFooter">
+        <a href={!session ? "/login" : "/dashboard"}>Dashboard</a>
+        {session ? <p onClick={logout}>Logout</p> : null}
       </div>
       <footer>
         <div className="footerWrap">

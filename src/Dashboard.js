@@ -229,7 +229,7 @@ export default function Dashboard() {
               }
               onClick={() => navigateTo("/")}
               variant="contained"
-              className="buttonNew"
+              className="buttonNewMobile"
             >
               New URL
             </Button>
@@ -324,6 +324,7 @@ export default function Dashboard() {
             }
             onClick={() => alert("Hi!")}
             variant="contained"
+            className="buttonNewMobile"
           >
             New URL
           </Button>

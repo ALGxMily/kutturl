@@ -459,10 +459,46 @@ text-decoration: none;
   #buttonNew{
     display: none;
   }
+#upperFooter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
+}
+
 .footerButton{
   display:none;
 }
+.upperFooter{
+  display: none;
+}
+@media screen and (max-width: 768px){
+  .upperFooter{
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    margin-top: 14vh;
+    background-color:#121212;
+  }
+.upperFooter p{
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 10px;
+  font-family: "Poppins", sans-serif;
+  color:#FBBD12;
+}
+.upperFooter a{
+  color:#FBBD12;
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 10px;
+  font-family: "Poppins", sans-serif;
+  text-decoration: none;
+}
+}
+
+
 
 /* Login loading class */
 .loading_before{
@@ -643,5 +679,9 @@ text-decoration: none;
     aspect-ratio: 1;
     padding: 30px;
     width: 100%;
+  }
+  .form-group button {
+    width: 40%;
+    height: 40%;
   }
 }
