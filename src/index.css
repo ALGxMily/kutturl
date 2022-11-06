@@ -84,3 +84,42 @@ form small{
   font-size:1rem;
   margin-bottom:1rem;
 }
+table{
+  width:40%;
+  height:100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #121212;
+}
+@media (max-width: 768px) {
+  table{
+    width:30%;
+  }
+  table td{
+    font-size:0.8rem;
+  }
+}
+table th{
+  color: #c29a2d;
+  border-bottom-width: 2px;
+  border-bottom-color: #c29a2d ;
+  background-color: #121212;
+  text-align: left;
+  padding: 16px;
+}
+table td{
+  text-align: left;
+  padding: 16px;
+  color: #fff;
+}
+table tr:nth-child(even) {
+  background-color: #121212;
+}
+table tr:nth-child(odd) {
+  background-color: #2c2c31;
+
+}
+table tr #rowItem:nth-child(0){
+  opacity: 70%;
+}
+

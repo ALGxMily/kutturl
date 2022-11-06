@@ -22,11 +22,13 @@ import { auth } from "./firebaseConfig";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signOut } from "firebase/auth";
+import NotFound from "./404";
 
 function App() {
   return (
     <Routes>
       <Route path="*" element={<Home />} />
+      <Route path="/404" element={<NotFound />} />
       <Route path="/urls" element={<Urls />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

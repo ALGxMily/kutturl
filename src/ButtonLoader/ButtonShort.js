@@ -4,7 +4,7 @@ import loadingAnimation from "./loading.json";
 import "../App.css";
 import { CSpinner } from "@coreui/react";
 import { Tooltip } from "rsuite";
-
+import { ToastContainer, toast } from "react-toastify";
 import {
   BrowserRouter as Router,
   Switch,
@@ -83,18 +83,40 @@ export function FinalPage() {
   const [url, setUrl] = React.useState("LOADING");
   const [tooltip, setTooltip] = React.useState(false);
   const navigateto = useNavigate();
+  const isDev = process.env.NODE_ENV === "development";
+  const public_url = isDev
+    ? "http://localhost:5005"
+    : "https://kuturl.herokuapp.com";
+
   useEffect(() => {
     setUrl(searchParams.get("url"));
     console.log(searchParams.get("url"));
   }, [searchParams]);
-  const shorturl = `https://kuturl.herokuapp.com/?i=${url}`;
+  const shorturl = `${public_url}/?i=${url}`;
   const copy = () => {
+    notifyCopy();
     navigator.clipboard.writeText(shorturl);
   };
   const redirectToProfile = () => {
     navigateto({
-      pathname: `/urls`,
+      pathname: `/dashboard`,
     });
+  };
+  const notifyCopy = () => {
+    try {
+      toast.success("Link copied successfully!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="finalPage">
@@ -109,6 +131,17 @@ export function FinalPage() {
       <button className="finalpageURLButton" onClick={redirectToProfile}>
         Your URLs
       </button>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="dark"
+      />
     </div>
   );
 }

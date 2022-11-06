@@ -11,9 +11,10 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
-import { Grid } from "gridjs";
+import Grid from "@mui/material/Grid";
+import Skeleton from "@mui/material/Skeleton";
 import "gridjs/dist/theme/mermaid.css";
-import { Add, ExitOutline } from "react-ionicons";
+import { Add, Close, Copy, CopyOutline, ExitOutline } from "react-ionicons";
 import Lottie from "lottie-react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -21,7 +22,11 @@ import { auth } from "./firebaseConfig";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signOut } from "firebase/auth";
-import { Button } from "@mui/material";
+import { Button, Tab } from "@mui/material";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import { styled } from "@mui/material/styles";
+import Table from "./Table";
 function PopUpMenu() {
   const logout = async () => {
     await auth.signOut();
@@ -59,6 +64,22 @@ export default function Dashboard() {
       console.log(error);
     }
   };
+  const notifySuccessful = (message) => {
+    try {
+      toast.success(`${message}`, {
+        position: "top-center",
+        autoClose: 1400,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   React.useEffect(() => {
     if (loading) {
       const logo = document.getElementById("logo");
@@ -85,43 +106,6 @@ export default function Dashboard() {
       logo.style.display = "none";
     }
   }, [loading]);
-  const wrapperRef = React.useRef(null);
-
-  const grid = new Grid({
-    columns: ["Created", "URL", "Uses"],
-    server: {
-      url: "https://swapi.dev/api/films/",
-      then: (data) =>
-        data.results.map((movie) => [
-          movie.title,
-          movie.director,
-          movie.producer,
-        ]),
-    },
-    style: {
-      table: {
-        "margin-top": "4vh",
-        border: "3px solid transparent",
-        backgroundColor: "transparent",
-      },
-      th: {
-        "font-size": "1.2rem",
-        "background-color": "#121212",
-        color: "#FBBD12",
-        "border-bottom": "3px solid #FBBD12",
-        "text-align": "left",
-      },
-      td: {
-        "font-size": "1.2rem",
-        "text-align": "center",
-        "border-bottom": "3px solid rgba(255, 255, 255, 0.1)",
-        "background-color": "#121212",
-        borderRight: "none",
-        borderWith: "none",
-        color: "#fff",
-      },
-    },
-  });
   const [userUID, setUserUID] = React.useState("");
   React.useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -131,21 +115,36 @@ export default function Dashboard() {
     });
     return unsubscribe;
   }, []);
-
+  const [dataUser, setData] = React.useState([]);
   const isDev = process.env.NODE_ENV === "development";
   const public_url = isDev
     ? "http://localhost:5005"
     : "https://kuturl.herokuapp.com";
 
+  const wrapperRef = React.useRef(null);
+  const copy = (key) => {
+    dataUser.forEach((element) => {
+      if (element.key === key) {
+        navigator.clipboard.writeText(`${public_url}?i=${key}`);
+        notifySuccessful("Copied to clipboard");
+      }
+    });
+  };
   React.useEffect(() => {
-    grid.render(wrapperRef.current);
-
+    if (!userUID) return;
     fetch(`${public_url}/shorturl?uuid=${userUID}`, {
       method: "GET",
     }).then((res) => {
-      console.log(res);
+      res
+        .json()
+        .then((data) => {
+          setData(data.data);
+        })
+        .catch((error) => {
+          notifyErrorGlobal(error);
+        });
     });
-  });
+  }, [userUID]);
   const [text, setText] = React.useState("");
   const focused = React.useRef(null);
   const refButton = React.useRef(null);
@@ -177,12 +176,9 @@ export default function Dashboard() {
     auth
       .signOut()
       .then(() => {
-        window.location.reload();
-      })
-      .finally(() => {
         navigateTo("/");
-        setLoading(false);
-      });
+      })
+      .finally(() => {});
   };
   const loadURL = async () => {
     if (!text) {
@@ -203,6 +199,7 @@ export default function Dashboard() {
           <div className="leftHeader">
             <h1>My URLs</h1>
             <Button
+              id="buttonNew"
               style={{
                 backgroundColor: "#FBBD12",
                 color: "#121212",
@@ -226,7 +223,7 @@ export default function Dashboard() {
                   }}
                 />
               }
-              onClick={() => alert("Hi!")}
+              onClick={() => navigateTo("/")}
               variant="contained"
               className="buttonNew"
             >
@@ -235,11 +232,97 @@ export default function Dashboard() {
           </div>
           <div className="rightHeader">
             <p>{username}</p>
-            <ExitOutline color={"#fff"} height="25px" width="25px" />
+            <ExitOutline
+              color={"#c29a2d"}
+              height="25px"
+              width="25px"
+              onClick={logout}
+              style={{
+                cursor: "pointer",
+                top: "3px",
+                position: "relative",
+              }}
+            />
           </div>
         </div>
-        <div className="containerTable">
-          <div ref={wrapperRef} />
+        <div className={"tableContainer"}>
+          {dataUser ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>URL</th>
+                  <th>Uses</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dataUser.map(({ uses, key, date }) => (
+                  <tr id="rowItems">
+                    <td>
+                      <b>{date.split("T")[0]} </b>
+                    </td>
+                    <td key={key}>
+                      {`${public_url}?i=${key}`}
+                      <CopyOutline
+                        style={{
+                          cursor: "pointer",
+                          top: "5px",
+                          position: "relative",
+                          left: "5px",
+                        }}
+                        color={"#c29a2d"}
+                        onClick={() => copy(key)}
+                      />
+                    </td>
+                    <td>{uses}</td>
+                    <td>
+                      <Close color={"red"} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <Skeleton
+              variant="rectangular"
+              sx={{ bgcolor: "red" }}
+              width={200}
+              height={50}
+            />
+          )}
+        </div>
+        <div className="footerButton">
+          <Button
+            id="buttonNewMobile"
+            style={{
+              display: "flex",
+              backgroundColor: "#FBBD12",
+              color: "#121212",
+              fontSize: "1rem",
+              fontWeight: "bold",
+              borderRadius: "10px",
+              marginLeft: "3rem ",
+              padding: "0.5rem 1rem",
+              marginBottom: ".5rem",
+            }}
+            startIcon={
+              <Add
+                color={"#121212"}
+                height="25px"
+                width="25px"
+                style={{
+                  marginRight: "10px",
+                  alignItems: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              />
+            }
+            onClick={() => alert("Hi!")}
+            variant="contained"
+          >
+            New URL
+          </Button>
         </div>
       </div>
       <div id="logo">
@@ -252,6 +335,17 @@ export default function Dashboard() {
         animationData={require("./loading.json")}
         width={100}
         height={100}
+      />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="dark"
       />
     </>
   );
