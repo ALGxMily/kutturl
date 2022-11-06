@@ -191,7 +191,11 @@ export default function Dashboard() {
     <>
       <div className="App">
         <div className="App-header" id="logoHeader">
-          <img onClick={() => navigateTo("/")} src="logo-center.svg" />
+          <img
+            style={{ cursor: "pointer" }}
+            onClick={() => navigateTo("/")}
+            src="logo-center.svg"
+          />
         </div>
       </div>
       <div className="contentWrapDashboard" id="containerDashboard">
