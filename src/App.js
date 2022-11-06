@@ -84,25 +84,28 @@ function Home() {
       const loadingLottie = document.getElementById("loading");
       const container = document.getElementById("container");
       const logoHeader = document.getElementById("logoHeader");
+      const upperFooter = document.getElementById("upperFooter");
 
       loadingLottie.className = "loading";
       logoHeader.style.display = "none";
       header.className = "header_loading";
       logo.className = "logo_loading";
       container.className = "container_loading";
+      upperFooter.className = "upperFooter_loading";
     } else {
       const logo = document.getElementById("logo");
       const container = document.getElementById("container");
       const header = document.getElementById("header");
       const logoHeader = document.getElementById("logoHeader");
       const loadingLottie = document.getElementById("loading");
+      const upperFooter = document.getElementById("upperFooter");
 
       loadingLottie.style.display = "none";
       logoHeader.style.display = "flex";
       header.className = "inputWrap";
       logo.className = "logo";
       container.className = "contentWrap";
-
+      upperFooter.className = "upperFooter";
       logo.style.display = "none";
     }
   }, [loading]);
@@ -155,6 +158,14 @@ function Home() {
     setLoading(true);
   };
   React.useEffect(() => {
+    //if the keyboard is up
+    if (window.innerHeight < window.outerHeight) {
+      const upperFooter = document.getElementById("upperFooter");
+      upperFooter.style.display = "none";
+    } else {
+      const upperFooter = document.getElementById("upperFooter");
+      upperFooter.style.display = "flex";
+    }
     setLoading(true);
     auth.onAuthStateChanged((user) => {
       try {
@@ -254,7 +265,7 @@ function Home() {
       <div id="logo">
         <img src="logo-center.svg" />
       </div>
-      <div className="upperFooter">
+      <div className="upperFooter" id="upperFooter">
         <a href={!session ? "/login" : "/dashboard"}>Dashboard</a>
         {session ? <p onClick={logout}>Logout</p> : null}
       </div>
