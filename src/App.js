@@ -308,10 +308,10 @@ function Home() {
       <div id="logo">
         <img src="logo-center.svg" />
       </div>
-      <div className="upperFooter" id="upperFooter">
+      {/* <div className="upperFooter" id="upperFooter">
         <a href={!session ? "/login" : "/dashboard"}>Dashboard</a>
         {session ? <p onClick={logout}>Logout</p> : null}
-      </div>
+      </div> */}
       <footer>
         <div className="footerWrap">
           <div className="footerContent">
