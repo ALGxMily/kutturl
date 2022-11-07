@@ -323,7 +323,6 @@ export default function Dashboard() {
                         >
                           {public_url}?i=
                           <span
-                            className="linkDashboard"
                             style={{
                               color: "#c29a2d",
                               fontWeight: "bold",
@@ -332,7 +331,6 @@ export default function Dashboard() {
                             }}
                           >
                             {key}
-
                             <CopyOutline
                               style={{
                                 cursor: "pointer",
