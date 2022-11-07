@@ -300,7 +300,7 @@ export default function Dashboard() {
                           <CopyOutline
                             style={{
                               cursor: "pointer",
-                              top: "10x",
+                              top: "15x",
                               position: "relative",
                             }}
                             color={"#c29a2d"}
