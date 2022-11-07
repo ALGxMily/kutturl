@@ -84,7 +84,9 @@ text-decoration: none;
   .App-header p{
     font-size: 2rem;
   }
-  
+  .linkDashboard{
+    display:none;
+  }
 }
 .App-header li{
   list-style:none;
@@ -150,10 +152,20 @@ text-decoration: none;
   justify-content: center;
 
 }
-.urlContainerTitle{
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+
+#copyIcon{
+  display: none;
+}
+@media screen and (max-width: 768px) {
+  .urlContaineTitleMobile{
+    display: flex;
+    flex-direction: row;
+  }
+  #copyIcon{
+    display: block;
+    margin-left: .5rem;
+
+  }
 }
 
 .nodata{

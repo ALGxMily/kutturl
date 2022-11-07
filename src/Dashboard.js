@@ -176,6 +176,7 @@ export default function Dashboard() {
       })
       .catch((error) => {
         console.log(error);
+        setError("Network error - please try again later...");
       });
   }, [userUID]);
   const [text, setText] = React.useState("");
@@ -293,11 +294,23 @@ export default function Dashboard() {
                       <b>{date.split("T")[0]} </b>
                     </td>
                     <td key={key}>
-                      <div className="urlContaineTitle">
-                        <p>{name}</p>
+                      <div className="urlContaineTitleMobile">
+                        <p onClick={() => copy(key)}>{name}</p>
+                        <p id="copyIcon">
+                          <CopyOutline
+                            style={{
+                              cursor: "pointer",
+                              top: "10x",
+                              position: "relative",
+                            }}
+                            color={"#c29a2d"}
+                          />
+                        </p>
                       </div>
                       <div className="urlContainerLink">
                         <span
+                          className="linkDashboard"
+                          onClick={() => copy(key)}
                           style={{
                             color: "#fff",
                             cursor: "pointer",
@@ -323,7 +336,6 @@ export default function Dashboard() {
                               position: "relative",
                             }}
                             color={"#c29a2d"}
-                            onClick={() => copy(key)}
                           />
                         </span>
                       </div>
