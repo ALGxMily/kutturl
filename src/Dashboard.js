@@ -102,7 +102,6 @@ export default function Dashboard() {
       logoHeader.style.display = "flex";
       logo.className = "logo";
       container.className = "contentWrapDashboard";
-
       logo.style.display = "none";
     }
   }, [loading]);

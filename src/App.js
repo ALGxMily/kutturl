@@ -99,7 +99,6 @@ function Home() {
       const header = document.getElementById("header");
       const logoHeader = document.getElementById("logoHeader");
       const loadingLottie = document.getElementById("loading");
-      const dashboardAMobile = document.getElementById("dashboardAMobile");
 
       loadingLottie.style.display = "none";
       logoHeader.style.display = "flex";
@@ -107,7 +106,6 @@ function Home() {
       logo.className = "logo";
       container.className = "contentWrap";
       logo.style.display = "none";
-      dashboardAMobile.style.display = "none";
 
       //if on a mobile device, show dashboardAMobile
     }
