@@ -84,8 +84,9 @@ text-decoration: none;
   .App-header p{
     font-size: 2rem;
   }
-  .linkDashboard{
-    display:none;
+  .urlContainerLink span{
+    display:flex;
+    font-size: 1rem;
   }
 }
 .App-header li{
@@ -133,6 +134,10 @@ text-decoration: none;
   margin-bottom: 20px;
 
 }
+
+#logo-header a{
+  display: none;
+}
 .inputWrap input{
   width: 100%;
   height: 50px;
@@ -156,7 +161,14 @@ text-decoration: none;
 #copyIcon{
   display: none;
 }
+.mobile_dashboard{
+  display: none;
+}
+
 @media screen and (max-width: 768px) {
+  #dateTable{
+    display: none;
+  }
   .urlContaineTitleMobile{
     display: flex;
     flex-direction: row;
@@ -165,6 +177,9 @@ text-decoration: none;
     display: block;
     margin-left: .1rem;
 
+  }
+  .mobile_dashboard{
+    display: block;
   }
 }
 

@@ -282,7 +282,8 @@ export default function Dashboard() {
             <table>
               <thead>
                 <tr style={{ textAlign: "center" }}>
-                  <th>Date</th>
+                  <th id="dateTable">Date</th>
+                  <th>Name</th>
                   <th>URL</th>
                   <th>Uses</th>
                 </tr>
@@ -290,23 +291,25 @@ export default function Dashboard() {
               <tbody>
                 {dataUser.map(({ uses, key, date, name }) => (
                   <tr id="rowItems">
-                    <td>
+                    <td id="dateTable">
                       <b>{date.split("T")[0]} </b>
                     </td>
-                    <td key={key}>
+                    <td>
                       <div className="urlContaineTitleMobile">
                         <p onClick={() => copy(key)}>{name}</p>
                         <p id="copyIcon">
-                          <CopyOutline
+                          {/* <CopyOutline
                             style={{
                               cursor: "pointer",
                               top: "15x",
                               position: "relative",
                             }}
                             color={"#c29a2d"}
-                          />
+                          /> */}
                         </p>
                       </div>
+                    </td>
+                    <td key={key}>
                       <div className="urlContainerLink">
                         <span
                           className="linkDashboard"
@@ -320,6 +323,7 @@ export default function Dashboard() {
                         >
                           {public_url}?i=
                           <span
+                            className="linkDashboard"
                             style={{
                               color: "#c29a2d",
                               fontWeight: "bold",
@@ -332,7 +336,6 @@ export default function Dashboard() {
                           <CopyOutline
                             style={{
                               cursor: "pointer",
-                              top: "5px",
                               position: "relative",
                             }}
                             color={"#c29a2d"}

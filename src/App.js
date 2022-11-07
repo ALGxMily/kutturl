@@ -99,6 +99,7 @@ function Home() {
       const header = document.getElementById("header");
       const logoHeader = document.getElementById("logoHeader");
       const loadingLottie = document.getElementById("loading");
+      const dashboardAMobile = document.getElementById("dashboardAMobile");
 
       loadingLottie.style.display = "none";
       logoHeader.style.display = "flex";
@@ -106,6 +107,9 @@ function Home() {
       logo.className = "logo";
       container.className = "contentWrap";
       logo.style.display = "none";
+      dashboardAMobile.style.display = "none";
+
+      //if on a mobile device, show dashboardAMobile
     }
   }, [loading]);
 
@@ -155,6 +159,22 @@ function Home() {
     }
     setLoading(true);
   };
+
+  //react useeffect depending on screen resize
+  React.useEffect(() => {
+    const handleResize = () => {
+      const dashboardAMobile = document.getElementById("dashboardAMobile");
+
+      if (window.innerWidth < 768) {
+        dashboardAMobile.style.display = "flex";
+      } else if (window.innerWidth > 768) {
+        dashboardAMobile.style.display = "none";
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   React.useEffect(() => {
     if (searchParams.get("message") === "invalid_request") {
       notifyError();
@@ -227,11 +247,12 @@ function Home() {
                   marginTop: "10px",
                 }}
                 className="mobile_dashboard"
+                id="dashboardAMobile"
                 href="/dashboard"
               >
                 Dashboard
                 <ArrowForward
-                  onClick={logout}
+                  onClick={() => navigateTo("/dashboard")}
                   color="#FBBD12"
                   style={{
                     cursor: "pointer",
