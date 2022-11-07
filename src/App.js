@@ -188,7 +188,6 @@ function Home() {
         setSession(!!user);
         setLoading(false);
       } catch (error) {
-        console.log("error " + error);
         setSession(false);
         setLoading(false);
       }

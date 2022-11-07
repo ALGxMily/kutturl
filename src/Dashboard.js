@@ -207,12 +207,14 @@ export default function Dashboard() {
   }, []);
   const logout = async () => {
     setLoading(true);
-    auth
-      .signOut()
-      .then(() => {
-        navigateTo("/");
-      })
-      .finally(() => {});
+    try {
+      auth.signOut().then(() => {
+        setLoading(false);
+        navigateTo("/login");
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
