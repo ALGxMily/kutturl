@@ -25,7 +25,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { signOut } from "firebase/auth";
 import NotFound from "./404";
 import { Button } from "@mui/material";
-import { ArrowForward, ExitOutline } from "react-ionicons";
+import Tippy from "@tippyjs/react";
+import Joyride from "react-joyride";
+import "tippy.js/dist/tippy.css"; // optional
+import {
+  ArrowForward,
+  ExitOutline,
+  Heart,
+  InformationCircleOutline,
+} from "react-ionicons";
 
 function App() {
   return (
@@ -109,6 +117,7 @@ function Home() {
 
       //if on a mobile device, show dashboardAMobile
     }
+    setSteps(stepsScreenApp);
   }, [loading]);
 
   const [text, setText] = React.useState("");
@@ -157,9 +166,86 @@ function Home() {
     }
     setLoading(true);
   };
+  const stepsScreenApp = [
+    {
+      target: "#inputSection",
+      content: "Enter a URL to get started!",
+    },
+    {
+      target: "#button",
+      content: "Click here to shorten your URL!",
+    },
+    {
+      target: "#dashboardSection",
+      content: "Click here to access your dashboard!",
+    },
+    {
+      target: "#loginSection",
+      content: "Click here to login or register!",
+    },
+    {
+      target: "#disclaimer",
+      content: (
+        <p>
+          This is a small project made for fun{"\n"}
+          <br />
+          and learning purposes!If you find any bugs, please report them to
+          dgiuliano@yandex.com{"\n"}Any suggestions are welcome!{"\n"}Enjoy!
+        </p>
+      ),
+      onclick: () => {
+        setJoyride({ ...joyride, run: false });
+      },
+    },
+  ];
+  const [steps, setSteps] = React.useState([]);
+  const [run, setRun] = React.useState(true);
+  const HandleJoyRideCallback = (data) => {
+    const { status, type } = data;
+    const finishedStatuses = [status.FINISHED, status.SKIPPED];
 
-  //react useeffect depending on screen resize
+    if (finishedStatuses.includes(status)) {
+      console.log("finished");
+      setJoyride({ ...joyride, run: false });
+    }
+  };
+  const [joyride, setJoyride] = React.useState({
+    run: true,
+    steps: stepsScreenApp,
+    continuous: true,
+    showProgress: false,
+    showSkipButton: true,
+
+    styles: {
+      options: {
+        zIndex: 10000,
+        backgroundColor: "#1F1F1F",
+        primaryColor: "#FBBD12",
+        textColor: "white",
+      },
+      buttonNext: {
+        backgroundColor: "#FBBD12",
+        color: "black",
+      },
+      buttonBack: {
+        backgroundColor: "#FBBD12",
+        color: "black",
+      },
+      buttonClose: {
+        backgroundColor: "#1F1F1F",
+        color: "black",
+      },
+      buttonSkip: {
+        backgroundColor: "#FBBD12",
+        color: "black",
+      },
+    },
+  });
+
   React.useEffect(() => {
+    if (!loading) {
+      setSteps(stepsScreenApp);
+    }
     const handleResize = () => {
       const dashboardAMobile = document.getElementById("dashboardAMobile");
 
@@ -174,6 +260,7 @@ function Home() {
   }, []);
 
   React.useEffect(() => {
+    setRun(true);
     if (searchParams.get("message") === "invalid_request") {
       notifyError();
       return;
@@ -203,6 +290,7 @@ function Home() {
         setLoading(false);
       });
   };
+
   React.useEffect(() => {
     // attach the event listener
     document.addEventListener("keydown", handleKeyPress);
@@ -220,6 +308,7 @@ function Home() {
       <div className="App">
         <div className="App-header" id="logoHeader">
           <img src="logo-center.svg" />
+
           {session ? (
             <>
               <a className="mobileUsername">
@@ -237,11 +326,11 @@ function Home() {
               </a>
               <a
                 style={{
-                  display: "flex",
                   color: "#FBBD12",
                   alignItems: "center",
                   cursor: "pointer",
                   marginTop: "10px",
+                  display: "none",
                 }}
                 className="mobile_dashboard"
                 id="dashboardAMobile"
@@ -274,16 +363,49 @@ function Home() {
           )}
           <div className="inputWrap" id="header">
             <li>
-              <a href={!session ? "/login" : "/dashboard"}>Dashboard</a>
+              <a
+                id="dashboardSection"
+                href={!session ? "/login" : "/dashboard"}
+              >
+                <Joyride
+                  callback={HandleJoyRideCallback}
+                  run={joyride.run}
+                  steps={joyride.steps}
+                  continuous={joyride.continuous}
+                  showProgress={joyride.showProgress}
+                  showSkipButton={joyride.showSkipButton}
+                  styles={joyride.styles}
+                />
+                Dashboard
+              </a>
             </li>
             <li>
               {!session ? (
-                <a style={{ cursor: "pointer" }} onClick={goToLogin}>
-                  Log-in
-                </a>
+                <>
+                  <a
+                    id="loginSection"
+                    style={{ cursor: "pointer" }}
+                    onClick={goToLogin}
+                  >
+                    Log-in
+                  </a>
+                </>
               ) : (
                 <>
-                  <a style={{ cursor: "pointer" }} onClick={() => menu()}>
+                  <a
+                    id="loginSection"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => menu()}
+                  >
+                    <Joyride
+                      callback={HandleJoyRideCallback}
+                      run={joyride.run}
+                      steps={joyride.steps}
+                      continuous={joyride.continuous}
+                      showProgress={joyride.showProgress}
+                      showSkipButton={joyride.showSkipButton}
+                      styles={joyride.styles}
+                    />
                     {username}
                   </a>
                   {popUpMenu && PopUpMenu()}
@@ -298,32 +420,71 @@ function Home() {
           <h2>Easy, convenient, prettier</h2>
           <p>Shorten your URLs like a boss.</p>
         </div>
-        <div className="inputWrap">
-          <input
-            itemType="url"
-            ref={focused}
-            onChange={(text) => setText(text.target.value)}
-            type="text"
-            placeholder="Paste your link here"
-          ></input>
-          <a onClick={loadURL}>
+        <div className="inputWrap" id="inputSection">
+          <Joyride
+            callback={HandleJoyRideCallback}
+            run={joyride.run}
+            steps={joyride.steps}
+            continuous={joyride.continuous}
+            showProgress={joyride.showProgress}
+            showSkipButton={joyride.showSkipButton}
+            styles={joyride.styles}
+          />
+          <Tippy content="Insert Link here" placement="bottom">
+            <input
+              itemType="url"
+              ref={focused}
+              onChange={(text) => setText(text.target.value)}
+              type="text"
+              placeholder="Paste your link here"
+              id="input"
+            ></input>
+          </Tippy>
+          <a id="button" onClick={loadURL}>
             <ButtonShort text={text} buttonRef={refButton} />
+            <Joyride
+              callback={HandleJoyRideCallback}
+              run={joyride.run}
+              steps={joyride.steps}
+              continuous={joyride.continuous}
+              showProgress={joyride.showProgress}
+              showSkipButton={joyride.showSkipButton}
+              styles={joyride.styles}
+            />
           </a>
         </div>
       </div>
       <div id="logo">
         <img src="logo-center.svg" />
       </div>
-      {/* <div className="upperFooter" id="upperFooter">
-        <a href={!session ? "/login" : "/dashboard"}>Dashboard</a>
-        {session ? <p onClick={logout}>Logout</p> : null}
-      </div> */}
       <footer>
         <div className="footerWrap">
-          <div className="footerContent">
-            {/* <img src='logo-center.svg'/> */}
+          <div className="footerContent" id="disclaimer">
+            <Joyride
+              callback={HandleJoyRideCallback}
+              run={joyride.run}
+              steps={joyride.steps}
+              continuous={joyride.continuous}
+              showProgress={joyride.showProgress}
+              showSkipButton={joyride.showSkipButton}
+              styles={joyride.styles}
+            />
+            <p>
+              Made with{" "}
+              <Heart
+                color="#FBBD12"
+                style={{ position: "relative", top: "2px" }}
+              />{" "}
+              by{" "}
+              <a
+                target={"_blank"}
+                href="https://github.com/ALGxMily"
+                style={{ color: "#fff", textDecoration: "none" }}
+              >
+                Dzhuliano
+              </a>
+            </p>
           </div>
-          <p>&copy; 2022 kuturl.xyz</p>
         </div>
       </footer>
       <Lottie
