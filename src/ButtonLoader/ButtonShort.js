@@ -149,7 +149,14 @@ export function FinalPage() {
       <h1>
         Click to copy
         <Tooltip title="Click to copy">
-          <a href="#" onClick={() => copy()}>
+          <a
+            href="#"
+            onClick={() => copy()}
+            style={{
+              aspectRatio: "1",
+              width: "60%",
+            }}
+          >
             {shorturl}
           </a>
         </Tooltip>
