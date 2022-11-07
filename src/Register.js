@@ -2,22 +2,70 @@ import React from "react";
 import { auth } from "./firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
+import { ToastContainer, toast } from "react-toastify";
 export default function Register() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState("");
+  const [errorData, setError] = React.useState("");
   const loadingRef = React.useRef(null);
   const navigateTo = useNavigate();
+  const notifyErrorGlobal = (error) => {
+    try {
+      toast.error(`Error ~ ${error}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const notifySuccessful = (message) => {
+    try {
+      toast.success(`${message}`, {
+        position: "top-center",
+        autoClose: 1400,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const register = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
       const { user, session, error } = await auth
         .createUserWithEmailAndPassword(email, password)
-        .catch((error) => {
-          console.log(error);
+        .catch((error, response) => {
+          const err = error.toString();
+          const isError =
+            err ===
+            "FirebaseError: Firebase: The email address is already in use by another account. (auth/email-already-in-use)."
+              ? true
+              : false;
+
+          if (isError) {
+            notifyErrorGlobal("Email already in use");
+          } else {
+            notifyErrorGlobal("Something went wrong");
+          }
+          setLoading(false);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2300);
         })
         .then(() => {
           setLoading(false);
@@ -35,7 +83,7 @@ export default function Register() {
             });
         });
     } catch (error) {
-      console.log(error);
+      console.log("error", error);
     }
   };
   React.useEffect(() => {
@@ -59,7 +107,9 @@ export default function Register() {
         <div className="right">
           <form>
             <div className="form-group" id="form">
-              <label for="username">Username</label>
+              <label for="username" id="emailLabel">
+                Username
+              </label>
               <input
                 onChange={(e) => {
                   setUsername(e.target.value);
@@ -70,7 +120,9 @@ export default function Register() {
                 aria-describedby="emailHelp"
                 placeholder="Enter username"
               />
-              <label for="email">Email address</label>
+              <label for="email" id="emailLabel">
+                Email address
+              </label>
               <input
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -81,7 +133,9 @@ export default function Register() {
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
               />
-              <label for="password">Password</label>
+              <label for="password" id="passwordLabel">
+                Password
+              </label>
               <input
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -91,6 +145,14 @@ export default function Register() {
                 id="passwordForm"
                 placeholder="Password"
               />
+
+              <button
+                onClick={(e) => register(e)}
+                type="submit"
+                className="registerButton"
+              >
+                Create account
+              </button>
               <small>
                 Have an account already?{" "}
                 <a
@@ -101,13 +163,6 @@ export default function Register() {
                   Login here
                 </a>
               </small>
-              <button
-                onClick={(e) => register(e)}
-                type="submit"
-                className="registerButton"
-              >
-                Create account
-              </button>
             </div>
           </form>
         </div>
@@ -119,6 +174,17 @@ export default function Register() {
         animationData={require("./loading.json")}
         width={100}
         height={100}
+      />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="dark"
       />
     </>
   );

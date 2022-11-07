@@ -37,11 +37,37 @@ export default function ButtonLoader({ text, buttonRef }) {
   function openLinklink() {
     const user = auth.currentUser;
     const uuid = user.uid;
+    console.log(text);
+    //url regex
+
+    let regex =
+      "((http|https)://)(www.)?" +
+      "[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]" +
+      "{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)";
+    if (!text.match(regex)) {
+      window.location.reload();
+      navigateto({
+        pathname: `/`,
+        search: createSearchParams({
+          message: "invalid_request",
+        }).toString(),
+      });
+    }
     fetch(`${public_url}/shorturladd?url=${text}&uuid=${uuid}`, {
       method: "GET",
     })
       .then((response) => response.json())
       .then((response) => {
+        if (response.error === "ERR_URL") {
+          console.log("Please enter a valid URL!");
+          navigateto({
+            pathname: `/`,
+            search: createSearchParams({
+              message: "invalid_request",
+            }).toString(),
+          });
+        }
+
         console.log(response);
         setUrl(response.url);
         setKey(response.key);

@@ -11,14 +11,38 @@ export default function Login() {
   const [loading, setLoading] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState("");
+  const [errorData, setError] = React.useState("");
   const loadingRef = React.useRef(null);
   const navigateTo = useNavigate();
+
+  //change button height when keyboard is up
+  React.useEffect(() => {
+    const keyboardUp = () => {
+      const button = document.querySelector(".form-group button");
+      const input = document.querySelector(".form-group input");
+      button.style.height = "60vh";
+      input.style.height = "60%";
+      console.log("keyboard up");
+    };
+    const keyboardDown = () => {
+      const button = document.getElementById(".form-group button");
+      const input = document.querySelector(".form-group input");
+      button.style.height = "20vh";
+      input.style.height = "20%";
+      console.log("keyboard down");
+    };
+    window.addEventListener("keyboardDidShow", keyboardUp);
+    window.addEventListener("keyboardDidHide", keyboardDown);
+    return () => {
+      window.removeEventListener("keyboardDidShow", keyboardUp);
+      window.removeEventListener("keyboardDidHide", keyboardDown);
+    };
+  }, []);
   const notifyErrorGlobal = (error) => {
     try {
       toast.error(`Error- ${error}`, {
         position: "top-center",
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -53,36 +77,54 @@ export default function Login() {
       auth
         .signInWithEmailAndPassword(email, password)
         .catch((error) => {
-          error.message === "INVALID_EMAIL" ||
+          if (error) setLoading(false);
+          const errorTemp = error.message;
+          setError(errorTemp);
+          navigateTo("/login");
+          //rerender the page and show error
+          errorData === "INVALID_EMAIL" ||
           "EMAIL_NOT_FOUND" ||
           "INVALID_PASSWORD" ||
           "USER_DISABLED"
             ? notifyErrorGlobal("Invalid Email or Password")
             : notifyErrorGlobal("Something went wrong");
-          notifyErrorGlobal(error.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        })
+        .finally(() => {
           setLoading(false);
-          setLoading(true);
-          navigateTo("/login");
         })
         .then((response) => {
-          if (response.user) {
+          if (!response) {
+            console.log(response.error);
+            setLoading(false);
+            return;
+            // window.location.reload();
+          }
+          if (response.user !== null) {
             setLoading(false);
             notifySuccessful("Login Successful");
             navigateTo("/dashboard");
           }
         });
+      // } catch (error) {
+      //   console.log(error);
+      //   setLoading(false);
+      //   error.message === "INVALID_EMAIL" ||
+      //   "EMAIL_NOT_FOUND" ||
+      //   "INVALID_PASSWORD" ||
+      //   "USER_DISABLED"
+      //     ? notifyErrorGlobal("Invalid Email or Password")
+      //     : notifyErrorGlobal("Something went wrong");
+      //   notifyErrorGlobal(error.message);
+      //   setLoading(true);
+      //   navigateTo("/login");
+      // }
+      // };
     } catch (error) {
       console.log(error);
       setLoading(false);
-      error.message === "INVALID_EMAIL" ||
-      "EMAIL_NOT_FOUND" ||
-      "INVALID_PASSWORD" ||
-      "USER_DISABLED"
-        ? notifyErrorGlobal("Invalid Email or Password")
-        : notifyErrorGlobal("Something went wrong");
-      notifyErrorGlobal(error.message);
-      setLoading(true);
-      navigateTo("/login");
     }
   };
   const goToHome = () => {
@@ -105,6 +147,7 @@ export default function Login() {
       <div className="split" id="screen">
         <div className="left" id="left">
           <img
+            id="logo-auth"
             style={{ cursor: "pointer" }}
             onClick={goToHome}
             draggable={false}
@@ -114,7 +157,9 @@ export default function Login() {
         <div className="right">
           <form>
             <div className="form-group" id="form">
-              <label htmlFor="email">Email address</label>
+              <label htmlFor="email" id="emailLabel">
+                Email address
+              </label>
               <input
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -125,7 +170,9 @@ export default function Login() {
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
               />
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password" id="passwordLabel">
+                Password
+              </label>
               <input
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -135,6 +182,10 @@ export default function Login() {
                 id="passwordForm"
                 placeholder="Password"
               />
+
+              <button onClick={(e) => login(e)} className="btn btn-primary">
+                <p>Login</p>
+              </button>
               <small>
                 New here?{" "}
                 <a
@@ -145,10 +196,6 @@ export default function Login() {
                   Make a new account today
                 </a>
               </small>
-              <button onClick={(e) => login(e)} className="btn btn-primary">
-                Login
-              </button>
-              <small className="error">{error}</small>
             </div>
           </form>
         </div>

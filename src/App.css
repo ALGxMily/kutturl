@@ -144,6 +144,29 @@ text-decoration: none;
   background-color:rgb(185, 182, 182, 0.2);
   margin-left: 6rem;
 }
+.urlContainerLink{
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+}
+.urlContainerTitle{
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.nodata{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.nodata h1{
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  font-size: 1.5rem;
+  color: #fff;
+}
 .containerHeader{
   display: flex;
   flex-direction: row;
@@ -598,17 +621,16 @@ text-decoration: none;
 .registerButton{
   width: 10vw;
 }
+
 @media screen and (max-width: 768px){
   .split{
     flex-direction: column;
     display: flex;
-    align-items: center;
-    justify-content: center;
 
   }
   .left{
     width: 100%;
-    height: 30vh;
+    height: 20vh;
   }
   .left img{
     width: 50%;
@@ -616,7 +638,7 @@ text-decoration: none;
   }
   .right{
     width: 100%;
-    height: 50vh;
+    height: 80vh;
   }
   .right form{
     width: 100%;
@@ -624,8 +646,8 @@ text-decoration: none;
   }
   .form-group{
     width: 100%;
-    height: 100%;
-    justify-content: center;
+    height: 80%;
+    justify-content: flex-start;
     align-items: center;
   }
   .form-group input{
@@ -635,7 +657,7 @@ text-decoration: none;
   }
   .form-group button{
     width: 30%;
-    height: 10%;
+    height: 20%;
   }
   .registerButton{
     width: 100%;
@@ -668,6 +690,7 @@ text-decoration: none;
   align-items: center;
 }
 @media screen and (max-width: 768px){
+
   .tableContainer{
     display: flex;
     justify-content: flex-start;
@@ -682,8 +705,29 @@ text-decoration: none;
     padding: 30px;
     width: 100%;
   }
+  .form-group{
+    width: 100%;
+    height: 100%;
+    justify-content: flex-start;
+    align-items: center;
+  }
   .form-group button {
-    width: 40%;
-    height: 40%;
+    width: 60%;
+    font-size: 2rem;
+    height: 60vh;
+    viewport-fit: cover;
+    vertical-align: middle;
+    margin-top: 10px;
+
+
+    font-size: 1rem;
+    aspect-ratio: 1;
+  }
+  .form-group input{
+    width: 70%;
+    height: 60%;
+    font-size: 1rem;
+    aspect-ratio: 1;
+
   }
 }

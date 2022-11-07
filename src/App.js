@@ -10,7 +10,9 @@ import {
   Routes,
   useNavigate,
   useLocation,
+  useSearchParams,
 } from "react-router-dom";
+
 import Login from "./Login";
 import { MdContentPaste } from "react-icons/md";
 import Register from "./Register";
@@ -24,6 +26,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { signOut } from "firebase/auth";
 import NotFound from "./404";
 import { Button } from "@mui/material";
+import { ExitOutline } from "react-ionicons";
 
 function App() {
   return (
@@ -39,6 +42,7 @@ function App() {
   );
 }
 function Home() {
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = React.useState(true);
   const [username, setUsername] = React.useState("");
   const [session, setSession] = React.useState(false);
@@ -150,14 +154,17 @@ function Home() {
     navigateTo("/login");
   };
   const loadURL = async () => {
-    if (!text) {
-      setLoading(false);
+    if (text === "") {
       notifyError();
       return;
     }
     setLoading(true);
   };
   React.useEffect(() => {
+    if (searchParams.get("message") === "invalid_request") {
+      notifyError();
+      return;
+    }
     //if the keyboard is up
     if (window.innerHeight < window.outerHeight) {
       const upperFooter = document.getElementById("upperFooter");
@@ -210,7 +217,19 @@ function Home() {
         <div className="App-header" id="logoHeader">
           <img src="logo-center.svg" />
           {session ? (
-            <a className="mobileUsername">Logged in as {username}</a>
+            <a className="mobileUsername">
+              Logged in as {username}
+              <ExitOutline
+                onClick={logout}
+                color="#FBBD12"
+                style={{
+                  cursor: "pointer",
+                  top: "3px",
+                  marginLeft: "5px",
+                  position: "relative",
+                }}
+              />
+            </a>
           ) : (
             <a
               style={{

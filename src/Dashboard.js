@@ -116,6 +116,7 @@ export default function Dashboard() {
     return unsubscribe;
   }, []);
   const [dataUser, setData] = React.useState([]);
+  const [errorData, setError] = React.useState("");
   const isDev = process.env.NODE_ENV === "development";
   const public_url = isDev
     ? "http://localhost:5005"
@@ -130,20 +131,52 @@ export default function Dashboard() {
       }
     });
   };
+  const deleteURL = (key) => {
+    dataUser.forEach((element) => {
+      if (element.key === key) {
+        fetch(`${public_url}/delete?key=${key}&uuid=${userUID}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.message) {
+              notifySuccessful(data.message);
+              setTimeout(() => {
+                window.location.reload();
+              }, 1500);
+            } else {
+              notifyErrorGlobal(data.error);
+            }
+          })
+          .catch((error) => {
+            notifyErrorGlobal(error);
+          });
+      }
+    });
+  };
+
   React.useEffect(() => {
     if (!userUID) return;
     fetch(`${public_url}/shorturl?uuid=${userUID}`, {
       method: "GET",
-    }).then((res) => {
-      res
-        .json()
-        .then((data) => {
-          setData(data.data);
-        })
-        .catch((error) => {
-          notifyErrorGlobal(error);
+    })
+      .then((res) => {
+        res.json().then((data) => {
+          if (data.error) {
+            if (data.error === "EMPTY_LIST") {
+              setError("It's time to create your first short URL!");
+            }
+            if (data.error === "INVALID_UUID") {
+              setError("Invalid User");
+            }
+          } else {
+            setData(data.data);
+          }
         });
-    });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, [userUID]);
   const [text, setText] = React.useState("");
   const focused = React.useRef(null);
@@ -180,13 +213,7 @@ export default function Dashboard() {
       })
       .finally(() => {});
   };
-  const loadURL = async () => {
-    if (!text) {
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
-  };
+
   return (
     <>
       <div className="App">
@@ -250,49 +277,83 @@ export default function Dashboard() {
           </div>
         </div>
         <div className={"tableContainer"}>
-          {dataUser ? (
+          {!errorData ? (
             <table>
               <thead>
-                <tr>
+                <tr style={{ textAlign: "center" }}>
                   <th>Date</th>
                   <th>URL</th>
                   <th>Uses</th>
                 </tr>
               </thead>
               <tbody>
-                {dataUser.map(({ uses, key, date }) => (
+                {dataUser.map(({ uses, key, date, name }) => (
                   <tr id="rowItems">
                     <td>
                       <b>{date.split("T")[0]} </b>
                     </td>
                     <td key={key}>
-                      {`${public_url}?i=${key}`}
-                      <CopyOutline
-                        style={{
-                          cursor: "pointer",
-                          top: "5px",
-                          position: "relative",
-                          left: "5px",
-                        }}
-                        color={"#c29a2d"}
-                        onClick={() => copy(key)}
-                      />
+                      <div className="urlContaineTitle">
+                        <p>{name}</p>
+                      </div>
+                      <div className="urlContainerLink">
+                        <span
+                          style={{
+                            color: "#fff",
+                            cursor: "pointer",
+                            fontSize: "1rem",
+                            overflow: "hidden",
+                          }}
+                        >
+                          {public_url}?i=
+                          <span
+                            style={{
+                              color: "#c29a2d",
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              textDecoration: "none",
+                            }}
+                          >
+                            {key}
+                          </span>
+                          <CopyOutline
+                            style={{
+                              cursor: "pointer",
+                              top: "5px",
+                              position: "relative",
+                            }}
+                            color={"#c29a2d"}
+                            onClick={() => copy(key)}
+                          />
+                        </span>
+                      </div>
                     </td>
                     <td>{uses}</td>
                     <td>
-                      <Close color={"red"} />
+                      <Close
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        color={"red"}
+                        onClick={() => deleteURL(key)}
+                      />
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : (
-            <Skeleton
-              variant="rectangular"
-              sx={{ bgcolor: "red" }}
-              width={200}
-              height={50}
-            />
+            <h1
+              style={{
+                color: "#c29a2d",
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+                textAlign: "center",
+                marginTop: "2rem",
+              }}
+            >
+              {errorData}
+            </h1>
           )}
         </div>
         <div className="footerButton">
