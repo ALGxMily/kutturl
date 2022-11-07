@@ -332,14 +332,15 @@ export default function Dashboard() {
                             }}
                           >
                             {key}
+
+                            <CopyOutline
+                              style={{
+                                cursor: "pointer",
+                                position: "relative",
+                              }}
+                              color={"#c29a2d"}
+                            />
                           </span>
-                          <CopyOutline
-                            style={{
-                              cursor: "pointer",
-                              position: "relative",
-                            }}
-                            color={"#c29a2d"}
-                          />
                         </span>
                       </div>
                     </td>
