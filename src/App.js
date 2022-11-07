@@ -160,14 +160,6 @@ function Home() {
       notifyError();
       return;
     }
-    //if the keyboard is up
-    if (window.innerHeight < window.outerHeight) {
-      const upperFooter = document.getElementById("upperFooter");
-      upperFooter.style.display = "none";
-    } else {
-      const upperFooter = document.getElementById("upperFooter");
-      upperFooter.style.display = "flex";
-    }
     setLoading(true);
     auth.onAuthStateChanged((user) => {
       try {
