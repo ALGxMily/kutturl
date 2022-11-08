@@ -220,7 +220,7 @@ function Home() {
       options: {
         zIndex: 10000,
         backgroundColor: "#1F1F1F",
-        primaryColor: "#FBBD12",
+        primaryColor: "#DDA200",
         textColor: "white",
       },
       buttonNext: {
