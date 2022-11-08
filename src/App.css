@@ -161,10 +161,15 @@ text-decoration: none;
 .mobile_dashboard{
   display: none;
 }
-
+.urlContaineTitleMobile{
+  width: 100%;
+}
 @media screen and (max-width: 768px) {
   #dateTable{
     display: none;
+  }
+  .inputname{
+    width: 20vw,
   }
   .urlContaineTitleMobile{
     display: flex;

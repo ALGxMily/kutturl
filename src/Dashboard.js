@@ -14,7 +14,14 @@ import {
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
 import "gridjs/dist/theme/mermaid.css";
-import { Add, Close, Copy, CopyOutline, ExitOutline } from "react-ionicons";
+import {
+  Add,
+  Close,
+  Copy,
+  CopyOutline,
+  ExitOutline,
+  Pencil,
+} from "react-ionicons";
 import Lottie from "lottie-react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -22,8 +29,9 @@ import { auth } from "./firebaseConfig";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signOut } from "firebase/auth";
-import { Button, Tab } from "@mui/material";
+import { Button, Tab, Toolbar } from "@mui/material";
 import Paper from "@mui/material/Paper";
+import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import Table from "./Table";
@@ -48,6 +56,7 @@ export default function Dashboard() {
   const loadingRef = React.useRef(null);
   const navigateTo = useNavigate();
   const location = useLocation();
+  const refEdit = React.useRef(null);
   const notifyErrorGlobal = (error) => {
     try {
       toast.error(`Error-${error}`, {
@@ -80,6 +89,25 @@ export default function Dashboard() {
       console.log(error);
     }
   };
+  const notifyEdit = (message, time) => {
+    try {
+      toast.info(`${message}`, {
+        toastId: "edit",
+        position: "top-center",
+        autoClose: time,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        closeButton: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const [time, setTime] = React.useState(false);
   React.useEffect(() => {
     if (loading) {
       const logo = document.getElementById("logo");
@@ -113,7 +141,7 @@ export default function Dashboard() {
       }
     });
     return unsubscribe;
-  }, []);
+  }, [!loading]);
   const [dataUser, setData] = React.useState([]);
   const [errorData, setError] = React.useState("");
   const isDev = process.env.NODE_ENV === "development";
@@ -122,6 +150,21 @@ export default function Dashboard() {
     : "https://kuturl.herokuapp.com";
 
   const wrapperRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      const inputName = document.getElementById("inputName");
+
+      if (window.innerWidth < 768) {
+        inputName.style.width = "20vw";
+      } else if (window.innerWidth > 768) {
+        inputName.style.width = "8vw";
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const copy = (key) => {
     dataUser.forEach((element) => {
       if (element.key === key) {
@@ -153,6 +196,45 @@ export default function Dashboard() {
       }
     });
   };
+  const saveName = (key) => {
+    dataUser.forEach((element) => {
+      if (element.key === key) {
+        fetch(`${public_url}/update?key=${key}&uuid=${userUID}&name=${text}`, {
+          method: "PUT",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.message) {
+              notifySuccessful(data.message);
+              setTimeout(() => {
+                window.location.reload();
+              }, 1500);
+            } else {
+              notifyErrorGlobal(data.error);
+            }
+          })
+          .catch((error) => {
+            notifyErrorGlobal(error);
+          });
+      }
+    });
+  };
+  const handleClickOutside = (event) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+      refEdit.current.style.display = "none";
+      refButton.current.style.display = "flex";
+      const toastID = "edit";
+      toast.dismiss(toastID);
+    }
+  };
+  React.useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [wrapperRef]);
 
   React.useEffect(() => {
     if (!userUID) return;
@@ -177,19 +259,17 @@ export default function Dashboard() {
         console.log(error);
         setError("Network error - please try again later...");
       });
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, [userUID]);
   const [text, setText] = React.useState("");
   const focused = React.useRef(null);
   const refButton = React.useRef(null);
   const [popUpMenu, setPopUpMenu] = React.useState(false);
   const user = auth.currentUser;
-  const menu = () => {
-    setPopUpMenu(!popUpMenu);
-  };
-  const goToLogin = () => {
-    setLoading(true);
-    navigateTo("/login");
-  };
   React.useEffect(() => {
     setLoading(true);
     auth.onAuthStateChanged((user) => {
@@ -203,7 +283,7 @@ export default function Dashboard() {
         setLoading(false);
       }
     });
-  }, []);
+  }, [!loading]);
   const logout = async () => {
     setLoading(true);
     try {
@@ -218,7 +298,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="App">
+      <div className="App" ref={wrapperRef}>
         <div className="App-header" id="logoHeader">
           <img
             style={{ cursor: "pointer" }}
@@ -295,19 +375,83 @@ export default function Dashboard() {
                     <td id="dateTable">
                       <b>{date.split("T")[0]} </b>
                     </td>
-                    <td>
+                    <td id="name">
                       <div className="urlContaineTitleMobile">
-                        <p onClick={() => copy(key)}>{name}</p>
-                        <p id="copyIcon">
-                          {/* <CopyOutline
-                            style={{
-                              cursor: "pointer",
-                              top: "15x",
-                              position: "relative",
-                            }}
-                            color={"#c29a2d"}
-                          /> */}
-                        </p>
+                        {/* <p onClick={() => copy(key)}>{name}</p> */}
+                        <input
+                          key={key}
+                          ref={refButton === key ? refButton : null}
+                          id={`inputName${key}`}
+                          className="inputName"
+                          type="text"
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                            outline: "none",
+                            color: "#c29a2d",
+                            fontSize: "1rem",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                            width: "8vw",
+                          }}
+                          value={name}
+                          readOnly
+                          onFocus={() => {
+                            focused.current = key;
+                          }}
+                          onBlur={() => {
+                            focused.current = null;
+                          }}
+                          onKeyDown={(e) => {
+                            //if its clicked mouse1
+
+                            if (e.key === "Enter") {
+                              refButton.current.click();
+                            }
+                          }}
+                        />
+                        <input
+                          key={key}
+                          ref={refEdit === key ? refButton : null}
+                          id={`inputNameEdit${key}`}
+                          className="inputNameEdit"
+                          type="text"
+                          style={{
+                            display: "none",
+                            backgroundColor: "transparent",
+                            border: "none",
+                            outline: "none",
+                            color: "#c29a2d",
+                            fontSize: "1rem",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                            width: "8vw",
+                          }}
+                          placeholder={name}
+                          value={text}
+                          onChange={(e) => setText(e.target.value)}
+                          onFocus={() => {
+                            focused.current = key;
+                          }}
+                          onBlur={() => {
+                            focused.current = null;
+                          }}
+                          onKeyDown={(e) => {
+                            //if its clicked mouse1
+
+                            if (e.key === "Enter") {
+                              saveName(key, text);
+                              const inputName = document.getElementById(
+                                "inputName" + key
+                              );
+                              const inputNameEdit = document.getElementById(
+                                "inputNameEdit" + key
+                              );
+                              inputName.style.display = "block";
+                              inputNameEdit.style.display = "none";
+                            }
+                          }}
+                        />
                       </div>
                     </td>
                     <td key={key}>
@@ -345,13 +489,55 @@ export default function Dashboard() {
                     </td>
                     <td>{uses}</td>
                     <td>
-                      <Close
-                        style={{
-                          cursor: "pointer",
-                        }}
-                        color={"red"}
-                        onClick={() => deleteURL(key)}
-                      />
+                      <Tooltip
+                        title="Edit"
+                        placement="top"
+                        arrow
+                        style={{ cursor: "pointer" }}
+                      >
+                        <Button>
+                          <Pencil
+                            color={"#c29a2d"}
+                            style={{
+                              cursor: "pointer",
+                              position: "relative",
+                            }}
+                            onClick={() => {
+                              notifyEdit(
+                                "Edit mode\nPress enter to save!",
+                                false
+                              );
+                              const inputName = document.getElementById(
+                                "inputName" + key
+                              );
+                              inputName.style.display = "none";
+                              const inputNameEdit = document.getElementById(
+                                "inputNameEdit" + key
+                              );
+                              inputNameEdit.style.display = "block";
+                              inputNameEdit.focus();
+                            }}
+                          />
+                        </Button>
+                      </Tooltip>
+                      <Tooltip
+                        title="Delete"
+                        placement="top"
+                        arrow
+                        style={{ cursor: "pointer" }}
+                      >
+                        <Button>
+                          <Close
+                            style={{
+                              cursor: "pointer",
+                            }}
+                            height="25px"
+                            width="25px"
+                            color={"red"}
+                            onClick={() => deleteURL(key)}
+                          />
+                        </Button>
+                      </Tooltip>
                     </td>
                   </tr>
                 ))}
