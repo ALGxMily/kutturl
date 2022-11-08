@@ -220,7 +220,7 @@ function Home() {
       options: {
         zIndex: 10000,
         backgroundColor: "#1F1F1F",
-        primaryColor: "#FBBD12",
+        primaryColor: "#DDA200",
         textColor: "white",
         borderRadius: "15px",
       },
@@ -262,7 +262,6 @@ function Home() {
   }, []);
 
   React.useEffect(() => {
-    setRun(true);
     if (searchParams.get("message") === "invalid_request") {
       notifyError();
       return;
@@ -271,10 +270,11 @@ function Home() {
     auth.onAuthStateChanged((user) => {
       try {
         setUsername(user.displayName);
-
+        setJoyride({ ...joyride, run: false });
         setSession(!!user);
         setLoading(false);
       } catch (error) {
+        setJoyride({ ...joyride, run: true });
         setSession(false);
         setLoading(false);
       }
