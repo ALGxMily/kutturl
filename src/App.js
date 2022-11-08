@@ -222,7 +222,9 @@ function Home() {
         backgroundColor: "#1F1F1F",
         primaryColor: "#FBBD12",
         textColor: "white",
+        borderRadius: "15px",
       },
+
       buttonNext: {
         backgroundColor: "#FBBD12",
         color: "black",
@@ -233,7 +235,7 @@ function Home() {
       },
       buttonClose: {
         backgroundColor: "#1F1F1F",
-        color: "black",
+        color: "white",
       },
       buttonSkip: {
         backgroundColor: "#FBBD12",
