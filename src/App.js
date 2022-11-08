@@ -260,7 +260,6 @@ function Home() {
   }, []);
 
   React.useEffect(() => {
-    setRun(true);
     if (searchParams.get("message") === "invalid_request") {
       notifyError();
       return;
@@ -269,10 +268,11 @@ function Home() {
     auth.onAuthStateChanged((user) => {
       try {
         setUsername(user.displayName);
-
+        setJoyride({ ...joyride, run: false });
         setSession(!!user);
         setLoading(false);
       } catch (error) {
+        setJoyride({ ...joyride, run: true });
         setSession(false);
         setLoading(false);
       }
