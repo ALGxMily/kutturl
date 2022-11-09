@@ -141,7 +141,7 @@ export default function Dashboard() {
       }
     });
     return unsubscribe;
-  }, [!loading]);
+  }, []);
   const [dataUser, setData] = React.useState([]);
   const [errorData, setError] = React.useState("");
   const isDev = process.env.NODE_ENV === "development";
@@ -263,8 +263,10 @@ export default function Dashboard() {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("click", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
+      
+
     };
-  }, [userUID]);
+  }, [loading, userUID]);
   const [text, setText] = React.useState("");
   const focused = React.useRef(null);
   const refButton = React.useRef(null);
