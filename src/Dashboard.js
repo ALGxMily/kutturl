@@ -32,31 +32,12 @@ import { signOut } from "firebase/auth";
 import { Button, Tab, Toolbar } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
-import { styled } from "@mui/material/styles";
-import Table from "./Table";
-function PopUpMenu() {
-  const logout = async () => {
-    await auth.signOut();
-  };
-  return (
-    <ul className="drop-down">
-      <li>
-        <a style={{ color: "white" }} onClick={logout}>
-          Log out
-        </a>
-      </li>
-    </ul>
-  );
-}
 export default function Dashboard() {
   const [loading, setLoading] = React.useState(false);
   const [username, setUsername] = React.useState("");
   const [session, setSession] = React.useState(false);
   const loadingRef = React.useRef(null);
   const navigateTo = useNavigate();
-  const location = useLocation();
-  const refEdit = React.useRef(null);
   const notifyErrorGlobal = (error) => {
     try {
       toast.error(`Error-${error}`, {
@@ -107,7 +88,6 @@ export default function Dashboard() {
       console.log(error);
     }
   };
-  const [time, setTime] = React.useState(false);
   React.useEffect(() => {
     if (loading) {
       const logo = document.getElementById("logo");
@@ -149,21 +129,19 @@ export default function Dashboard() {
     ? "http://localhost:5005"
     : "https://kuturl.herokuapp.com";
 
-  const wrapperRef = React.useRef(null);
+  // React.useEffect(() => {
+  //   const handleResize = () => {
+  //     const inputName = document.getElementById("inputName");
 
-  React.useEffect(() => {
-    const handleResize = () => {
-      const inputName = document.getElementById("inputName");
-
-      if (window.innerWidth < 768) {
-        inputName.style.width = "20vw";
-      } else if (window.innerWidth > 768) {
-        inputName.style.width = "8vw";
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  //     if (window.innerWidth < 768) {
+  //       inputName.style.width = "20vw";
+  //     } else if (window.innerWidth > 768) {
+  //       inputName.style.width = "8vw";
+  //     }
+  //   };
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   const copy = (key) => {
     dataUser.forEach((element) => {
@@ -196,53 +174,54 @@ export default function Dashboard() {
       }
     });
   };
-  const saveName = (key) => {
-    dataUser.forEach((element) => {
-      if (element.key === key) {
-        fetch(`${public_url}/update?key=${key}&uuid=${userUID}&name=${text}`, {
-          method: "PUT",
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.message) {
-              notifySuccessful(data.message);
-              setTimeout(() => {
-                window.location.reload();
-              }, 1500);
-            } else {
-              notifyErrorGlobal(data.error);
-            }
-          })
-          .catch((error) => {
-            notifyErrorGlobal(error);
-          });
-      }
-    });
-  };
-  const handleClickOutside = (event) => {
-    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-      refEdit.current.style.display = "none";
-      refButton.current.style.display = "flex";
-      const toastID = "edit";
-      toast.dismiss(toastID);
-    }
-  };
-  React.useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, [wrapperRef]);
+  // const saveName = (key) => {
+  //   dataUser.forEach((element) => {
+  //     if (element.key === key) {
+  //       fetch(`${public_url}/update?key=${key}&uuid=${userUID}&name=${text}`, {
+  //         method: "PUT",
+  //       })
+  //         .then((res) => res.json())
+  //         .then((data) => {
+  //           if (data.message) {
+  //             notifySuccessful(data.message);
+  //             setTimeout(() => {
+  //               window.location.reload();
+  //             }, 1500);
+  //           } else {
+  //             notifyErrorGlobal(data.error);
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           notifyErrorGlobal(error);
+  //         });
+  //     }
+  //   });
+  // };
+  // const handleClickOutside = (event) => {
+  //   if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+  //     refEdit = refEdit.current.style.display = "none";
+  //     refButton.current.style.display = "flex";
+  //     const toastID = "edit";
+  //     toast.dismiss(toastID);
+  //   }
+  // };
+  // React.useEffect(() => {
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   document.addEventListener("touchstart", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //     document.removeEventListener("touchstart", handleClickOutside);
+  //   };
+  // }, [wrapperRef]);
 
-  React.useEffect(() => {
+  const getData = () => {
     if (!userUID) return;
     fetch(`${public_url}/shorturl?uuid=${userUID}`, {
       method: "GET",
     })
       .then((res) => {
         res.json().then((data) => {
+          console.log(data);
           if (data.error) {
             if (data.error === "EMPTY_LIST") {
               setError("It's time to create your first short URL!");
@@ -259,12 +238,16 @@ export default function Dashboard() {
         console.log(error);
         setError("Network error - please try again later...");
       });
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("click", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
+    // return () => {
+    //   document.removeEventListener("mousedown", handleClickOutside);
+    //   document.removeEventListener("click", handleClickOutside);
+    //   document.removeEventListener("touchstart", handleClickOutside);
+    // };
+  };
+  React.useEffect(() => {
+    getData();
   }, [userUID]);
+
   const [text, setText] = React.useState("");
   const focused = React.useRef(null);
   const refButton = React.useRef(null);
@@ -283,7 +266,7 @@ export default function Dashboard() {
         setLoading(false);
       }
     });
-  }, [!loading]);
+  }, []);
   const logout = async () => {
     setLoading(true);
     try {
@@ -298,7 +281,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="App" ref={wrapperRef}>
+      <div className="App">
         <div className="App-header" id="logoHeader">
           <img
             style={{ cursor: "pointer" }}
@@ -375,10 +358,9 @@ export default function Dashboard() {
                     <td id="dateTable">
                       <b>{date.split("T")[0]} </b>
                     </td>
-                    <td id="name">
-                      <div className="urlContaineTitleMobile">
-                        {/* <p onClick={() => copy(key)}>{name}</p> */}
-                        <input
+                    {/*  <td id="name">
+                        <div className="urlContaineTitleMobile">
+                         <input
                           key={key}
                           ref={refButton === key ? refButton : null}
                           id={`inputName${key}`}
@@ -452,8 +434,8 @@ export default function Dashboard() {
                             }
                           }}
                         />
-                      </div>
-                    </td>
+                      </div> 
+                    </td>*/}
                     <td key={key}>
                       <div className="urlContainerLink">
                         <span
@@ -466,7 +448,7 @@ export default function Dashboard() {
                             overflow: "hidden",
                           }}
                         >
-                          {public_url}?i=
+                          {public_url}/
                           <span
                             style={{
                               color: "#c29a2d",
@@ -489,7 +471,7 @@ export default function Dashboard() {
                     </td>
                     <td>{uses}</td>
                     <td>
-                      <Tooltip
+                      {/* <Tooltip
                         title="Edit"
                         placement="top"
                         arrow
@@ -519,7 +501,7 @@ export default function Dashboard() {
                             }}
                           />
                         </Button>
-                      </Tooltip>
+                      </Tooltip> */}
                       <Tooltip
                         title="Delete"
                         placement="top"

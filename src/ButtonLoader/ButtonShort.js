@@ -118,7 +118,7 @@ export function FinalPage() {
     setUrl(searchParams.get("url"));
     console.log(searchParams.get("url"));
   }, [searchParams]);
-  const shorturl = `${public_url}/?i=${url}`;
+  const shorturl = `${public_url}/${url}`;
   const copy = () => {
     notifyCopy();
     navigator.clipboard.writeText(shorturl);

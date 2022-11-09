@@ -34,11 +34,13 @@ import {
   Heart,
   InformationCircleOutline,
 } from "react-ionicons";
+import HandleRedirect from "./HandleRedirect";
 
 function App() {
   return (
     <Routes>
-      <Route path="*" element={<Home />} />
+      <Route exact path="/:shortId" element={<HandleRedirect />} />
+      <Route path="/app" element={<Home />} />
       <Route path="/404" element={<NotFound />} />
       <Route path="/urls" element={<Urls />} />
       <Route path="/login" element={<Login />} />
