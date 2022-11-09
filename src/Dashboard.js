@@ -33,24 +33,8 @@ import { Button, Tab, Toolbar } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
-import { styled } from "@mui/material/styles";
-import Table from "./Table";
-function PopUpMenu() {
-  const logout = async () => {
-    await auth.signOut();
-  };
-  return (
-    <ul className="drop-down">
-      <li>
-        <a style={{ color: "white" }} onClick={logout}>
-          Log out
-        </a>
-      </li>
-    </ul>
-  );
-}
 export default function Dashboard() {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [username, setUsername] = React.useState("");
   const [session, setSession] = React.useState(false);
   const loadingRef = React.useRef(null);
@@ -110,6 +94,7 @@ export default function Dashboard() {
   const [time, setTime] = React.useState(false);
   React.useEffect(() => {
     if (loading) {
+      handleResize(keyItem);
       const logo = document.getElementById("logo");
       const loadingLottie = document.getElementById("loading");
       const container = document.getElementById("containerDashboard");
@@ -135,6 +120,7 @@ export default function Dashboard() {
   }, [loading]);
   const [userUID, setUserUID] = React.useState("");
   React.useEffect(() => {
+    setLoading(true);
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUserUID(user.uid);
@@ -151,16 +137,32 @@ export default function Dashboard() {
 
   const wrapperRef = React.useRef(null);
 
-  React.useEffect(() => {
-    const handleResize = () => {
-      const inputName = document.getElementById("inputName");
-
+  const handleResize = (key) => {
+    const inputName = document.getElementById("inputName" + key);
+    if(!loading){
+    if (window.innerWidth < 768) {
+      inputName.style.width = "20vw";
+    } else if (window.innerWidth > 768) {
+      return;
+    }
+  }else{
+    setTimeout(() => {
       if (window.innerWidth < 768) {
         inputName.style.width = "20vw";
       } else if (window.innerWidth > 768) {
-        inputName.style.width = "8vw";
+          return;
       }
-    };
+    }
+    , 4000);
+  }
+  };
+  const [keyItem, setKey] = React.useState("");
+  React.useEffect(() => {
+
+
+    // handleResize(keyItem)
+    refEdit.current = keyItem;
+    refButton.current = keyItem;
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -221,8 +223,14 @@ export default function Dashboard() {
   };
   const handleClickOutside = (event) => {
     if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-      refEdit.current.style.display = "none";
-      refButton.current.style.display = "flex";
+      const inputNameEdit = document.getElementById(
+        "inputNameEdit" + keyItem
+      );
+      inputNameEdit.style.display = "none";
+      // refEdit.current.style.display = "none";
+      const inputName = document.getElementById("inputName" + keyItem);
+      inputName.style.display = "flex";
+      // refButton.current.style.display = "flex";
       const toastID = "edit";
       toast.dismiss(toastID);
     }
@@ -236,56 +244,63 @@ export default function Dashboard() {
     };
   }, [wrapperRef]);
 
-  React.useEffect(() => {
-    if (!userUID) return;
-    fetch(`${public_url}/shorturl?uuid=${userUID}`, {
-      method: "GET",
-    })
-      .then((res) => {
-        res.json().then((data) => {
-          if (data.error) {
-            if (data.error === "EMPTY_LIST") {
-              setError("It's time to create your first short URL!");
-            }
-            if (data.error === "INVALID_UUID") {
-              setError("Invalid User");
-            }
-          } else {
-            setData(data.data);
+const fetchData = async () => {
+  if (!userUID) return;
+  await fetch(`${public_url}/shorturl?uuid=${userUID}`, {
+    method: "GET",
+  })
+    .then(async(res) => {
+      await res.json().then((data) => {
+        if (data.error) {
+          if (data.error === "EMPTY_LIST") {
+            setError("It's time to create your first short URL!");
+            setLoading(false);
           }
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        setError("Network error - please try again later...");
+          if (data.error === "INVALID_UUID") {
+            setError("Invalid User");
+            setLoading(false);
+          }
+        } else {
+          setData(data.data);
+        }
       });
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("click", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-      
-
-    };
-  }, [loading, userUID]);
+    })
+    .catch((error) => {
+      console.log(error);
+      setError("Network error - please try again later...");
+      setLoading(false);
+    });
+};
   const [text, setText] = React.useState("");
   const focused = React.useRef(null);
   const refButton = React.useRef(null);
   const [popUpMenu, setPopUpMenu] = React.useState(false);
   const user = auth.currentUser;
   React.useEffect(() => {
-    setLoading(true);
+
     auth.onAuthStateChanged((user) => {
       try {
         setUsername(user.displayName);
         setSession(!!user);
         setLoading(false);
+        if (user) {
+          try{
+          fetchData().catch((error) => {
+            console.log(error);
+          });
+          }catch(error){
+            console.log(error);
+          }
+
+        }
+
       } catch (error) {
         console.log("error " + error);
         setSession(false);
-        setLoading(false);
       }
     });
-  }, [!loading]);
+
+  }, []);
   const logout = async () => {
     setLoading(true);
     try {
@@ -372,7 +387,8 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {dataUser.map(({ uses, key, date, name }) => (
+                {dataUser.map(({ uses, key, date, name }) => 
+                (
                   <tr id="rowItems">
                     <td id="dateTable">
                       <b>{date.split("T")[0]} </b>
@@ -381,9 +397,12 @@ export default function Dashboard() {
                       <div className="urlContaineTitleMobile">
                         {/* <p onClick={() => copy(key)}>{name}</p> */}
                         <input
+                                                onLoad={() => {
+                                                  setKey(key);
+                                                }}
                           key={key}
                           ref={refButton === key ? refButton : null}
-                          id={`inputName${key}`}
+                          id={`inputName${keyItem}`}
                           className="inputName"
                           type="text"
                           style={{
@@ -413,9 +432,12 @@ export default function Dashboard() {
                           }}
                         />
                         <input
+                        onLoad={() => {
+                          setKey(key);
+                        }}
                           key={key}
-                          ref={refEdit === key ? refButton : null}
-                          id={`inputNameEdit${key}`}
+                          ref={refEdit === key ? refEdit : null}
+                          id={`inputNameEdit${keyItem}`}
                           className="inputNameEdit"
                           type="text"
                           style={{
@@ -510,11 +532,11 @@ export default function Dashboard() {
                                 false
                               );
                               const inputName = document.getElementById(
-                                "inputName" + key
+                                "inputName" + keyItem
                               );
                               inputName.style.display = "none";
                               const inputNameEdit = document.getElementById(
-                                "inputNameEdit" + key
+                                "inputNameEdit" + keyItem
                               );
                               inputNameEdit.style.display = "block";
                               inputNameEdit.focus();
@@ -542,9 +564,11 @@ export default function Dashboard() {
                       </Tooltip>
                     </td>
                   </tr>
-                ))}
+))}
+
               </tbody>
             </table>
+
           ) : (
             <h1
               style={{
