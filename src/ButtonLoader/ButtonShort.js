@@ -110,9 +110,7 @@ export function FinalPage() {
   const [tooltip, setTooltip] = React.useState(false);
   const navigateto = useNavigate();
   const isDev = process.env.NODE_ENV === "development";
-  const public_url = isDev
-    ? "http://localhost:3000"
-    : "https://kuturl.herokuapp.com";
+  const public_url = isDev ? "http://localhost:3000" : "https://kutturl.com";
 
   useEffect(() => {
     setUrl(searchParams.get("url"));

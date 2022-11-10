@@ -440,7 +440,7 @@ export default function Dashboard() {
                             overflow: "hidden",
                           }}
                         >
-                          {public_url}/
+                          https://kutturl.com/
                           <span
                             style={{
                               color: "#c29a2d",

@@ -8,9 +8,7 @@ export default function HandleRedirect() {
   const [url, setUrl] = React.useState(null);
 
   const isDev = process.env.NODE_ENV === "development";
-  const public_url = isDev
-    ? "http://localhost:5005"
-    : "https://kuturl.herokuapp.com/";
+  const public_url = isDev ? "http://localhost:5005" : "https://kutturl.com";
 
   React.useEffect(() => {
     fetch(`${public_url}/?i=${shortId}`, {
