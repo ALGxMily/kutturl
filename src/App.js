@@ -40,6 +40,7 @@ function App() {
   return (
     <Routes>
       <Route exact path="/:shortId" element={<HandleRedirect />} />
+      <Route exact path="/" element={<Home />} />
       <Route path="/app" element={<Home />} />
       <Route path="/404" element={<NotFound />} />
       <Route path="/urls" element={<Urls />} />
