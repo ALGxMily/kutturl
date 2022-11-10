@@ -143,11 +143,12 @@ export default function Dashboard() {
   //   return () => window.removeEventListener("resize", handleResize);
   // }, []);
   const focused = React.useRef(false);
+  const handleFocus = () => {
+    focused.current = true;
+  };
+
   const copy = (key) => {
     dataUser.forEach((element) => {
-      focused.current.select();
-      document.execCommand("copy");
-      focused.current.blur();
       notifySuccessful("Copied");
       if (element.key === key) {
         navigator.clipboard.writeText(`http://kutturl.com/${key}`);
@@ -443,6 +444,13 @@ export default function Dashboard() {
                             cursor: "pointer",
                             fontSize: "1rem",
                             overflow: "hidden",
+                          }}
+                          onFocus={() => {
+                            focused.current = key;
+                            focused.current.select();
+                          }}
+                          onBlur={() => {
+                            focused.current = null;
                           }}
                         >
                           http://kutturl.com/
