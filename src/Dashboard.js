@@ -142,11 +142,15 @@ export default function Dashboard() {
   //   window.addEventListener("resize", handleResize);
   //   return () => window.removeEventListener("resize", handleResize);
   // }, []);
-
+  const focused = React.useRef(false);
   const copy = (key) => {
     dataUser.forEach((element) => {
+      focused.current.select();
+      document.execCommand("copy");
+      focused.current.blur();
+      notifySuccessful("Copied");
       if (element.key === key) {
-        navigator.clipboard.writeText(`${public_url}/${key}`);
+        navigator.clipboard.writeText(`http://kutturl.com/${key}`);
         notifySuccessful("Copied to clipboard");
       }
     });
@@ -431,6 +435,7 @@ export default function Dashboard() {
                     <td key={key}>
                       <div className="urlContainerLink">
                         <span
+                          ref={focused}
                           className="linkDashboard"
                           onClick={() => copy(key)}
                           style={{
