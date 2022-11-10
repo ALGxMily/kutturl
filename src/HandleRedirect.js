@@ -13,16 +13,13 @@ export default function HandleRedirect() {
     : "https://kuturl.herokuapp.com/";
 
   React.useEffect(() => {
-    const getURL = async () => {
-      await fetch(`${public_url}/${shortId}`, {
-        method: "GET",
-      }).then((res) => {
-        res.json().then((data) => {
-          setUrl(data.url);
-        });
+    fetch(`${public_url}/?i=${shortId}`, {
+      method: "GET",
+    }).then((res) => {
+      res.json().then((data) => {
+        setUrl(data.url);
       });
-    };
-    getURL();
+    });
   }, [shortId]);
 
   if (url) {

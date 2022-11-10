@@ -111,7 +111,7 @@ export function FinalPage() {
   const navigateto = useNavigate();
   const isDev = process.env.NODE_ENV === "development";
   const public_url = isDev
-    ? "http://localhost:5005"
+    ? "http://localhost:3000"
     : "https://kuturl.herokuapp.com";
 
   useEffect(() => {

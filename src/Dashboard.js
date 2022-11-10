@@ -126,7 +126,7 @@ export default function Dashboard() {
   const [errorData, setError] = React.useState("");
   const isDev = process.env.NODE_ENV === "development";
   const public_url = isDev
-    ? "http://localhost:5005"
+    ? "http://localhost:3000"
     : "https://kuturl.herokuapp.com";
 
   // React.useEffect(() => {
@@ -146,7 +146,7 @@ export default function Dashboard() {
   const copy = (key) => {
     dataUser.forEach((element) => {
       if (element.key === key) {
-        navigator.clipboard.writeText(`${public_url}?i=${key}`);
+        navigator.clipboard.writeText(`${public_url}/${key}`);
         notifySuccessful("Copied to clipboard");
       }
     });
@@ -214,13 +214,14 @@ export default function Dashboard() {
   //   };
   // }, [wrapperRef]);
 
-  const getData = () => {
+  React.useEffect(() => {
+    //prevent default
     if (!userUID) return;
     fetch(`${public_url}/shorturl?uuid=${userUID}`, {
       method: "GET",
     })
-      .then((res) => {
-        res.json().then((data) => {
+      .then((data) => {
+        data.json().then((data) => {
           console.log(data);
           if (data.error) {
             if (data.error === "EMPTY_LIST") {
@@ -236,23 +237,14 @@ export default function Dashboard() {
       })
       .catch((error) => {
         console.log(error);
-        setError("Network error - please try again later...");
       });
     // return () => {
     //   document.removeEventListener("mousedown", handleClickOutside);
     //   document.removeEventListener("click", handleClickOutside);
     //   document.removeEventListener("touchstart", handleClickOutside);
     // };
-  };
-  React.useEffect(() => {
-    getData();
   }, [userUID]);
 
-  const [text, setText] = React.useState("");
-  const focused = React.useRef(null);
-  const refButton = React.useRef(null);
-  const [popUpMenu, setPopUpMenu] = React.useState(false);
-  const user = auth.currentUser;
   React.useEffect(() => {
     setLoading(true);
     auth.onAuthStateChanged((user) => {
@@ -285,7 +277,7 @@ export default function Dashboard() {
         <div className="App-header" id="logoHeader">
           <img
             style={{ cursor: "pointer" }}
-            onClick={() => navigateTo("/")}
+            onClick={() => navigateTo("/app")}
             src="logo-center.svg"
           />
         </div>
@@ -319,7 +311,7 @@ export default function Dashboard() {
                   }}
                 />
               }
-              onClick={() => navigateTo("/")}
+              onClick={() => navigateTo("/app")}
               variant="contained"
               className="buttonNewMobile"
             >
@@ -470,8 +462,8 @@ export default function Dashboard() {
                       </div>
                     </td>
                     <td>{uses}</td>
-                    <td>
-                      {/* <Tooltip
+
+                    {/*  <Tooltip
                         title="Edit"
                         placement="top"
                         arrow
@@ -502,6 +494,7 @@ export default function Dashboard() {
                           />
                         </Button>
                       </Tooltip> */}
+                    <td>
                       <Tooltip
                         title="Delete"
                         placement="top"
