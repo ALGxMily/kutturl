@@ -440,7 +440,7 @@ export default function Dashboard() {
                             overflow: "hidden",
                           }}
                         >
-                          https://kutturl.com/
+                          http://kutturl.com/
                           <span
                             style={{
                               color: "#c29a2d",
