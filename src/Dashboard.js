@@ -149,9 +149,13 @@ export default function Dashboard() {
 
   const copy = (key) => {
     dataUser.forEach((element) => {
-      notifySuccessful("Copied");
       if (element.key === key) {
-        navigator.clipboard.writeText(`http://kutturl.com/${key}`);
+        const el = document.createElement("textarea");
+        el.value = shorturl;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
         notifySuccessful("Copied to clipboard");
       }
     });
