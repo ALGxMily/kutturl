@@ -110,7 +110,7 @@ export function FinalPage() {
   const [tooltip, setTooltip] = React.useState(false);
   const navigateto = useNavigate();
   const isDev = process.env.NODE_ENV === "development";
-  const public_url = isDev ? "http://localhost:3000" : "https://kutturl.com";
+  const public_url = isDev ? "http://localhost:3000" : "http://kutturl.com";
 
   useEffect(() => {
     setUrl(searchParams.get("url"));
@@ -119,7 +119,13 @@ export function FinalPage() {
   const shorturl = `${public_url}/${url}`;
   const copy = () => {
     notifyCopy();
-    navigator.clipboard.writeText(shorturl);
+    //copy text on http protocol workaround
+    const el = document.createElement("textarea");
+    el.value = shorturl;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
   };
   const redirectToProfile = () => {
     navigateto({
