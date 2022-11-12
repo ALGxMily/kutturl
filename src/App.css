@@ -184,7 +184,14 @@ text-decoration: none;
     display: block;
   }
 }
-
+@media screen and (max-width: 768px) {
+  .finalPage{
+    padding: 2rem;
+    display: block;
+    aspect-ratio: 1;
+    width: 100%;
+  }
+}
 .nodata{
   display: flex;
   justify-content: center;

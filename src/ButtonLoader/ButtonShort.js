@@ -118,7 +118,6 @@ export function FinalPage() {
   }, [searchParams]);
   const shorturl = `${public_url}/${url}`;
   const copy = () => {
-    notifyCopy();
     //copy text on http protocol workaround
     const el = document.createElement("textarea");
     el.value = shorturl;
@@ -126,17 +125,18 @@ export function FinalPage() {
     el.select();
     document.execCommand("copy");
     document.body.removeChild(el);
+    notifySuccessful("Copied to clipboard!");
   };
   const redirectToProfile = () => {
     navigateto({
       pathname: `/dashboard`,
     });
   };
-  const notifyCopy = () => {
+  const notifySuccessful = (message) => {
     try {
-      toast.success("Link copied successfully!", {
+      toast.success(`${message}`, {
         position: "top-center",
-        autoClose: 2000,
+        autoClose: 1400,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: false,
@@ -159,6 +159,7 @@ export function FinalPage() {
             style={{
               aspectRatio: "1",
               width: "60%",
+              color: "white",
             }}
           >
             {shorturl}

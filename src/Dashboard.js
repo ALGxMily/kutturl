@@ -126,7 +126,7 @@ export default function Dashboard() {
   const [errorData, setError] = React.useState("");
   const isDev = process.env.NODE_ENV === "development";
   const public_url = isDev
-    ? "http://localhost:3000"
+    ? "http://localhost:5005"
     : "https://kuturl.herokuapp.com";
 
   // React.useEffect(() => {
