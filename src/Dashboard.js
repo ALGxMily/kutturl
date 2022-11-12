@@ -150,8 +150,9 @@ export default function Dashboard() {
   const copy = (key) => {
     dataUser.forEach((element) => {
       if (element.key === key) {
+        //copy element with key with workaround execCommand
         const el = document.createElement("textarea");
-        el.value = shorturl;
+        el.value = `http://kutturl.com/${element.key}`;
         document.body.appendChild(el);
         el.select();
         document.execCommand("copy");
