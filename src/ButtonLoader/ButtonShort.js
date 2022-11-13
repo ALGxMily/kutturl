@@ -107,14 +107,19 @@ export default function ButtonLoader({ text, buttonRef }) {
 export function FinalPage() {
   const [searchParams] = useSearchParams();
   const [url, setUrl] = React.useState("LOADING");
-  const [tooltip, setTooltip] = React.useState(false);
+  const loading = React.useRef(false);
   const navigateto = useNavigate();
   const isDev = process.env.NODE_ENV === "development";
   const public_url = isDev ? "http://localhost:3000" : "http://kutturl.com";
 
   useEffect(() => {
-    setUrl(searchParams.get("url"));
-    console.log(searchParams.get("url"));
+    if (searchParams.get("url") === null) {
+      loading.current = true;
+    } else {
+      setUrl(searchParams.get("url"));
+      console.log(searchParams.get("url"));
+      loading.current = false;
+    }
   }, [searchParams]);
   const shorturl = `${public_url}/${url}`;
   const copy = () => {
@@ -149,37 +154,46 @@ export function FinalPage() {
     }
   };
   return (
-    <div className="finalPage">
-      <h1>
-        Click to copy
-        <Tooltip title="Click to copy">
-          <a
-            href="#"
-            onClick={() => copy()}
-            style={{
-              aspectRatio: "1",
-              width: "60%",
-              color: "white",
-            }}
-          >
-            {shorturl}
-          </a>
-        </Tooltip>
-      </h1>
-      <button className="finalpageURLButton" onClick={redirectToProfile}>
-        Your URLs
-      </button>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        theme="dark"
+    <>
+      <div className="finalPage">
+        <h1>
+          Click to copy
+          <Tooltip title="Click to copy">
+            <a
+              href="#"
+              onClick={() => copy()}
+              style={{
+                aspectRatio: "1",
+                width: "60%",
+                color: "white",
+              }}
+            >
+              {shorturl}
+            </a>
+          </Tooltip>
+        </h1>
+        <button className="finalpageURLButton" onClick={redirectToProfile}>
+          Your URLs
+        </button>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          theme="dark"
+        />
+      </div>
+      <Lottie
+        id="loadingURL"
+        ref={loading}
+        animationData={require("./loading.json")}
+        width={100}
+        height={100}
       />
-    </div>
+    </>
   );
 }

@@ -164,9 +164,12 @@ export default function Dashboard() {
   const deleteURL = (key) => {
     dataUser.forEach((element) => {
       if (element.key === key) {
-        fetch(`${public_url}/delete?key=${key}&uuid=${userUID}`, {
-          method: "DELETE",
-        })
+        fetch(
+          `https://kuturl.herokuapp.com/delete?key=${key}&uuid=${userUID}`,
+          {
+            method: "DELETE",
+          }
+        )
           .then((res) => res.json())
           .then((data) => {
             if (data.message) {

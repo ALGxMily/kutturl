@@ -184,6 +184,11 @@ text-decoration: none;
     display: block;
   }
 }
+.loadingURL{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 @media screen and (max-width: 768px) {
   .finalPage{
     padding: 2rem;
