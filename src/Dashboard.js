@@ -1,7 +1,7 @@
 import AnimatedBg from "react-animated-bg";
 import "./App.css";
 import ButtonShort, { FinalPage } from "./ButtonLoader/ButtonShort";
-import React from "react";
+import React, { Fragment } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -164,12 +164,9 @@ export default function Dashboard() {
   const deleteURL = (key) => {
     dataUser.forEach((element) => {
       if (element.key === key) {
-        fetch(
-          `https://kuturl.herokuapp.com/delete?key=${key}&uuid=${userUID}`,
-          {
-            method: "DELETE",
-          }
-        )
+        fetch(`${public_url}/delete?key=${key}&uuid=${userUID}`, {
+          method: "GET",
+        })
           .then((res) => res.json())
           .then((data) => {
             if (data.message) {
@@ -285,7 +282,7 @@ export default function Dashboard() {
   };
 
   return (
-    <>
+    <Fragment>
       <div className="App">
         <div className="App-header" id="logoHeader">
           <img
@@ -295,7 +292,11 @@ export default function Dashboard() {
           />
         </div>
       </div>
-      <div className="contentWrapDashboard" id="containerDashboard">
+      <div
+        className="contentWrapDashboard"
+        id="containerDashboard"
+        style={{ maxHeight: "200vh", overflow: "scroll" }}
+      >
         <div className="containerHeaderDashboard">
           <div className="leftHeader">
             <h1>My URLs</h1>
@@ -346,13 +347,12 @@ export default function Dashboard() {
             />
           </div>
         </div>
-        <div className={"tableContainer"}>
+        <div className={"tableContainer"} id="tabelContainer">
           {!errorData ? (
             <table>
               <thead>
                 <tr style={{ textAlign: "center" }}>
                   <th id="dateTable">Date</th>
-                  <th>Name</th>
                   <th>URL</th>
                   <th>Uses</th>
                 </tr>
@@ -610,6 +610,6 @@ export default function Dashboard() {
         draggable
         theme="dark"
       />
-    </>
+    </Fragment>
   );
 }
