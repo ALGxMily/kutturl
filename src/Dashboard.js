@@ -257,11 +257,13 @@ export default function Dashboard() {
 
   React.useEffect(() => {
     setLoading(true);
+    document.title = "Loading...";
     auth.onAuthStateChanged((user) => {
       try {
         setUsername(user.displayName);
         setSession(!!user);
         setLoading(false);
+        document.title = "Kutturl | Dashboard";
       } catch (error) {
         console.log("error " + error);
         setSession(false);

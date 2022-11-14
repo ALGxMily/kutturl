@@ -87,6 +87,7 @@ export default function Register() {
     }
   };
   React.useEffect(() => {
+    document.title = "Kutturl | Register";
     const split = document.getElementById("screen");
     const loadingLottie = document.getElementById("loading");
     const rightSide = document.getElementById("form");

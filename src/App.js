@@ -267,15 +267,19 @@ function Home() {
   React.useEffect(() => {
     if (searchParams.get("message") === "invalid_request") {
       notifyError();
+      window.history.replaceState({}, document.title, "/");
+
       return;
     }
     setLoading(true);
+    document.title = "Loading...";
     auth.onAuthStateChanged((user) => {
       try {
         setUsername(user.displayName);
         setJoyride({ ...joyride, run: false });
         setSession(!!user);
         setLoading(false);
+        document.title = "Kutturl | Home";
       } catch (error) {
         setJoyride({ ...joyride, run: true });
         setSession(false);

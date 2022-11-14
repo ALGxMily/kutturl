@@ -17,6 +17,7 @@ export default function Login() {
 
   //change button height when keyboard is up
   React.useEffect(() => {
+    document.title = "Kutturl | Login";
     const keyboardUp = () => {
       const button = document.querySelector(".form-group button");
       const input = document.querySelector(".form-group input");

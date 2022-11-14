@@ -33,45 +33,42 @@ export default function ButtonLoader({ text, buttonRef }) {
     : "https://kuturl.herokuapp.com";
 
   const navigateto = useNavigate();
-
+  const notifyErrorGlobal = (error) => {
+    try {
+      toast.error(`Error ~ ${error}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   function openLinklink() {
     const user = auth.currentUser;
     const uuid = user.uid;
     console.log(text);
-    //url regex
+    //url regex TODO
 
-    let regex =
-      "((http|https)://)(www.)?" +
-      "[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]" +
-      "{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)";
-    if (!text.match(regex)) {
-      window.location.reload();
-      navigateto({
-        pathname: `/`,
-        search: createSearchParams({
-          message: "invalid_request",
-        }).toString(),
-      });
-    }
     fetch(`${public_url}/shorturladd?url=${text}&uuid=${uuid}`, {
       method: "GET",
     })
       .then((response) => response.json())
       .then((response) => {
         if (response.error === "ERR_URL") {
-          console.log("Please enter a valid URL!");
-          navigateto({
-            pathname: `/`,
-            search: createSearchParams({
-              message: "invalid_request",
-            }).toString(),
-          });
+          notifyErrorGlobal("Invalid URL");
         }
 
         console.log(response);
         setUrl(response.url);
         setKey(response.key);
         setLoading(true);
+        document.title = "Loading...";
         navigateto({
           pathname: `/finalpage`,
           search: createSearchParams({ url: response.key }).toString(),
@@ -101,6 +98,17 @@ export default function ButtonLoader({ text, buttonRef }) {
           {!loading && <span>Shorten</span>}
         </button>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="dark"
+      />
     </>
   );
 }
@@ -115,10 +123,12 @@ export function FinalPage() {
   useEffect(() => {
     if (searchParams.get("url") === null) {
       loading.current = true;
+      document.title = "Loading...";
     } else {
       setUrl(searchParams.get("url"));
       console.log(searchParams.get("url"));
       loading.current = false;
+      document.title = "KuttURL";
     }
   }, [searchParams]);
   const shorturl = `${public_url}/${url}`;
