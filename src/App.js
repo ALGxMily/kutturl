@@ -40,7 +40,6 @@ function App() {
     <Routes>
       <Route path="*" element={<Home />} />
       <Route path="/404" element={<NotFound />} />
-      <Route path="/urls" element={<Urls />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/finalpage" element={<FinalPage />} />
@@ -523,17 +522,6 @@ function PopUpMenu() {
         </a>
       </li>
     </ul>
-  );
-}
-function Urls() {
-  return (
-    <div className="apiWrap">
-      <h1>API</h1>
-      <p>
-        Our API is free to use and easy to integrate. You can use it to shorten
-        links, get analytics, and more.
-      </p>
-    </div>
   );
 }
 export default App;
