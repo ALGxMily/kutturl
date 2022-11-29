@@ -10,6 +10,7 @@
     "@emotion/styled": "^11.10.4",
     "@mui/material": "^5.10.10",
     "@nadavshaar/react-grid-table": "^1.1.0",
+    "@pkasila/react-adsense": "^1.0.2",
     "@radix-ui/react-alert-dialog": "^1.0.2",
     "@radix-ui/react-popover": "1.0.2",
     "@react-firebase/auth": "^0.2.10",
