@@ -69,13 +69,13 @@ export default function HandleRedirect() {
         }}
       >Almost there!</h1>
 
-        <Adsense 
-        slot="4915690457"
+        {/* <Adsense 
+        slot="8545615608"
         style={{ display: "block" }}
         format="auto"
         responsive="true"
         client="pub-5197012541210620"
-      />
+      /> */}
       </div>
   );
 }

@@ -12,7 +12,7 @@ import {
   useLocation,
   useSearchParams,
 } from "react-router-dom";
-
+import Ad from "./GoogleAd";
 import Login from "./Login";
 import Register from "./Register";
 import Dashboard from "./Dashboard";
@@ -466,6 +466,7 @@ function Home() {
       <div id="logo">
         <img src="logo-center.svg" />
       </div>
+      <Ad />
       <footer>
         <div className="footerWrap">
           <div className="footerContent" id="disclaimer">

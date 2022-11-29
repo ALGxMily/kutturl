@@ -1,45 +1,38 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect } from "react"
 
-class GoogleAd extends Component {
-  googleInit = null;
+const SideAd = () => {
+  useEffect(() => {
+    const pushAd = () => {
+      try {
+        const adsbygoogle = window.adsbygoogle
+        console.log({ ads:adsbygoogle })
+        adsbygoogle.push({})
+      } catch (e) {
+        console.error(e)
+      }
+    }
 
-  componentDidMount() {
-    const { timeout } = this.props;
-    this.googleInit = setTimeout(() => {
-      if (typeof window !== 'undefined')
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-    }, timeout);
-  }
+    let interval = setInterval(() => {
+      // Check if Adsense script is loaded every 300ms
+      if (window.adsbygoogle) {
+        pushAd()
+        // clear the interval once the ad is pushed so that function isn't called indefinitely
+        clearInterval(interval)
+      }
+    }, 300)
 
-  componentWillUnmount() {
-    if (this.googleInit) clearTimeout(this.googleInit);
-  }
-
-  render() {
-    const { classNames, slot, googleAdId, style, format } = this.props;
-    return (
-      <div className={classNames}>
-        <ins
-          className="adsbygoogle"
-          style={style || { display: 'block', textAlign: "center" }}
-          data-ad-client={googleAdId}
-          data-ad-slot={slot}
-          data-ad-format={format || "auto"}
-          data-full-width-responsive="true"
-        ></ins>
-      </div>
-    );
-  }
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+  return (
+    <ins
+      className="adsbygoogle"
+      style={{ display: "inline-block", width: "300px", height: "250px" }}
+      data-ad-client="ca-pub-5197012541210620"
+      data-ad-slot="8545615608"
+    ></ins>
+  )
 }
-GoogleAd.propTypes = {
-  classNames: PropTypes.string,
-  slot: PropTypes.string,
-  timeout: PropTypes.number,
-  googleAdId: PropTypes.string,
-};
-GoogleAd.defaultProps = {
-  classNames: '',
-  timeout: 200,
-};
-export default GoogleAd;
+
+export default SideAd
