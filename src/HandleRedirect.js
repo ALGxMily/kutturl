@@ -6,13 +6,18 @@ export default function HandleRedirect() {
   const { shortId } = useParams();
 
   const [url, setUrl] = React.useState(null);
+  const [ip, setIp] = React.useState(null);
 
   const isDev = process.env.NODE_ENV === "development";
   const public_url = isDev
     ? "http://localhost:5005"
     : "https://kuturl.herokuapp.com";
 
+
+
   React.useEffect(() => {
+
+
     fetch(`${public_url}/?i=${shortId}`, {
       method: "GET",
     }).then((res) => {
@@ -24,6 +29,20 @@ export default function HandleRedirect() {
 
   if (url) {
     window.location.href = url;
+    fetch('https://api.ipify.org/?format=json')
+    .then(response => response.json())
+    .then(data => setIp(data.ip));
+    fetch(`${public_url}/api/redirects`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ip: ip,
+        shortId: shortId,
+        url: url,
+      }),
+    });
   }
 
   return (
@@ -39,6 +58,7 @@ export default function HandleRedirect() {
         animationData={require("./loading.json")}
         style={{ width: "100px", height: "100px" }}
       />
+      <h1>Redirecting you to your site!</h1>
     </div>
   );
 }
