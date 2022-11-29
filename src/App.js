@@ -36,6 +36,7 @@ import {
 } from "react-ionicons";
 import HandleRedirect from "./HandleRedirect";
 import ResponsiveNativeAds from "./GoogleAd";
+import MyLeaderBoardAd from "./GoogleAd";
 
 function App() {
   return (
@@ -468,7 +469,8 @@ function Home() {
         <img src="logo-center.svg" />
       </div>
       {/* <Ad /> */}
-      <ResponsiveNativeAds />
+
+      <MyLeaderBoardAd />
       <footer>
         <div className="footerWrap">
           <div className="footerContent" id="disclaimer">
