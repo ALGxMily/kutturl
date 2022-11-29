@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate, useParams, createSearchParams } from "react-router-dom";
 import Lottie from "lottie-react";
+import GoogleAd from "./GoogleAd";
+import {Adsense} from "@ctrl/react-adsense";
 
 export default function HandleRedirect() {
   const { shortId } = useParams();
@@ -50,6 +52,7 @@ export default function HandleRedirect() {
       style={{
         display: "flex",
         justifyContent: "center",
+        flexDirection: "column",
         alignItems: "center",
         height: "100vh",
       }}
@@ -58,7 +61,21 @@ export default function HandleRedirect() {
         animationData={require("./loading.json")}
         style={{ width: "100px", height: "100px" }}
       />
-      <h1>Redirecting you to your site!</h1>
-    </div>
+      <h1 
+        style={{
+          color: "white",
+          fontSize: "2rem",
+          marginLeft: "1rem",
+        }}
+      >Almost there!</h1>
+
+        <Adsense 
+        slot="4915690457"
+        style={{ display: "block" }}
+        format="auto"
+        responsive="true"
+        client="pub-5197012541210620"
+      />
+      </div>
   );
 }

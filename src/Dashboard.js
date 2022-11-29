@@ -152,7 +152,7 @@ export default function Dashboard() {
       if (element.key === key) {
         //copy element with key with workaround execCommand
         const el = document.createElement("textarea");
-        el.value = `http://kutturl.com/${element.key}`;
+        el.value = `https://kutturl.com/${element.key}`;
         document.body.appendChild(el);
         el.select();
         document.execCommand("copy");
@@ -463,7 +463,7 @@ export default function Dashboard() {
                             focused.current = null;
                           }}
                         >
-                          http://kutturl.com/
+                          https://kutturl.com/
                           <span
                             style={{
                               color: "#c29a2d",
