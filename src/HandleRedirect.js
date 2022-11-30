@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate, useParams, createSearchParams } from "react-router-dom";
 import Lottie from "lottie-react";
 import GoogleAd from "./GoogleAd";
-import {Adsense} from "@ctrl/react-adsense";
 
 export default function HandleRedirect() {
   const { shortId } = useParams();
@@ -15,11 +14,7 @@ export default function HandleRedirect() {
     ? "http://localhost:5005"
     : "https://kuturl.herokuapp.com";
 
-
-
   React.useEffect(() => {
-
-
     fetch(`${public_url}/?i=${shortId}`, {
       method: "GET",
     }).then((res) => {
@@ -31,9 +26,9 @@ export default function HandleRedirect() {
 
   if (url) {
     window.location.href = url;
-    fetch('https://api.ipify.org/?format=json')
-    .then(response => response.json())
-    .then(data => setIp(data.ip));
+    fetch("https://api.ipify.org/?format=json")
+      .then((response) => response.json())
+      .then((data) => setIp(data.ip));
     fetch(`${public_url}/api/redirects`, {
       method: "POST",
       headers: {
@@ -61,21 +56,23 @@ export default function HandleRedirect() {
         animationData={require("./loading.json")}
         style={{ width: "100px", height: "100px" }}
       />
-      <h1 
+      <h1
         style={{
           color: "white",
           fontSize: "2rem",
           marginLeft: "1rem",
         }}
-      >Almost there!</h1>
+      >
+        Almost there!
+      </h1>
 
-        {/* <Adsense 
+      {/* <Adsense 
         slot="8545615608"
         style={{ display: "block" }}
         format="auto"
         responsive="true"
         client="pub-5197012541210620"
       /> */}
-      </div>
+    </div>
   );
 }

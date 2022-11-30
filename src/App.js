@@ -35,6 +35,8 @@ import {
   InformationCircleOutline,
 } from "react-ionicons";
 import HandleRedirect from "./HandleRedirect";
+import ResponsiveNativeAds from "./GoogleAd";
+import MyLeaderBoardAd from "./GoogleAd";
 
 function App() {
   return (
@@ -466,7 +468,9 @@ function Home() {
       <div id="logo">
         <img src="logo-center.svg" />
       </div>
-      <Ad />
+      {/* <Ad /> */}
+
+      <MyLeaderBoardAd />
       <footer>
         <div className="footerWrap">
           <div className="footerContent" id="disclaimer">

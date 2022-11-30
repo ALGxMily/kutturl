@@ -1,38 +1,34 @@
-import React, { useEffect } from "react"
+import React, { Component } from "react";
 
-const SideAd = () => {
-  useEffect(() => {
-    const pushAd = () => {
-      try {
-        const adsbygoogle = window.adsbygoogle
-        console.log({ ads:adsbygoogle })
-        adsbygoogle.push({})
-      } catch (e) {
-        console.error(e)
-      }
-    }
+class MyLeaderBoardAd extends Component {
+  componentDidMount() {
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  }
 
-    let interval = setInterval(() => {
-      // Check if Adsense script is loaded every 300ms
-      if (window.adsbygoogle) {
-        pushAd()
-        // clear the interval once the ad is pushed so that function isn't called indefinitely
-        clearInterval(interval)
-      }
-    }, 300)
+  //display ad
+  // <ins
+  //   className="adsbygoogle"
+  //   style={{ display: "block" }}
+  //   data-ad-client="ca-pub-5197012541210620"
+  //   data-ad-slot="8545615608"
+  //   data-ad-format="auto"
+  //   data-full-width-responsive="true"
+  // ></ins>
 
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
-  return (
-    <ins
-      className="adsbygoogle"
-      style={{ display: "inline-block", width: "300px", height: "250px" }}
-      data-ad-client="pub-5197012541210620"
-      data-ad-slot="8545615608"
-    ></ins>
-  )
+  render() {
+    return (
+      <div>
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block", width: "728px", height: "90px" }}
+          data-ad-client="ca-pub-5197012541210620"
+          data-ad-slot="8545615608"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+      </div>
+    );
+  }
 }
 
-export default SideAd
+export default MyLeaderBoardAd;
