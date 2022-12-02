@@ -5,16 +5,6 @@ class MyLeaderBoardAd extends Component {
     (window.adsbygoogle = window.adsbygoogle || []).push({});
   }
 
-  //display ad
-  // <ins
-  //   className="adsbygoogle"
-  //   style={{ display: "block" }}
-  //   data-ad-client="ca-pub-5197012541210620"
-  //   data-ad-slot="8545615608"
-  //   data-ad-format="auto"
-  //   data-full-width-responsive="true"
-  // ></ins>
-
   render() {
     return (
       <ins

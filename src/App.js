@@ -495,7 +495,6 @@ function Home() {
       </div>
       {/* <Ad /> */}
 
-      <MyLeaderBoardAd />
       <footer>
         <div className="footerWrap">
           <div className="footerContent" id="disclaimer">
