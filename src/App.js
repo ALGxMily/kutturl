@@ -339,7 +339,7 @@ function Home() {
         // Applied to the canvas element.
         style={{ background: "transparent" }}
         // Controls the number of snowflakes that are created (defaults to 150).
-        snowflakeCount={200}
+        snowflakeCount={100}
       />
       <div className="App">
         <div className="App-header" id="logoHeader">

@@ -61,7 +61,7 @@ text-decoration: none;
   justify-content:space-between;
   align-items:center;
   color:white;
-  padding: 2vh 2vw;
+  padding: 2vh .5vw;
 }
 @media screen and (max-width: 768px){
   .App-header{
