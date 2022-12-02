@@ -2,6 +2,7 @@ import "./App.css";
 import AnimatedBg from "react-animated-bg";
 import ButtonShort, { FinalPage } from "./ButtonLoader/ButtonShort";
 import React from "react";
+import Snowfall from "react-snowfall";
 import {
   BrowserRouter as Router,
   Switch,
@@ -37,6 +38,7 @@ import {
 import HandleRedirect from "./HandleRedirect";
 import ResponsiveNativeAds from "./GoogleAd";
 import MyLeaderBoardAd from "./GoogleAd";
+import createAndAppendAdsElement from "./GoogleAd";
 
 function App() {
   return (
@@ -160,6 +162,7 @@ function Home() {
         });
     }
   }, []);
+
   const goToLogin = () => {
     setLoading(true);
     navigateTo("/login");
@@ -314,8 +317,30 @@ function Home() {
   const menu = () => {
     setPopUpMenu(!popUpMenu);
   };
+
+  //return a map of ads to be displayed
+  const getAds = () => {
+    const ads = [
+      {
+        id: 1,
+        title: "Ad 1",
+        description: "Ad 1 description",
+        image: "https://via.placeholder.com/300x250",
+        url: "https://www.google.com",
+      },
+    ];
+    return ads;
+  };
   return (
     <>
+      <Snowfall
+        // The color of the snowflake, can be any valid CSS color.
+        color="#fff"
+        // Applied to the canvas element.
+        style={{ background: "transparent" }}
+        // Controls the number of snowflakes that are created (defaults to 150).
+        snowflakeCount={200}
+      />
       <div className="App">
         <div className="App-header" id="logoHeader">
           <img src="logo-center.svg" />
