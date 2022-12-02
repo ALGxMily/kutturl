@@ -29,7 +29,7 @@ const linkShortner = async (url, uuid) => {
     responseObj.error = data.error;
     throw data.error;
   } else {
-    responseObj.shortUrl = `${public_url}/${data.key}`;
+    responseObj.shortUrl = `https://kutturl.com/${data.key}`;
     responseObj.success = true;
     return responseObj;
   }
