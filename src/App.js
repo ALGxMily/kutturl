@@ -403,7 +403,7 @@ function Home() {
         // Applied to the canvas element.
         style={{ background: "transparent" }}
         // Controls the number of snowflakes that are created (defaults to 150).
-        snowflakeCount={200}
+        snowflakeCount={140}
         // Controls the speed of the snowfall animation (defaults to 1).
         animationSpeed={2}
         // Controls the size of the snowflakes (defaults to 3).
