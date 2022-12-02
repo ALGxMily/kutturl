@@ -114,9 +114,11 @@ form button p{
 }
 }
 table{
+  width:50%;
   height:100%;
   border-collapse: collapse;
   border-spacing: 0;
+
   border: 1px solid #121212;
 }
 @media (max-width: 768px) {
@@ -136,12 +138,14 @@ table td{
   text-align: center;
   padding: 16px;
   color: #fff;
+
 }
 table tr:nth-child(even) {
   background-color: #121212;
 }
 table tr:nth-child(odd) {
   background-color: #2c2c31;
+  border-radius: 50px;
 
 }
 table tr #rowItem:nth-child(0){
