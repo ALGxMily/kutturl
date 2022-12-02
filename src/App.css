@@ -55,6 +55,7 @@ color: #fff;
 text-decoration: none;
 }
 .App-header{
+  -webkit-app-region: drag;
   background-color:#121212;
   width:100%;
   display:flex;
@@ -638,8 +639,9 @@ text-decoration: none;
   align-items: center;
 }
 .left img{
-  width: 35%;
-  height: 50%;
+  width: 60%;
+
+  aspect-ratio: auto;
 }
 .right{
   width: 50%;

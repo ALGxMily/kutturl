@@ -201,6 +201,7 @@ function Home() {
           dgiuliano@yandex.com{"\n"}Any suggestions are welcome!{"\n"}Enjoy!
         </p>
       ),
+
       onclick: () => {
         setJoyride({ ...joyride, run: false });
       },
@@ -218,7 +219,7 @@ function Home() {
     }
   };
   const [joyride, setJoyride] = React.useState({
-    run: true,
+    run: false,
     steps: stepsScreenApp,
     continuous: true,
     showProgress: false,
@@ -277,7 +278,7 @@ function Home() {
       return;
     }
     setLoading(true);
-    document.title = "Loading...";
+    document.title = "Kutturl";
     auth.onAuthStateChanged((user) => {
       try {
         setUsername(user.displayName);
