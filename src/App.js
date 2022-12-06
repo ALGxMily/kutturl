@@ -568,7 +568,7 @@ function Home() {
         </div>
       </div>
       <div id="logo">
-        <object src="logo-center.svg" />
+        <object data="logo-center.svg" />
       </div>
       {/* <Ad /> */}
       <div className="tipsWrap">

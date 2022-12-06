@@ -149,7 +149,7 @@ export default function Login() {
             style={{ cursor: "pointer" }}
             onClick={goToHome}
             draggable={false}
-            src="logo-center.svg"
+            data={"logo-center.svg"}
           />
         </div>
         <div className="right">
