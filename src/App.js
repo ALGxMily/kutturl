@@ -31,18 +31,14 @@ import { Button } from "@mui/material";
 import Tippy from "@tippyjs/react";
 import Joyride from "react-joyride";
 import "tippy.js/dist/tippy.css"; // optional
-import {
-  ArrowForward,
-  ExitOutline,
-  Heart,
-  InformationCircleOutline,
-} from "react-ionicons";
+import { ArrowForward, ExitOutline, Heart, InformationCircleOutline } from "react-ionicons";
 import HandleRedirect from "./HandleRedirect";
 import ResponsiveNativeAds from "./GoogleAd";
 import MyLeaderBoardAd from "./GoogleAd";
 import createAndAppendAdsElement from "./GoogleAd";
 import linkShortner from "./Linkshortner";
 import Modal from "./Modal";
+import KutturlTips from "./Components/KutturlTips";
 
 function App() {
   return (
@@ -70,7 +66,7 @@ function Home() {
   const loadingRef = React.useRef(null);
   const navigateTo = useNavigate();
   const location = useLocation();
-
+  const [show, setShow] = React.useState(false);
   const notifyError = () => {
     try {
       toast.error("Please enter a valid URL!", {
@@ -194,6 +190,9 @@ function Home() {
           progress: undefined,
           theme: "dark",
         });
+    setTimeout(() => {
+      setCopiedLink(false);
+    }, 1100);
   };
   const goToLogin = () => {
     setLoading(true);
@@ -269,8 +268,8 @@ function Home() {
         <p>
           This is a small project made for fun{"\n"}
           <br />
-          and learning purposes!If you find any bugs, please report them to
-          dgiuliano@yandex.com{"\n"}Any suggestions are welcome!{"\n"}Enjoy!
+          and learning purposes!If you find any bugs, please report them to dgiuliano@yandex.com{"\n"}Any suggestions
+          are welcome!{"\n"}Enjoy!
         </p>
       ),
 
@@ -339,6 +338,7 @@ function Home() {
 
       if (window.innerWidth < 768) {
         dashboardAMobile.style.display = "flex";
+        setShow(false);
       } else if (window.innerWidth > 768) {
         dashboardAMobile.style.display = "none";
       }
@@ -364,6 +364,7 @@ function Home() {
         setJoyride({ ...joyride, run: true });
         setSession(false);
         setLoading(false);
+        setShow(true);
       }
     });
   }, []);
@@ -398,19 +399,12 @@ function Home() {
   return (
     <>
       <Snowfall
-        // The color of the snowflake, can be any valid CSS color.
         color="#fff"
-        // Applied to the canvas element.
         style={{ background: "transparent" }}
-        // Controls the number of snowflakes that are created (defaults to 150).
         snowflakeCount={140}
-        // Controls the speed of the snowfall animation (defaults to 1).
         animationSpeed={2}
-        // Controls the size of the snowflakes (defaults to 3).
         snowflakeSize={3}
-        // Controls the speed of the snowflakes (defaults to 1).
         snowflakeSpeed={2}
-        // Controls the speed of the snowflakes (defaults to 1).
         snowflakeRandomness={4}
         changeFrequency={200}
       />
@@ -472,10 +466,7 @@ function Home() {
           )}
           <div className="inputWrap" id="header">
             <li>
-              <a
-                id="dashboardSection"
-                href={!session ? "/login" : "/dashboard"}
-              >
+              <a id="dashboardSection" href={!session ? "/login" : "/dashboard"}>
                 <Joyride
                   callback={HandleJoyRideCallback}
                   run={joyride.run}
@@ -491,21 +482,13 @@ function Home() {
             <li>
               {!session ? (
                 <>
-                  <a
-                    id="loginSection"
-                    style={{ cursor: "pointer" }}
-                    onClick={goToLogin}
-                  >
+                  <a id="loginSection" style={{ cursor: "pointer" }} onClick={goToLogin}>
                     Log-in
                   </a>
                 </>
               ) : (
                 <>
-                  <a
-                    id="loginSection"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => menu()}
-                  >
+                  <a id="loginSection" style={{ cursor: "pointer" }} onClick={() => menu()}>
                     <Joyride
                       callback={HandleJoyRideCallback}
                       run={joyride.run}
@@ -540,22 +523,20 @@ function Home() {
             showSkipButton={joyride.showSkipButton}
             styles={joyride.styles}
           />
-          <Tippy content="Insert Link here" placement="bottom">
-            <input
-              itemType="url"
-              ref={focused}
-              value={text}
-              onChange={(text) => setText(text.target.value)}
-              type="text"
-              placeholder="Paste your link here"
-              id="input"
-            ></input>
-          </Tippy>
+          <input
+            //clear button
+            itemType="url"
+            ref={focused}
+            value={text}
+            onChange={(text) => setText(text.target.value)}
+            type="search"
+            placeholder="Paste your link here"
+            id="input"
+          ></input>
           <a id="button" onClick={!link ? loadURL : copyFunction}>
-            {/* <ButtonShort text={text} buttonRef={refButton} /> */}
             <div className="buttonWrap">
               {link ? (
-                <button className="button">{copiedLink ? "✔️" : "Copy"}</button>
+                <button className="button">{copiedLink ? "✔️ Copied" : "Copy"}</button>
               ) : (
                 <button className="button">
                   {shortnerLoading ? (
@@ -590,7 +571,9 @@ function Home() {
         <img src="logo-center.svg" />
       </div>
       {/* <Ad /> */}
-
+      <div className="tipsWrap">
+        <KutturlTips controlShow={show} />
+      </div>
       <footer>
         <div className="footerWrap">
           <div className="footerContent" id="disclaimer">
@@ -604,17 +587,8 @@ function Home() {
               styles={joyride.styles}
             />
             <p>
-              Made with{" "}
-              <Heart
-                color="#FBBD12"
-                style={{ position: "relative", top: "2px" }}
-              />{" "}
-              by{" "}
-              <a
-                target={"_blank"}
-                href="https://github.com/ALGxMily"
-                style={{ color: "#fff", textDecoration: "none" }}
-              >
+              Made with <Heart color="#FBBD12" style={{ position: "relative", top: "2px" }} /> by{" "}
+              <a target={"_blank"} href="https://github.com/ALGxMily" style={{ color: "#fff", textDecoration: "none" }}>
                 Dzhuliano
               </a>
             </p>
@@ -661,10 +635,7 @@ function Urls() {
   return (
     <div className="apiWrap">
       <h1>API</h1>
-      <p>
-        Our API is free to use and easy to integrate. You can use it to shorten
-        links, get analytics, and more.
-      </p>
+      <p>Our API is free to use and easy to integrate. You can use it to shorten links, get analytics, and more.</p>
     </div>
   );
 }

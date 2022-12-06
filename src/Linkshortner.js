@@ -1,9 +1,7 @@
 import { auth } from "./firebaseConfig";
 
 const isDev = process.env.NODE_ENV === "development";
-const public_url = isDev
-  ? "http://localhost:5005"
-  : "https://kuturl.herokuapp.com";
+const public_url = isDev ? "http://localhost:5005" : "https://kuturl.herokuapp.com";
 
 const linkShortner = async (url, uuid) => {
   let baseURL = `${public_url}/shorturladd`;

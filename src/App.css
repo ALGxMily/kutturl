@@ -149,6 +149,7 @@ text-decoration: none;
   background-color:rgb(185, 182, 182, 0.2);
   margin-left: 6rem;
 }
+
 .urlContainerLink{
   display: flex;
   align-items: flex-start;
@@ -260,6 +261,24 @@ text-decoration: none;
   align-items: center;
   justify-content: center;
 }
+
+
+.tipsWrap{
+  display: flex;
+  align-items:flex-end;
+  justify-content: flex-start;
+  margin-top: 7rem;
+}
+@media screen and (max-width: 768px){
+  .tipsWrap{
+    display: flex;
+    align-items:flex-end;
+    justify-content: flex-start;
+    margin-top: 1rem;
+  }}
+
+
+
 .button{
   width: 10vw;
   height: 50px;
