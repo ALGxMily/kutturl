@@ -267,15 +267,17 @@ text-decoration: none;
   display: flex;
   align-items:flex-end;
   justify-content: flex-start;
-  margin-top: 7rem;
+  margin-top: 5rem;
 }
 @media screen and (max-width: 768px){
   .tipsWrap{
     display: flex;
-    align-items:flex-end;
-    justify-content: flex-start;
-    margin-top: 1rem;
-  }}
+    margin-top: -2rem;
+    margin-bottom: 10rem;
+
+  }
+
+}
 
 
 

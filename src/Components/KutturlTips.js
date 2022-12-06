@@ -21,7 +21,7 @@ export default function KutturlTips({ controlShow }) {
   //if device is mobile then setShow to false
   React.useEffect(() => {
     if (window.innerWidth < 768) {
-      setShow(false);
+      setShow(true);
     }
   }, []);
   React.useEffect(() => {
