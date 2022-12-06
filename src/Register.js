@@ -103,7 +103,7 @@ export default function Register() {
     <>
       <div className="split" id="screen">
         <div className="left" id="left">
-          <img src="logo-center.svg" />
+          <object src="logo-center.svg" />
         </div>
         <div className="right">
           <form>
@@ -147,11 +147,7 @@ export default function Register() {
                 placeholder="Password"
               />
 
-              <button
-                onClick={(e) => register(e)}
-                type="submit"
-                className="registerButton"
-              >
+              <button onClick={(e) => register(e)} type="submit" className="registerButton">
                 Create account
               </button>
               <small>
