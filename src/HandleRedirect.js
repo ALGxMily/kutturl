@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate, useParams, createSearchParams } from "react-router-dom";
 import Lottie from "lottie-react";
-import GoogleAd from "./GoogleAd";
 import MyLeaderBoardAd from "./GoogleAd";
 
 export default function HandleRedirect() {
@@ -66,7 +65,7 @@ export default function HandleRedirect() {
       >
         Almost there!
       </h1>
-<MyLeaderBoardAd />
+{/* <MyLeaderBoardAd /> */}
       {/* <Adsense 
         slot="8545615608"
         style={{ display: "block" }}

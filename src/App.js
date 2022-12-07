@@ -270,12 +270,13 @@ function Home() {
     if (searchParams.get("message") === "invalid_request") {
       notifyError();
       window.history.replaceState({}, document.title, "/");
-
       return;
     }
-    setLoading(true);
-    document.title = "Loading...";
+
+    if(loading){document.title = "Loading...";}else{document.title = "Kutturl"}
+
     auth.onAuthStateChanged((user) => {
+      if (user) {
       try {
         setUsername(user.displayName);
         setJoyride({ ...joyride, run: false });
@@ -286,7 +287,14 @@ function Home() {
         setJoyride({ ...joyride, run: true });
         setSession(false);
         setLoading(false);
+        document.title = "Kutturl";
       }
+    } else {
+      setJoyride({ ...joyride, run: true });
+      setSession(false);
+      setLoading(false);
+      document.title = "Kutturl";
+    }
     });
   }, []);
   const logout = async () => {
@@ -299,6 +307,7 @@ function Home() {
       .finally(() => {
         navigateTo("/");
         setLoading(false);
+        document.title = "Kutturl";
       });
   };
 
@@ -470,7 +479,6 @@ function Home() {
       </div>
       {/* <Ad /> */}
 
-      <MyLeaderBoardAd />
       <footer>
         <div className="footerWrap">
           <div className="footerContent" id="disclaimer">

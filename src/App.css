@@ -3,7 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400&display=swap');
 #appWrap{
@@ -101,12 +101,12 @@ text-decoration: none;
 .App-header li a:hover{
   color:white;
 }
-
 .contentWrap{
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
   text-align: left;
+  overflow: hidden;
   padding-left: 20vw;
   min-height: 50vh;
 }
