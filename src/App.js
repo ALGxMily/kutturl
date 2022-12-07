@@ -597,7 +597,7 @@ function Home() {
               styles={joyride.styles}
             />
             <p>
-              Made with <Heart color="#FBBD12" style={{ position: "relative", top: "2px" }} /> by{" "}
+              Made with <Heart color="#FBBD12" style={{ position: "relative", top: "2.1px" }} /> by{" "}
               <a target={"_blank"} href="https://github.com/ALGxMily" style={{ color: "#fff", textDecoration: "none" }}>
                 Dzhuliano
               </a>
