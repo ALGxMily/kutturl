@@ -365,12 +365,14 @@ function Home() {
         setJoyride({ ...joyride, run: true });
         setSession(false);
         setLoading(false);
+        setShow(true);
       }
     } else {
       setJoyride({ ...joyride, run: true });
       setSession(false);
       setLoading(false);
       document.title = "Kutturl";
+      setShow(true);
     }
     });
   }, []);
@@ -578,8 +580,10 @@ function Home() {
         <object data="logo-center.svg" />
       </div>
       {/* <Ad /> */}
-
-      <MyLeaderBoardAd />
+      <div className="tipsWrap" >
+        <KutturlTips controlShow={show} />
+      </div>
+      {/* <MyLeaderBoardAd /> */}
       <footer>
         <div className="footerWrap">
           <div className="footerContent" id="disclaimer">
