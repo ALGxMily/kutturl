@@ -83,10 +83,7 @@ export default function Login() {
           setError(errorTemp);
           navigateTo("/login");
           //rerender the page and show error
-          errorData === "INVALID_EMAIL" ||
-          "EMAIL_NOT_FOUND" ||
-          "INVALID_PASSWORD" ||
-          "USER_DISABLED"
+          errorData === "INVALID_EMAIL" || "EMAIL_NOT_FOUND" || "INVALID_PASSWORD" || "USER_DISABLED"
             ? notifyErrorGlobal("Invalid Email or Password")
             : notifyErrorGlobal("Something went wrong");
           setTimeout(() => {
@@ -147,12 +144,12 @@ export default function Login() {
     <>
       <div className="split" id="screen">
         <div className="left" id="left">
-          <img
+          <object
             id="logo-auth"
             style={{ cursor: "pointer" }}
             onClick={goToHome}
             draggable={false}
-            src="logo-center.svg"
+            data={"logo-center.svg"}
           />
         </div>
         <div className="right">

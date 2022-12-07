@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate, useParams, createSearchParams } from "react-router-dom";
 import Lottie from "lottie-react";
-import MyLeaderBoardAd from "./GoogleAd";
-
+import GoogleAd from "./GoogleAd";
+import Snowfall from "react-snowfall";
 export default function HandleRedirect() {
   const { shortId } = useParams();
 
@@ -43,36 +43,42 @@ export default function HandleRedirect() {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <Lottie
-        animationData={require("./loading.json")}
-        style={{ width: "100px", height: "100px" }}
+    <>
+      <Snowfall
+        // The color of the snowflake, can be any valid CSS color.
+        color="#fff"
+        // Applied to the canvas element.
+        style={{ background: "transparent" }}
+        // Controls the number of snowflakes that are created (defaults to 150).
+        snowflakeCount={400}
+        // Controls the maximum size of the snowflakes (defaults to 5).
+        maxSnowflakeSize={5}
+        // Controls the minimum size of the snowflakes (defaults to 1).
+        minSnowflakeSize={1}
       />
-      <h1
+      <div
         style={{
-          color: "white",
-          fontSize: "2rem",
-          marginLeft: "1rem",
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+          height: "100vh",
         }}
       >
-        Almost there!
-      </h1>
-{/* <MyLeaderBoardAd /> */}
-      {/* <Adsense 
-        slot="8545615608"
-        style={{ display: "block" }}
-        format="auto"
-        responsive="true"
-        client="pub-5197012541210620"
-      /> */}
-    </div>
+        <Lottie
+          animationData={require("./loading.json")}
+          style={{ width: "100px", height: "100px" }}
+        />
+        <h1
+          style={{
+            color: "white",
+            fontSize: "2rem",
+            marginLeft: "1rem",
+          }}
+        >
+          Almost there!
+        </h1>
+      </div>
+    </>
   );
 }

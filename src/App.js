@@ -2,6 +2,9 @@ import "./App.css";
 import AnimatedBg from "react-animated-bg";
 import ButtonShort, { FinalPage } from "./ButtonLoader/ButtonShort";
 import React from "react";
+import Snowfall from "react-snowfall";
+import { Spinner } from "react-activity";
+import "react-activity/dist/library.css";
 import {
   BrowserRouter as Router,
   Switch,
@@ -28,15 +31,14 @@ import { Button } from "@mui/material";
 import Tippy from "@tippyjs/react";
 import Joyride from "react-joyride";
 import "tippy.js/dist/tippy.css"; // optional
-import {
-  ArrowForward,
-  ExitOutline,
-  Heart,
-  InformationCircleOutline,
-} from "react-ionicons";
+import { ArrowForward, ExitOutline, Heart, InformationCircleOutline } from "react-ionicons";
 import HandleRedirect from "./HandleRedirect";
 import ResponsiveNativeAds from "./GoogleAd";
 import MyLeaderBoardAd from "./GoogleAd";
+import createAndAppendAdsElement from "./GoogleAd";
+import linkShortner from "./Linkshortner";
+import Modal from "./Modal";
+import KutturlTips from "./Components/KutturlTips";
 
 function App() {
   return (
@@ -56,11 +58,15 @@ function App() {
 function Home() {
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = React.useState(true);
+  const [shortnerLoading, setShortnerLoading] = React.useState(false);
   const [username, setUsername] = React.useState("");
   const [session, setSession] = React.useState(false);
+  const [buttonText, setButtonText] = React.useState("Shorten");
+  const [link, setLink] = React.useState(false);
   const loadingRef = React.useRef(null);
   const navigateTo = useNavigate();
   const location = useLocation();
+  const [show, setShow] = React.useState(false);
   const notifyError = () => {
     try {
       toast.error("Please enter a valid URL!", {
@@ -79,7 +85,7 @@ function Home() {
   };
   const notifyErrorGlobal = (error) => {
     try {
-      toast.error(`Error-${error}`, {
+      toast.error(`${error}`, {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
@@ -126,10 +132,11 @@ function Home() {
   }, [loading]);
 
   const [text, setText] = React.useState("");
+  const [modalShow, setModalShow] = React.useState(false);
   const focused = React.useRef(null);
   const refButton = React.useRef(null);
   const [popUpMenu, setPopUpMenu] = React.useState(false);
-  const user = auth.currentUser;
+  const [copiedLink, setCopiedLink] = React.useState(false);
   const handleKeyPress = React.useCallback((event) => {
     if (event.ctrlKey === true && event.key === "v") {
       toast.success(`Link pasted!`, {
@@ -160,16 +167,83 @@ function Home() {
         });
     }
   }, []);
+  const copyFunction = () => {
+    setCopiedLink(true);
+    navigator.clipboard.writeText(text)
+      ? toast.success(`Link copied!`, {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        })
+      : toast.error(`Link not copied!`, {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+    setTimeout(() => {
+      setCopiedLink(false);
+    }, 1100);
+  };
   const goToLogin = () => {
     setLoading(true);
     navigateTo("/login");
   };
   const loadURL = async () => {
+    const user = auth.currentUser;
+    let uuid;
+    if (user) {
+      uuid = user.uid;
+    } else {
+      uuid = "guest";
+    }
+
     if (text === "") {
       notifyError();
       return;
     }
-    setLoading(true);
+    setShortnerLoading(true);
+    linkShortner(text, uuid?.toString())
+      .catch(() => {
+        notifyErrorGlobal("Something went wrong!");
+      })
+      .then((res) => {
+        if (res.success) {
+          setShortnerLoading(false);
+          setText(res.shortUrl);
+          setButtonText("Done!");
+          setTimeout(() => {
+            setLink(true);
+          }, 1000);
+
+          if (uuid !== "guest") {
+            toast.success(`Link saved!`, {
+              position: "top-center",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+          }
+        }
+        setModalShow(true);
+      })
+      .finally(() => {
+        setShortnerLoading(false);
+        setButtonText("Shorten");
+      });
   };
   const stepsScreenApp = [
     {
@@ -194,10 +268,11 @@ function Home() {
         <p>
           This is a small project made for fun{"\n"}
           <br />
-          and learning purposes!If you find any bugs, please report them to
-          dgiuliano@yandex.com{"\n"}Any suggestions are welcome!{"\n"}Enjoy!
+          and learning purposes!If you find any bugs, please report them to dgiuliano@yandex.com{"\n"}Any suggestions
+          are welcome!{"\n"}Enjoy!
         </p>
       ),
+
       onclick: () => {
         setJoyride({ ...joyride, run: false });
       },
@@ -215,7 +290,7 @@ function Home() {
     }
   };
   const [joyride, setJoyride] = React.useState({
-    run: true,
+    run: false,
     steps: stepsScreenApp,
     continuous: true,
     showProgress: false,
@@ -250,6 +325,11 @@ function Home() {
   });
 
   React.useEffect(() => {
+    const inputBox = document.getElementById("input");
+    //if input is clicked focused.current.select()
+    inputBox.addEventListener("click", () => {
+      focused.current.select();
+    });
     if (!loading) {
       setSteps(stepsScreenApp);
     }
@@ -258,6 +338,7 @@ function Home() {
 
       if (window.innerWidth < 768) {
         dashboardAMobile.style.display = "flex";
+        setShow(false);
       } else if (window.innerWidth > 768) {
         dashboardAMobile.style.display = "none";
       }
@@ -267,14 +348,11 @@ function Home() {
   }, []);
 
   React.useEffect(() => {
-    if (searchParams.get("message") === "invalid_request") {
-      notifyError();
-      window.history.replaceState({}, document.title, "/");
-      return;
+    if (text === "") {
+      setButtonText("Shorten");
     }
-
-    if(loading){document.title = "Loading...";}else{document.title = "Kutturl"}
-
+    setLoading(true);
+    document.title = "Loading...";
     auth.onAuthStateChanged((user) => {
       if (user) {
       try {
@@ -287,7 +365,6 @@ function Home() {
         setJoyride({ ...joyride, run: true });
         setSession(false);
         setLoading(false);
-        document.title = "Kutturl";
       }
     } else {
       setJoyride({ ...joyride, run: true });
@@ -323,8 +400,21 @@ function Home() {
   const menu = () => {
     setPopUpMenu(!popUpMenu);
   };
+
+  //return a map of ads to be displayed
+
   return (
     <>
+      <Snowfall
+        color="#fff"
+        style={{ background: "transparent" }}
+        snowflakeCount={140}
+        animationSpeed={2}
+        snowflakeSize={3}
+        snowflakeSpeed={2}
+        snowflakeRandomness={4}
+        changeFrequency={200}
+      />
       <div className="App">
         <div className="App-header" id="logoHeader">
           <img src="logo-center.svg" />
@@ -383,10 +473,7 @@ function Home() {
           )}
           <div className="inputWrap" id="header">
             <li>
-              <a
-                id="dashboardSection"
-                href={!session ? "/login" : "/dashboard"}
-              >
+              <a id="dashboardSection" href={!session ? "/login" : "/dashboard"}>
                 <Joyride
                   callback={HandleJoyRideCallback}
                   run={joyride.run}
@@ -402,21 +489,13 @@ function Home() {
             <li>
               {!session ? (
                 <>
-                  <a
-                    id="loginSection"
-                    style={{ cursor: "pointer" }}
-                    onClick={goToLogin}
-                  >
+                  <a id="loginSection" style={{ cursor: "pointer" }} onClick={goToLogin}>
                     Log-in
                   </a>
                 </>
               ) : (
                 <>
-                  <a
-                    id="loginSection"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => menu()}
-                  >
+                  <a id="loginSection" style={{ cursor: "pointer" }} onClick={() => menu()}>
                     <Joyride
                       callback={HandleJoyRideCallback}
                       run={joyride.run}
@@ -436,6 +515,7 @@ function Home() {
         </div>
       </div>
       <div className="contentWrapApp" id="container">
+        {/* <Modal show={modalShow} children={text} /> */}
         <div className="content">
           <h2>Easy, convenient, prettier</h2>
           <p>Shorten your URLs like a boss.</p>
@@ -450,18 +530,38 @@ function Home() {
             showSkipButton={joyride.showSkipButton}
             styles={joyride.styles}
           />
-          <Tippy content="Insert Link here" placement="bottom">
-            <input
-              itemType="url"
-              ref={focused}
-              onChange={(text) => setText(text.target.value)}
-              type="text"
-              placeholder="Paste your link here"
-              id="input"
-            ></input>
-          </Tippy>
-          <a id="button" onClick={loadURL}>
-            <ButtonShort text={text} buttonRef={refButton} />
+          <input
+            //clear button
+            itemType="url"
+            ref={focused}
+            value={text}
+            onChange={(text) => setText(text.target.value)}
+            type="search"
+            placeholder="Paste your link here"
+            id="input"
+          ></input>
+          <a id="button" onClick={!link ? loadURL : copyFunction}>
+            <div className="buttonWrap">
+              {link ? (
+                <button className="button">{copiedLink ? "✔️ Copied" : "Copy"}</button>
+              ) : (
+                <button className="button">
+                  {shortnerLoading ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Spinner />
+                    </div>
+                  ) : (
+                    <div>{buttonText}</div>
+                  )}
+                </button>
+              )}
+            </div>
             <Joyride
               callback={HandleJoyRideCallback}
               run={joyride.run}
@@ -475,10 +575,11 @@ function Home() {
         </div>
       </div>
       <div id="logo">
-        <img src="logo-center.svg" />
+        <object data="logo-center.svg" />
       </div>
       {/* <Ad /> */}
 
+      <MyLeaderBoardAd />
       <footer>
         <div className="footerWrap">
           <div className="footerContent" id="disclaimer">
@@ -492,17 +593,8 @@ function Home() {
               styles={joyride.styles}
             />
             <p>
-              Made with{" "}
-              <Heart
-                color="#FBBD12"
-                style={{ position: "relative", top: "2px" }}
-              />{" "}
-              by{" "}
-              <a
-                target={"_blank"}
-                href="https://github.com/ALGxMily"
-                style={{ color: "#fff", textDecoration: "none" }}
-              >
+              Made with <Heart color="#FBBD12" style={{ position: "relative", top: "2px" }} /> by{" "}
+              <a target={"_blank"} href="https://github.com/ALGxMily" style={{ color: "#fff", textDecoration: "none" }}>
                 Dzhuliano
               </a>
             </p>
@@ -549,10 +641,7 @@ function Urls() {
   return (
     <div className="apiWrap">
       <h1>API</h1>
-      <p>
-        Our API is free to use and easy to integrate. You can use it to shorten
-        links, get analytics, and more.
-      </p>
+      <p>Our API is free to use and easy to integrate. You can use it to shorten links, get analytics, and more.</p>
     </div>
   );
 }
