@@ -1,4 +1,5 @@
 import React from "react";
+import "./App.css";
 import { auth } from "./firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
@@ -103,7 +104,7 @@ export default function Register() {
     <>
       <div className="split" id="screen">
         <div className="left" id="left">
-          <object src="logo-center.svg" />
+          <object data="logo-center.svg" />
         </div>
         <div className="right">
           <form>

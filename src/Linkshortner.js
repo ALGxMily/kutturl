@@ -1,28 +1,25 @@
 import { auth } from "./firebaseConfig";
+import axios from "axios";
 
 const isDev = process.env.NODE_ENV === "development";
 const public_url = isDev ? "http://localhost:5005" : "https://kuturl.herokuapp.com";
 
 const linkShortner = async (url, uuid) => {
-  let baseURL = `${public_url}/shorturladd`;
+  console.log("linkShortner -> url", url);
+  let baseURL = `${public_url}/create`;
   let responseObj = {
     shortUrl: null,
     error: null,
     success: false,
   };
 
-  if (uuid === "guest") {
-    baseURL = `${baseURL}?url=${url}`;
-  } else {
-    baseURL = `${baseURL}?url=${url}&uuid=${uuid}`;
-  }
-
-  const response = await fetch(baseURL, {
-    method: "GET",
-  });
-
-  const data = await response.json();
-
+  console.log("linkShortner -> baseURL", baseURL);
+  const objToSend = {
+    url: url,
+    uuid: uuid ? uuid : null,
+  };
+  const response = await axios.post(baseURL, objToSend);
+  const data = response.data;
   if (data.error) {
     responseObj.error = data.error;
     throw data.error;

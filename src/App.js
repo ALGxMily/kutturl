@@ -65,7 +65,6 @@ function Home() {
   const [link, setLink] = React.useState(false);
   const loadingRef = React.useRef(null);
   const navigateTo = useNavigate();
-  const location = useLocation();
   const [show, setShow] = React.useState(false);
   const notifyError = () => {
     try {
