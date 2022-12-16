@@ -5,17 +5,7 @@
   scroll-behavior: smooth;
   overflow: hidden;
 }
-.announcement{
-  background-color: rgb(185, 182, 182, 0.2);
-  color: #fff;
-  padding: .6rem;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 400;
-  font-family: "Barlow", sans-serif;
-  display: flex;
-  justify-content: space-between;
-}
+
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400&display=swap');
 #appWrap{
   max-height: 100vh;
@@ -810,4 +800,19 @@ text-decoration: none;
     aspect-ratio: 1;
 
   }
+}
+.announcement{
+  background-color: rgb(185, 182, 182, 0.2);
+  color: #fff;
+  padding: .6rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: "Barlow", sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;  
+}
+.announcement .cross{
+  cursor: pointer;
 }
