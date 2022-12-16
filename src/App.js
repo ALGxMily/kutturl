@@ -31,7 +31,7 @@ import { Button } from "@mui/material";
 import Tippy from "@tippyjs/react";
 import Joyride from "react-joyride";
 import "tippy.js/dist/tippy.css"; // optional
-import { ArrowForward, ExitOutline, Heart, InformationCircleOutline } from "react-ionicons";
+import { ArrowForward, Close, ExitOutline, Heart, InformationCircleOutline } from "react-ionicons";
 import HandleRedirect from "./HandleRedirect";
 import ResponsiveNativeAds from "./GoogleAd";
 import MyLeaderBoardAd from "./GoogleAd";
@@ -354,25 +354,25 @@ function Home() {
     document.title = "Loading...";
     auth.onAuthStateChanged((user) => {
       if (user) {
-      try {
-        setUsername(user.displayName);
-        setJoyride({ ...joyride, run: false });
-        setSession(!!user);
-        setLoading(false);
-        document.title = "Kutturl | Home";
-      } catch (error) {
+        try {
+          setUsername(user.displayName);
+          setJoyride({ ...joyride, run: false });
+          setSession(!!user);
+          setLoading(false);
+          document.title = "Kutturl | Home";
+        } catch (error) {
+          setJoyride({ ...joyride, run: true });
+          setSession(false);
+          setLoading(false);
+          setShow(true);
+        }
+      } else {
         setJoyride({ ...joyride, run: true });
         setSession(false);
         setLoading(false);
+        document.title = "Kutturl";
         setShow(true);
       }
-    } else {
-      setJoyride({ ...joyride, run: true });
-      setSession(false);
-      setLoading(false);
-      document.title = "Kutturl";
-      setShow(true);
-    }
     });
   }, []);
   const logout = async () => {
@@ -401,6 +401,17 @@ function Home() {
   const menu = () => {
     setPopUpMenu(!popUpMenu);
   };
+  const setAnnouncementToCookie = () => {
+    setAnnouncement(false);
+    localStorage.setItem("announcement", false);
+  };
+  const [announcement, setAnnouncement] = React.useState(true);
+
+  React.useEffect(() => {
+    if (localStorage.getItem("announcement") === "false") {
+      setAnnouncement(false);
+    }
+  }, []);
 
   //return a map of ads to be displayed
 
@@ -417,6 +428,18 @@ function Home() {
         changeFrequency={200}
       />
       <div className="App">
+        {announcement && (
+          <div className="announcement">
+            <p></p>
+            <p>
+              <span style={{ color: "#FBBD12" }}>Announcement: </span>Links are now even shorter!{" "}
+              <span style={{ color: "#FBBD12" }}>Enjoy!</span>
+            </p>
+            <div className="cross" onClick={setAnnouncementToCookie}>
+              <Close color="#FBBD12" />
+            </div>
+          </div>
+        )}
         <div className="App-header" id="logoHeader">
           <img src="logo-center.svg" />
 
@@ -579,7 +602,7 @@ function Home() {
         <object data="logo-center.svg" />
       </div>
       {/* <Ad /> */}
-      <div className="tipsWrap" >
+      <div className="tipsWrap">
         <KutturlTips controlShow={show} />
       </div>
       {/* <MyLeaderBoardAd /> */}
