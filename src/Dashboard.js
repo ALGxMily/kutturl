@@ -297,7 +297,7 @@ export default function Dashboard() {
       <div
         className="contentWrapDashboard"
         id="containerDashboard"
-        style={{ maxHeight: "200vh", overflow: "scroll" }}
+        style={{ maxHeight: "200vh", overflow: "hidden" }}
       >
         <div className="containerHeaderDashboard">
           <div className="leftHeader">

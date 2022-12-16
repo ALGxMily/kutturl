@@ -351,8 +351,9 @@ function Home() {
       setButtonText("Shorten");
     }
     setLoading(true);
-    document.title = "Kutturl";
+    document.title = "Loading...";
     auth.onAuthStateChanged((user) => {
+      if (user) {
       try {
         setUsername(user.displayName);
         setJoyride({ ...joyride, run: false });
@@ -365,6 +366,13 @@ function Home() {
         setLoading(false);
         setShow(true);
       }
+    } else {
+      setJoyride({ ...joyride, run: true });
+      setSession(false);
+      setLoading(false);
+      document.title = "Kutturl";
+      setShow(true);
+    }
     });
   }, []);
   const logout = async () => {
@@ -377,6 +385,7 @@ function Home() {
       .finally(() => {
         navigateTo("/");
         setLoading(false);
+        document.title = "Kutturl";
       });
   };
 
@@ -570,9 +579,10 @@ function Home() {
         <object data="logo-center.svg" />
       </div>
       {/* <Ad /> */}
-      <div className="tipsWrap">
+      <div className="tipsWrap" >
         <KutturlTips controlShow={show} />
       </div>
+      {/* <MyLeaderBoardAd /> */}
       <footer>
         <div className="footerWrap">
           <div className="footerContent" id="disclaimer">
@@ -586,7 +596,7 @@ function Home() {
               styles={joyride.styles}
             />
             <p>
-              Made with <Heart color="#FBBD12" style={{ position: "relative", top: "2px" }} /> by{" "}
+              Made with <Heart color="#FBBD12" style={{ position: "relative", top: "2.1px" }} /> by{" "}
               <a target={"_blank"} href="https://github.com/ALGxMily" style={{ color: "#fff", textDecoration: "none" }}>
                 Dzhuliano
               </a>
