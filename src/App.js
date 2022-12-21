@@ -432,8 +432,7 @@ function Home() {
           <div className="announcement">
             <p></p>
             <p>
-              <span style={{ color: "#FBBD12" }}>Announcement: </span>Links are now even shorter!{" "}
-              <span style={{ color: "#FBBD12" }}>Enjoy!</span>
+              <span style={{ color: "#ea4630" }}>Merry Christmas! ❄️🎄 and happy new year 🎆</span>
             </p>
             <div className="cross" onClick={setAnnouncementToCookie}>
               <Close color="#FBBD12" />
