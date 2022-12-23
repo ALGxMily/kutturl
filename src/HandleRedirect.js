@@ -1,13 +1,17 @@
 import React from "react";
+import "./App.css";
+import { colors } from "./App";
 import { useNavigate, useParams, createSearchParams, redirect } from "react-router-dom";
 import Lottie from "lottie-react";
 import GoogleAd from "./GoogleAd";
 import Snowfall from "react-snowfall";
+import NotFound from "./404";
 export default function HandleRedirect() {
   const { shortId } = useParams();
 
   const [url, setUrl] = React.useState(null);
   const [ip, setIp] = React.useState(null);
+  const [data, setData] = React.useState(null);
 
   const isDev = process.env.NODE_ENV === "development";
   const public_url = isDev ? "http://localhost:5005" : "https://kuturl.herokuapp.com";
@@ -17,7 +21,10 @@ export default function HandleRedirect() {
       method: "GET",
     }).then((res) => {
       res.json().then((data) => {
-        setUrl(data.url);
+        console.log(data);
+        if (!data.redirectTo404) {
+          setUrl(data.url);
+        }
       });
     });
   }, [shortId]);
@@ -38,12 +45,67 @@ export default function HandleRedirect() {
         url: url,
       }),
     });
-  } else {
-    window.location.href = "/404";
   }
+  React.useEffect(() => {
+    const coords = { x: 0, y: 0 };
+    const circles = document.querySelectorAll(".circle");
 
+    circles.forEach(function (circle, index) {
+      circle.x = 0;
+      circle.y = 0;
+      circle.style.backgroundColor = colors[index % colors.length];
+    });
+
+    window.addEventListener("mousemove", function (e) {
+      coords.x = e.clientX;
+      coords.y = e.clientY;
+    });
+
+    function animateCircles() {
+      let x = coords.x;
+      let y = coords.y;
+
+      circles.forEach(function (circle, index) {
+        circle.style.left = x - 12 + "px";
+        circle.style.top = y - 12 + "px";
+
+        circle.style.scale = (circles.length - index) / circles.length;
+
+        circle.x = x;
+        circle.y = y;
+
+        const nextCircle = circles[index + 1] || circles[0];
+        x += (nextCircle.x - x) * 0.3;
+        y += (nextCircle.y - y) * 0.3;
+      });
+
+      requestAnimationFrame(animateCircles);
+    }
+
+    animateCircles();
+  }, []);
   return (
     <>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
       <Snowfall
         // The color of the snowflake, can be any valid CSS color.
         color="#fff"

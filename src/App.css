@@ -4,7 +4,7 @@
   box-sizing: border-box;
   scroll-behavior: smooth;
   overflow: hidden;
-  cursor: default;
+  cursor: none;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400&display=swap");
