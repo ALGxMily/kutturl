@@ -167,8 +167,6 @@ function Home() {
       logo.className = "logo";
       container.className = "contentWrap";
       logo.style.display = "none";
-
-      //if on a mobile device, show dashboardAMobile
     }
     setSteps(stepsScreenApp);
   }, [loading]);
@@ -375,19 +373,7 @@ function Home() {
     if (!loading) {
       setSteps(stepsScreenApp);
     }
-    const handleResize = () => {
-      const dashboardAMobile = document.getElementById("dashboardAMobile");
-
-      if (window.innerWidth < 768) {
-        dashboardAMobile.style.display = "flex";
-        setShow(false);
-      } else if (window.innerWidth > 768) {
-        dashboardAMobile.style.display = "none";
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [loading]);
 
   React.useEffect(() => {
     if (text === "") {
@@ -496,8 +482,6 @@ function Home() {
     }
   }, []);
 
-  //return a map of ads to be displayed
-
   return (
     <>
       <div className="circle"></div>
@@ -535,7 +519,7 @@ function Home() {
           <div className="announcement">
             <p></p>
             <p>
-              <span style={{ color: "#ea4630" }}>Merry Christmas! ❄️🎄 and happy new year 🎆</span>
+              <span style={{ color: "#FBBD12" }}>Merry Christmas! ❄️🎄 and happy new year 🎆</span>
             </p>
             <div className="cross" onClick={setAnnouncementToCookie}>
               <Close color="#FBBD12" />
@@ -661,11 +645,11 @@ function Home() {
             itemType="url"
             ref={focused}
             value={text}
-            onChange={(text) => setText(text.target.value)}
+            onChange={(e) => setText(e.target.value)}
             type="search"
             placeholder="Paste your link here"
             id="input"
-          ></input>
+          />
           <a id="button" onClick={!link ? loadURL : copyFunction}>
             <div className="buttonWrap">
               {link ? (

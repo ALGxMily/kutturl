@@ -3,15 +3,12 @@ import "./App.css";
 import { colors } from "./App";
 import { useNavigate, useParams, createSearchParams, redirect } from "react-router-dom";
 import Lottie from "lottie-react";
-import GoogleAd from "./GoogleAd";
 import Snowfall from "react-snowfall";
-import NotFound from "./404";
 export default function HandleRedirect() {
   const { shortId } = useParams();
 
   const [url, setUrl] = React.useState(null);
   const [ip, setIp] = React.useState(null);
-  const [data, setData] = React.useState(null);
 
   const isDev = process.env.NODE_ENV === "development";
   const public_url = isDev ? "http://localhost:5005" : "https://kuturl.herokuapp.com";
@@ -21,10 +18,7 @@ export default function HandleRedirect() {
       method: "GET",
     }).then((res) => {
       res.json().then((data) => {
-        console.log(data);
-        if (!data.redirectTo404) {
-          setUrl(data.url);
-        }
+        setUrl(data.url);
       });
     });
   }, [shortId]);
