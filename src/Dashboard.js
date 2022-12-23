@@ -2,26 +2,11 @@ import AnimatedBg from "react-animated-bg";
 import "./App.css";
 import ButtonShort, { FinalPage } from "./ButtonLoader/ButtonShort";
 import React, { Fragment } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Routes,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Routes, useNavigate, useLocation } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
 import "gridjs/dist/theme/mermaid.css";
-import {
-  Add,
-  Close,
-  Copy,
-  CopyOutline,
-  ExitOutline,
-  Pencil,
-} from "react-ionicons";
+import { Add, Close, Copy, CopyOutline, ExitOutline, Pencil } from "react-ionicons";
 import Lottie from "lottie-react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -32,6 +17,7 @@ import { signOut } from "firebase/auth";
 import { Button, Tab, Toolbar } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Tooltip from "@mui/material/Tooltip";
+import { animateCircles } from "./App";
 export default function Dashboard() {
   const [loading, setLoading] = React.useState(false);
   const [username, setUsername] = React.useState("");
@@ -125,9 +111,7 @@ export default function Dashboard() {
   const [dataUser, setData] = React.useState([]);
   const [errorData, setError] = React.useState("");
   const isDev = process.env.NODE_ENV === "development";
-  const public_url = isDev
-    ? "http://localhost:5005"
-    : "https://kuturl.herokuapp.com";
+  const public_url = isDev ? "http://localhost:5005" : "https://kuturl.herokuapp.com";
 
   // React.useEffect(() => {
   //   const handleResize = () => {
@@ -254,7 +238,6 @@ export default function Dashboard() {
     //   document.removeEventListener("touchstart", handleClickOutside);
     // };
   }, [userUID]);
-
   React.useEffect(() => {
     setLoading(true);
     document.title = "Loading...";
@@ -271,6 +254,68 @@ export default function Dashboard() {
       }
     });
   }, []);
+  React.useEffect(() => {
+    const coords = { x: 0, y: 0 };
+    const circles = document.querySelectorAll(".circle");
+    const colors = [
+      "#f8e6d3",
+      "#ffddbd",
+      "#ffcc99",
+      "#ffc285",
+      "#ef865e",
+      "#ec805d",
+      "#e36e5c",
+      "#ffb56b",
+      "#d5585c",
+      "#d1525c",
+      "#ff962e",
+      "#c03b5d",
+      "#fa9c3d",
+      "#ac265e",
+      "#9c155f",
+      "#950f5f",
+      "#ff9124",
+      "#7c0060",
+      "#680060",
+      "#60005f",
+      "#48005f",
+      "#ff8000",
+    ];
+
+    circles.forEach(function (circle, index) {
+      circle.x = 0;
+      circle.y = 0;
+      circle.style.backgroundColor = colors[index % colors.length];
+    });
+
+    window.addEventListener("mousemove", function (e) {
+      coords.x = e.clientX;
+      coords.y = e.clientY;
+    });
+
+    function animateCircles() {
+      let x = coords.x;
+      let y = coords.y;
+
+      circles.forEach(function (circle, index) {
+        circle.style.left = x - 12 + "px";
+        circle.style.top = y - 12 + "px";
+
+        circle.style.scale = (circles.length - index) / circles.length;
+
+        circle.x = x;
+        circle.y = y;
+
+        const nextCircle = circles[index + 1] || circles[0];
+        x += (nextCircle.x - x) * 0.3;
+        y += (nextCircle.y - y) * 0.3;
+      });
+
+      requestAnimationFrame(animateCircles);
+    }
+
+    animateCircles();
+  }, []);
   const logout = async () => {
     setLoading(true);
     try {
@@ -284,21 +329,33 @@ export default function Dashboard() {
   };
 
   return (
-    <Fragment>
+    <>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
       <div className="App">
         <div className="App-header" id="logoHeader">
-          <img
-            style={{ cursor: "pointer" }}
-            onClick={() => navigateTo("/app")}
-            src="logo-center.svg"
-          />
+          <img style={{ cursor: "pointer" }} onClick={() => navigateTo("/app")} src="logo-center.svg" />
         </div>
       </div>
-      <div
-        className="contentWrapDashboard"
-        id="containerDashboard"
-        style={{ maxHeight: "200vh", overflow: "hidden" }}
-      >
+      <div className="contentWrapDashboard" id="containerDashboard" style={{ maxHeight: "200vh", overflow: "hidden" }}>
         <div className="containerHeaderDashboard">
           <div className="leftHeader">
             <h1>My URLs</h1>
@@ -518,12 +575,7 @@ export default function Dashboard() {
                         </Button>
                       </Tooltip> */}
                     <td>
-                      <Tooltip
-                        title="Delete"
-                        placement="top"
-                        arrow
-                        style={{ cursor: "pointer" }}
-                      >
+                      <Tooltip title="Delete" placement="top" arrow style={{ cursor: "pointer" }}>
                         <Button>
                           <Close
                             style={{
@@ -612,6 +664,6 @@ export default function Dashboard() {
         draggable
         theme="dark"
       />
-    </Fragment>
+    </>
   );
 }
