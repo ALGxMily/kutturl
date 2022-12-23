@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useParams, createSearchParams } from "react-router-dom";
+import { useNavigate, useParams, createSearchParams, redirect } from "react-router-dom";
 import Lottie from "lottie-react";
 import GoogleAd from "./GoogleAd";
 import Snowfall from "react-snowfall";
@@ -10,9 +10,7 @@ export default function HandleRedirect() {
   const [ip, setIp] = React.useState(null);
 
   const isDev = process.env.NODE_ENV === "development";
-  const public_url = isDev
-    ? "http://localhost:5005"
-    : "https://kuturl.herokuapp.com";
+  const public_url = isDev ? "http://localhost:5005" : "https://kuturl.herokuapp.com";
 
   React.useEffect(() => {
     fetch(`${public_url}/?i=${shortId}`, {
@@ -40,6 +38,8 @@ export default function HandleRedirect() {
         url: url,
       }),
     });
+  } else {
+    window.location.href = "/404";
   }
 
   return (
@@ -65,10 +65,7 @@ export default function HandleRedirect() {
           height: "100vh",
         }}
       >
-        <Lottie
-          animationData={require("./loading.json")}
-          style={{ width: "100px", height: "100px" }}
-        />
+        <Lottie animationData={require("./loading.json")} style={{ width: "100px", height: "100px" }} />
         <h1
           style={{
             color: "white",
