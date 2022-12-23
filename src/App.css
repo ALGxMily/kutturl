@@ -4,7 +4,7 @@
   box-sizing: border-box;
   scroll-behavior: smooth;
   overflow: hidden;
-  cursor: none;
+  cursor: default;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400&display=swap");
@@ -591,8 +591,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  min-height: 100vh;
-  z-index: 999;
+  z-index: -1;
 }
 .split_loading {
   animation: fade 1s ease-in;

@@ -704,9 +704,9 @@ function Home() {
         <object data="logo-center.svg" />
       </div>
       {/* <Ad /> */}
-      <div className="tipsWrap">
+      {/* <div className="tipsWrap">
         <KutturlTips controlShow={show} />
-      </div>
+      </div> */}
       {/* <MyLeaderBoardAd /> */}
       <footer>
         <div className="footerWrap">
