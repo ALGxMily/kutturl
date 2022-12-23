@@ -2,35 +2,12 @@ import React from "react";
 import { Home, HomeOutline } from "react-ionicons";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { colors } from "./App";
 
 export default function NotFound() {
   React.useEffect(() => {
     const coords = { x: 0, y: 0 };
     const circles = document.querySelectorAll(".circle");
-    const colors = [
-      "#f8e6d3",
-      "#ffddbd",
-      "#ffcc99",
-      "#ffc285",
-      "#ef865e",
-      "#ec805d",
-      "#e36e5c",
-      "#ffb56b",
-      "#d5585c",
-      "#d1525c",
-      "#ff962e",
-      "#c03b5d",
-      "#fa9c3d",
-      "#ac265e",
-      "#9c155f",
-      "#950f5f",
-      "#ff9124",
-      "#7c0060",
-      "#680060",
-      "#60005f",
-      "#48005f",
-      "#ff8000",
-    ];
 
     circles.forEach(function (circle, index) {
       circle.x = 0;

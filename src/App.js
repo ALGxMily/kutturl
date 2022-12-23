@@ -39,7 +39,30 @@ import createAndAppendAdsElement from "./GoogleAd";
 import linkShortner from "./Linkshortner";
 import Modal from "./Modal";
 import KutturlTips from "./Components/KutturlTips";
-
+export const colors = [
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#fbbd12",
+  "#c29a2d",
+  "#c29a2d",
+  "#c29a2d",
+  "#c29a2d",
+  "#c29a2d",
+  "#c29a2d",
+];
 function App() {
   return (
     <Routes>
@@ -399,30 +422,6 @@ function Home() {
   React.useEffect(() => {
     const coords = { x: 0, y: 0 };
     const circles = document.querySelectorAll(".circle");
-    const colors = [
-      "#f8e6d3",
-      "#ffddbd",
-      "#ffcc99",
-      "#ffc285",
-      "#ef865e",
-      "#ec805d",
-      "#e36e5c",
-      "#ffb56b",
-      "#d5585c",
-      "#d1525c",
-      "#ff962e",
-      "#c03b5d",
-      "#fa9c3d",
-      "#ac265e",
-      "#9c155f",
-      "#950f5f",
-      "#ff9124",
-      "#7c0060",
-      "#680060",
-      "#60005f",
-      "#48005f",
-      "#ff8000",
-    ];
 
     circles.forEach(function (circle, index) {
       circle.x = 0;
