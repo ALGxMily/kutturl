@@ -328,7 +328,7 @@ export default function Dashboard() {
       <div className="circle"></div>
       <div className="App">
         <div className="App-header" id="logoHeader">
-          <img style={{ cursor: "pointer" }} onClick={() => navigateTo("/app")} src="logo-center.svg" />
+          <img style={{ cursor: "pointer" }} onClick={() => navigateTo("/app")} src="logo-center-old.svg" />
         </div>
       </div>
       <div className="contentWrapDashboard" id="containerDashboard" style={{ maxHeight: "200vh", overflow: "hidden" }}>

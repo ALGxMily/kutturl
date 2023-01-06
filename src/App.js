@@ -687,11 +687,6 @@ function Home() {
       <div id="logo">
         <object data="logo-center.svg" />
       </div>
-      {/* <Ad /> */}
-      {/* <div className="tipsWrap">
-        <KutturlTips controlShow={show} />
-      </div> */}
-      {/* <MyLeaderBoardAd /> */}
       <footer>
         <div className="footerWrap">
           <div className="footerContent" id="disclaimer">
