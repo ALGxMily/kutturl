@@ -474,8 +474,8 @@ function Home() {
     setAnnouncement(false);
     localStorage.setItem("announcement", false);
   };
-  const [announcement, setAnnouncement] = React.useState(true);
-
+  const [announcement, setAnnouncement] = React.useState(false);
+  const [snow, setSnow] = React.useState(false);
   React.useEffect(() => {
     if (localStorage.getItem("announcement") === "false") {
       setAnnouncement(false);
@@ -504,16 +504,16 @@ function Home() {
       <div className="circle"></div>
       <div className="circle"></div>
       <div className="circle"></div>
-      <Snowfall
-        color="#fff"
-        style={{ background: "transparent" }}
-        snowflakeCount={140}
-        animationSpeed={2}
-        snowflakeSize={3}
-        snowflakeSpeed={2}
-        snowflakeRandomness={4}
-        changeFrequency={200}
-      />
+{ snow && <Snowfall
+    color="#fff"
+    style={{ background: "transparent" }}
+    snowflakeCount={140}
+    animationSpeed={2}
+    snowflakeSize={3}
+    snowflakeSpeed={2}
+    snowflakeRandomness={4}
+    changeFrequency={200}
+  />}
       <div className="App">
         {announcement && (
           <div className="announcement">
@@ -527,7 +527,7 @@ function Home() {
           </div>
         )}
         <div className="App-header" id="logoHeader">
-          <img src="logo-center.svg" />
+          <img src="logo-center-old.svg" />
 
           {session ? (
             <>

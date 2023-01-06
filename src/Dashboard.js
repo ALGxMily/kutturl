@@ -619,7 +619,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div id="logo">
-        <img src="logo-center.svg" />
+      <img src="logo-center-old.svg" />
       </div>
       <Lottie
         id="loading"

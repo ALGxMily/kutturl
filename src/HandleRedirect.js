@@ -78,6 +78,7 @@ export default function HandleRedirect() {
 
     animateCircles();
   }, []);
+  const [snow, setSnow] = React.useState(false);
   return (
     <>
       <div className="circle"></div>
@@ -100,7 +101,7 @@ export default function HandleRedirect() {
       <div className="circle"></div>
       <div className="circle"></div>
       <div className="circle"></div>
-      <Snowfall
+{  snow &&    <Snowfall
         // The color of the snowflake, can be any valid CSS color.
         color="#fff"
         // Applied to the canvas element.
@@ -111,7 +112,7 @@ export default function HandleRedirect() {
         maxSnowflakeSize={5}
         // Controls the minimum size of the snowflakes (defaults to 1).
         minSnowflakeSize={1}
-      />
+      />}
       <div
         style={{
           display: "flex",

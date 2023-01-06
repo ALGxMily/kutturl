@@ -163,7 +163,7 @@ export default function Register() {
       <div className="circle"></div>
       <div className="split" id="screen">
         <div className="left" id="left">
-          <object data="logo-center.svg" />
+          <object data="logo-center-old.svg" />
         </div>
         <div className="right">
           <form>
