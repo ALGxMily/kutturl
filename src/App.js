@@ -31,7 +31,13 @@ import { Button } from "@mui/material";
 import Tippy from "@tippyjs/react";
 import Joyride from "react-joyride";
 import "tippy.js/dist/tippy.css"; // optional
-import { ArrowForward, Close, ExitOutline, Heart, InformationCircleOutline } from "react-ionicons";
+import {
+  ArrowForward,
+  Close,
+  ExitOutline,
+  Heart,
+  InformationCircleOutline,
+} from "react-ionicons";
 import HandleRedirect from "./HandleRedirect";
 import ResponsiveNativeAds from "./GoogleAd";
 import MyLeaderBoardAd from "./GoogleAd";
@@ -39,6 +45,7 @@ import createAndAppendAdsElement from "./GoogleAd";
 import linkShortner from "./Linkshortner";
 import Modal from "./Modal";
 import KutturlTips from "./Components/KutturlTips";
+import Maintanance from "./Maintanance";
 export const colors = [
   "#fbbd12",
   "#fbbd12",
@@ -64,19 +71,26 @@ export const colors = [
   "#c29a2d",
 ];
 function App() {
-  return (
-    <Routes>
-      <Route exact path="/:shortId" element={<HandleRedirect />} />
-      <Route exact path="/" element={<Home />} />
-      <Route path="/app" element={<Home />} />
-      <Route path="/404" element={<NotFound />} />
-      <Route path="/urls" element={<Urls />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/finalpage" element={<FinalPage />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-    </Routes>
-  );
+  const [maintanance, setMaintanance] = React.useState(true);
+
+  if (maintanance) {
+    return <Maintanance />;
+  } else {
+    return (
+      <Routes>
+        <Route exact path="/:shortId" element={<HandleRedirect />} />
+        <Route exact path="/" element={<Home />} />
+        <Route path="/app" element={<Home />} />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="/urls" element={<Urls />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/finalpage" element={<FinalPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/sorry" element={<Maintanance />} />
+      </Routes>
+    );
+  }
 }
 export const animateCircles = (coords, circles) => {
   let x = coords.x;
@@ -308,8 +322,8 @@ function Home() {
         <p>
           This is a small project made for fun{"\n"}
           <br />
-          and learning purposes!If you find any bugs, please report them to dgiuliano@yandex.com{"\n"}Any suggestions
-          are welcome!{"\n"}Enjoy!
+          and learning purposes!If you find any bugs, please report them to
+          dgiuliano@yandex.com{"\n"}Any suggestions are welcome!{"\n"}Enjoy!
         </p>
       ),
 
@@ -504,22 +518,26 @@ function Home() {
       <div className="circle"></div>
       <div className="circle"></div>
       <div className="circle"></div>
-{ snow && <Snowfall
-    color="#fff"
-    style={{ background: "transparent" }}
-    snowflakeCount={140}
-    animationSpeed={2}
-    snowflakeSize={3}
-    snowflakeSpeed={2}
-    snowflakeRandomness={4}
-    changeFrequency={200}
-  />}
+      {snow && (
+        <Snowfall
+          color="#fff"
+          style={{ background: "transparent" }}
+          snowflakeCount={140}
+          animationSpeed={2}
+          snowflakeSize={3}
+          snowflakeSpeed={2}
+          snowflakeRandomness={4}
+          changeFrequency={200}
+        />
+      )}
       <div className="App">
         {announcement && (
           <div className="announcement">
             <p></p>
             <p>
-              <span style={{ color: "#FBBD12" }}>Merry Christmas! ❄️🎄 and happy new year 🎆</span>
+              <span style={{ color: "#FBBD12" }}>
+                Merry Christmas! ❄️🎄 and happy new year 🎆
+              </span>
             </p>
             <div className="cross" onClick={setAnnouncementToCookie}>
               <Close color="#FBBD12" />
@@ -583,7 +601,10 @@ function Home() {
           )}
           <div className="inputWrap" id="header">
             <li>
-              <a id="dashboardSection" href={!session ? "/login" : "/dashboard"}>
+              <a
+                id="dashboardSection"
+                href={!session ? "/login" : "/dashboard"}
+              >
                 <Joyride
                   callback={HandleJoyRideCallback}
                   run={joyride.run}
@@ -599,13 +620,21 @@ function Home() {
             <li>
               {!session ? (
                 <>
-                  <a id="loginSection" style={{ cursor: "pointer" }} onClick={goToLogin}>
+                  <a
+                    id="loginSection"
+                    style={{ cursor: "pointer" }}
+                    onClick={goToLogin}
+                  >
                     Log-in
                   </a>
                 </>
               ) : (
                 <>
-                  <a id="loginSection" style={{ cursor: "pointer" }} onClick={() => menu()}>
+                  <a
+                    id="loginSection"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => menu()}
+                  >
                     <Joyride
                       callback={HandleJoyRideCallback}
                       run={joyride.run}
@@ -653,7 +682,9 @@ function Home() {
           <a id="button" onClick={!link ? loadURL : copyFunction}>
             <div className="buttonWrap">
               {link ? (
-                <button className="button">{copiedLink ? "✔️ Copied" : "Copy"}</button>
+                <button className="button">
+                  {copiedLink ? "✔️ Copied" : "Copy"}
+                </button>
               ) : (
                 <button className="button">
                   {shortnerLoading ? (
@@ -700,8 +731,17 @@ function Home() {
               styles={joyride.styles}
             />
             <p>
-              Made with <Heart color="#FBBD12" style={{ position: "relative", top: "2.1px" }} /> by{" "}
-              <a target={"_blank"} href="https://github.com/ALGxMily" style={{ color: "#fff", textDecoration: "none" }}>
+              Made with{" "}
+              <Heart
+                color="#FBBD12"
+                style={{ position: "relative", top: "2.1px" }}
+              />{" "}
+              by{" "}
+              <a
+                target={"_blank"}
+                href="https://github.com/ALGxMily"
+                style={{ color: "#fff", textDecoration: "none" }}
+              >
                 Dzhuliano
               </a>
             </p>
@@ -748,7 +788,10 @@ function Urls() {
   return (
     <div className="apiWrap">
       <h1>API</h1>
-      <p>Our API is free to use and easy to integrate. You can use it to shorten links, get analytics, and more.</p>
+      <p>
+        Our API is free to use and easy to integrate. You can use it to shorten
+        links, get analytics, and more.
+      </p>
     </div>
   );
 }

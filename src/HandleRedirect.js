@@ -1,7 +1,12 @@
 import React from "react";
 import "./App.css";
 import { colors } from "./App";
-import { useNavigate, useParams, createSearchParams, redirect } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+  createSearchParams,
+  redirect,
+} from "react-router-dom";
 import Lottie from "lottie-react";
 import Snowfall from "react-snowfall";
 export default function HandleRedirect() {
@@ -11,16 +16,23 @@ export default function HandleRedirect() {
   const [ip, setIp] = React.useState(null);
 
   const isDev = process.env.NODE_ENV === "development";
-  const public_url = isDev ? "http://localhost:5005" : "https://kuturl.herokuapp.com";
+  const public_url = isDev
+    ? "http://localhost:3000"
+    : "https://kuturl.herokuapp.com";
 
   React.useEffect(() => {
     fetch(`${public_url}/?i=${shortId}`, {
       method: "GET",
-    }).then((res) => {
-      res.json().then((data) => {
-        setUrl(data.url);
+    })
+      .then((res) => {
+        res.json().then((data) => {
+          setUrl(data.url);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        window.location.href = public_url + "/sorry";
       });
-    });
   }, [shortId]);
 
   if (url) {
@@ -101,18 +113,20 @@ export default function HandleRedirect() {
       <div className="circle"></div>
       <div className="circle"></div>
       <div className="circle"></div>
-{  snow &&    <Snowfall
-        // The color of the snowflake, can be any valid CSS color.
-        color="#fff"
-        // Applied to the canvas element.
-        style={{ background: "transparent" }}
-        // Controls the number of snowflakes that are created (defaults to 150).
-        snowflakeCount={400}
-        // Controls the maximum size of the snowflakes (defaults to 5).
-        maxSnowflakeSize={5}
-        // Controls the minimum size of the snowflakes (defaults to 1).
-        minSnowflakeSize={1}
-      />}
+      {snow && (
+        <Snowfall
+          // The color of the snowflake, can be any valid CSS color.
+          color="#fff"
+          // Applied to the canvas element.
+          style={{ background: "transparent" }}
+          // Controls the number of snowflakes that are created (defaults to 150).
+          snowflakeCount={400}
+          // Controls the maximum size of the snowflakes (defaults to 5).
+          maxSnowflakeSize={5}
+          // Controls the minimum size of the snowflakes (defaults to 1).
+          minSnowflakeSize={1}
+        />
+      )}
       <div
         style={{
           display: "flex",
@@ -122,7 +136,10 @@ export default function HandleRedirect() {
           height: "100vh",
         }}
       >
-        <Lottie animationData={require("./loading.json")} style={{ width: "100px", height: "100px" }} />
+        <Lottie
+          animationData={require("./loading.json")}
+          style={{ width: "100px", height: "100px" }}
+        />
         <h1
           style={{
             color: "white",
