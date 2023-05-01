@@ -56,7 +56,7 @@ export default function Home() {
     setLoading(true);
     // get items in clipboard workaround for http
     navigator.clipboard.readText().then((text) => {
-      if (text.includes("http")) {
+      if (text.includes("http") || url.includes("http")) {
         setUrl(text);
         setUrlReady(true);
         createURL(text);
