@@ -109,6 +109,16 @@ export default function Home() {
       if (event.ctrlKey && event.key === "v") {
         generateURL();
       }
+      // if return key is pressed on mobile
+      if (event.key === "Enter") {
+        generateURL();
+      }
+      if (event.key === "Escape") {
+        close();
+      }
+      if (event.ctrlKey && event.key === "c") {
+        copy();
+      }
     };
     // check if user is on mobile or desktop
     const mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
