@@ -121,17 +121,28 @@ export default function Home() {
       }
     };
     // check if user is on mobile or desktop
-    const mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (mobile) {
-      // if user is on mobile
-      isMobile(true);
-    } else {
-      // if user is on desktop
+    if (window.innerWidth > 768) {
       isMobile(false);
+    } else {
+      isMobile(true);
     }
     // attach the event listener
     document.addEventListener("keydown", handleKeyPress);
   }, [url]);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        isMobile(false);
+      } else {
+        isMobile(true);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    console.log(handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [mobile]);
 
   useEffect(() => {
     if (isMobile) {
@@ -281,10 +292,26 @@ export default function Home() {
             </div>
           </>
         )}
+        {!urlReady && !loading && (
+          <button
+            type="submit"
+            onClick={generateURL}
+            className="url-ready__button"
+          >
+            Generate
+          </button>
+        )}
         <div className="footer">
           <h3>
-            Made with <span style={{ color: "rgb(251, 189, 18)" }}>❤</span> by
-            Dzhuliano Dimov
+            Made with <span style={{ color: "rgb(251, 189, 18)" }}>❤</span> by{" "}
+            <a
+              target={"_blank"}
+              href="https://github.com/ALGxMily"
+              style={{ color: "#fff", textDecoration: "none" }}
+              rel="noreferrer"
+            >
+              Dzhuliano Dimov
+            </a>
           </h3>
         </div>
         <ToastContainer />
