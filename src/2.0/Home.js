@@ -220,7 +220,7 @@ export default function Home() {
               disabled={urlReady}
               style={{
                 backgroundColor: urlReady ? "#1e1e1e" : "#2c2c2c",
-                color: urlReady ? "#fff" : "#1e1e1e",
+                color: urlReady ? "#ffffff" : "#ffffff",
                 cursor: urlReady ? "not-allowed" : "text",
               }}
               type="text"
