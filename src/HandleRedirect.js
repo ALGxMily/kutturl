@@ -31,7 +31,6 @@ export default function HandleRedirect() {
       })
       .catch((err) => {
         console.log(err);
-        window.location.href = public_url + "/sorry";
       });
   }, [shortId]);
 

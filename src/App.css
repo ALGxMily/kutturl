@@ -1,10 +1,7 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   scroll-behavior: smooth;
-  overflow: hidden;
-  cursor: none;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400&display=swap");
@@ -579,20 +576,6 @@
   display: none;
 }
 
-.loading {
-  animation: fade 2s ease-in;
-  display: flex;
-  position: absolute;
-  top: 58%;
-  left: 50%;
-  bottom: 0;
-  transform: translate(-50%, -50%);
-  right: inherit;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  z-index: -1;
-}
 .split_loading {
   animation: fade 1s ease-in;
 }

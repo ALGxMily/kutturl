@@ -44,8 +44,13 @@ import MyLeaderBoardAd from "./GoogleAd";
 import createAndAppendAdsElement from "./GoogleAd";
 import linkShortner from "./Linkshortner";
 import Modal from "./Modal";
+import Home2 from "./2.0/Home";
 import KutturlTips from "./Components/KutturlTips";
 import Maintanance from "./Maintanance";
+import Test from "./2.0/Test";
+import Loginv2 from "./2.0/Loginv2";
+import Registerv2 from "./2.0/Registerv2";
+import RedirectURL from "./2.0/RedirectURL";
 export const colors = [
   "#fbbd12",
   "#fbbd12",
@@ -71,10 +76,19 @@ export const colors = [
   "#c29a2d",
 ];
 function App() {
-  const [maintanance, setMaintanance] = React.useState(true);
+  const [newVersion, setMaintanance] = React.useState(true);
 
-  if (maintanance) {
-    return <Maintanance />;
+  if (newVersion) {
+    return (
+      <Routes>
+        <Route exact path="/" element={<Home2 />} />
+        <Route exact path="/test" element={<Test />} />
+        <Route path="/login" element={<Loginv2 />} />
+        <Route path="/register" element={<Registerv2 />} />
+        <Route exact path="/:shortId" element={<RedirectURL />} />
+        <Route path="/404" element={<NotFound />} />
+      </Routes>
+    );
   } else {
     return (
       <Routes>
@@ -419,45 +433,6 @@ function Home() {
     });
   }, []);
 
-  React.useEffect(() => {
-    const coords = { x: 0, y: 0 };
-    const circles = document.querySelectorAll(".circle");
-
-    circles.forEach(function (circle, index) {
-      circle.x = 0;
-      circle.y = 0;
-      circle.style.backgroundColor = colors[index % colors.length];
-    });
-
-    window.addEventListener("mousemove", function (e) {
-      coords.x = e.clientX;
-      coords.y = e.clientY;
-    });
-
-    function animateCircles() {
-      let x = coords.x;
-      let y = coords.y;
-
-      circles.forEach(function (circle, index) {
-        circle.style.left = x - 12 + "px";
-        circle.style.top = y - 12 + "px";
-
-        circle.style.scale = (circles.length - index) / circles.length;
-
-        circle.x = x;
-        circle.y = y;
-
-        const nextCircle = circles[index + 1] || circles[0];
-        x += (nextCircle.x - x) * 0.3;
-        y += (nextCircle.y - y) * 0.3;
-      });
-
-      requestAnimationFrame(animateCircles);
-    }
-
-    animateCircles();
-  }, []);
-
   const logout = async () => {
     setLoading(true);
     auth
@@ -472,15 +447,6 @@ function Home() {
       });
   };
 
-  React.useEffect(() => {
-    // attach the event listener
-    document.addEventListener("keydown", handleKeyPress);
-
-    // remove the event listener
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [handleKeyPress]);
   const menu = () => {
     setPopUpMenu(!popUpMenu);
   };
