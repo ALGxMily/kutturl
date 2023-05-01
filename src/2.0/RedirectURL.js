@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import db from "./firebase";
 import { doc, getDoc } from "firebase/firestore";
+import Lottie from "lottie-react";
+import loadingAnimation from "../lottie/Link.json";
 
 export default function RedirectURL() {
   const { shortId } = useParams();
@@ -30,5 +32,29 @@ export default function RedirectURL() {
     window.location.href = url;
   }
 
-  return <div>Redirecting to {url}</div>;
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <Lottie
+        animationData={loadingAnimation}
+        style={{ width: "100%", height: "100%" }}
+      />
+      <h1
+        style={{
+          color: "white",
+          fontSize: "2rem",
+          marginLeft: "1rem",
+        }}
+      >
+        Almost there!
+      </h1>
+    </div>
+  );
 }
