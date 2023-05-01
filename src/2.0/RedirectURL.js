@@ -29,7 +29,9 @@ export default function RedirectURL() {
   }, [shortId]);
 
   if (url) {
-    window.location.href = url;
+    setTimeout(() => {
+      window.location.href = url;
+    }, 2000);
   }
 
   return (
@@ -44,7 +46,7 @@ export default function RedirectURL() {
     >
       <Lottie
         animationData={loadingAnimation}
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "50%", height: "50%" }}
       />
       <h1
         style={{
