@@ -219,8 +219,8 @@ export default function Home() {
             <input
               disabled={urlReady}
               style={{
-                backgroundColor: urlReady ? "#1e1e1e" : "#ffffff",
-                color: urlReady ? "#2c2c2c" : "#1e1e1e",
+                backgroundColor: urlReady ? "#1e1e1e" : "#2c2c2c",
+                color: urlReady ? "#fff" : "#1e1e1e",
                 cursor: urlReady ? "not-allowed" : "text",
               }}
               type="text"
