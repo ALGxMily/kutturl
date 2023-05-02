@@ -52,34 +52,89 @@ export default function Home() {
     });
   };
 
+  const generate = () => {
+    if (url.includes("http")) {
+      setUrl(url);
+      setUrlReady(true);
+      createURL(url);
+      setLoading(false);
+    } else {
+      toast.error("Invalid URL!", {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        closeButton: false,
+        progress: undefined,
+        style: {
+          backgroundColor: "#1e1e1e",
+          color: "#ffffff",
+          height: "40%",
+        },
+      });
+      setLoading(false);
+    }
+  };
+
   const generateURL = () => {
     setLoading(true);
-    // get items in clipboard workaround for http
-    navigator.clipboard.readText().then((text) => {
-      if (text.includes("http") || url.includes("http")) {
-        setUrl(text);
-        setUrlReady(true);
-        createURL(text);
-        setLoading(false);
-      } else {
-        toast.error("Invalid URL!", {
-          position: "bottom-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          closeButton: false,
-          progress: undefined,
-          style: {
-            backgroundColor: "#1e1e1e",
-            color: "#ffffff",
-            height: "40%",
-          },
+    // if user presses ctrl + v keys
+    const handleKeyPress = (event) => {
+      if (event.ctrlKey && event.key === "v") {
+        navigator.clipboard.readText().then((text) => {
+          if (text.includes("http") || url.includes("http")) {
+            setUrl(text);
+            setUrlReady(true);
+            createURL(text);
+            setLoading(false);
+          } else {
+            toast.error("Invalid URL!", {
+              position: "bottom-right",
+              autoClose: 2000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              closeButton: false,
+              progress: undefined,
+              style: {
+                backgroundColor: "#1e1e1e",
+                color: "#ffffff",
+                height: "40%",
+              },
+            });
+            setLoading(false);
+          }
         });
-        setLoading(false);
+      } else {
+        if (url.includes("http")) {
+          setUrl(url);
+          setUrlReady(true);
+          createURL(url);
+          setLoading(false);
+        } else {
+          toast.error("Invalid URL!", {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            closeButton: false,
+            progress: undefined,
+            style: {
+              backgroundColor: "#1e1e1e",
+              color: "#ffffff",
+              height: "40%",
+            },
+          });
+          setLoading(false);
+        }
       }
-    });
+    };
+    handleKeyPress();
   };
 
   const close = () => {
@@ -295,7 +350,7 @@ export default function Home() {
         {!urlReady && !loading && (
           <button
             type="submit"
-            onClick={generateURL}
+            onClick={generate}
             className="url-ready__button"
           >
             Generate
