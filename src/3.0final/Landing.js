@@ -346,7 +346,7 @@ export default function Landing() {
                 </button>
                 <button
                   onClick={() => {
-                    // open on another tab function
+                    window.open("https://" + shortLink);
                   }}
                   className="button"
                   style={{
