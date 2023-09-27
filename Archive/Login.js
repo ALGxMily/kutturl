@@ -1,34 +1,20 @@
 import React from "react";
 import "./App.css";
-import { auth } from "./firebaseConfig";
-import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
+import { useNavigate } from "react-router-dom";
+
+import "firebase/compat/auth";
+import { auth } from "./firebaseConfig";
 import { ToastContainer, toast } from "react-toastify";
-import { colors } from "./App";
-export default function Register() {
+import { colors } from "../src/App";
+
+export default function Login() {
+  const [loading, setLoading] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [username, setUsername] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
   const [errorData, setError] = React.useState("");
   const loadingRef = React.useRef(null);
   const navigateTo = useNavigate();
-  const notifyErrorGlobal = (error) => {
-    try {
-      toast.error(`Error ~ ${error}`, {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
   React.useEffect(() => {
     const coords = { x: 0, y: 0 };
     const circles = document.querySelectorAll(".circle");
@@ -67,6 +53,46 @@ export default function Register() {
 
     animateCircles();
   }, []);
+  //change button height when keyboard is up
+  React.useEffect(() => {
+    document.title = "Kutturl | Login";
+    const keyboardUp = () => {
+      const button = document.querySelector(".form-group button");
+      const input = document.querySelector(".form-group input");
+      button.style.height = "60vh";
+      input.style.height = "60%";
+      console.log("keyboard up");
+    };
+    const keyboardDown = () => {
+      const button = document.getElementById(".form-group button");
+      const input = document.querySelector(".form-group input");
+      button.style.height = "20vh";
+      input.style.height = "20%";
+      console.log("keyboard down");
+    };
+    window.addEventListener("keyboardDidShow", keyboardUp);
+    window.addEventListener("keyboardDidHide", keyboardDown);
+    return () => {
+      window.removeEventListener("keyboardDidShow", keyboardUp);
+      window.removeEventListener("keyboardDidHide", keyboardDown);
+    };
+  }, []);
+  const notifyErrorGlobal = (error) => {
+    try {
+      toast.error(`Error- ${error}`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const notifySuccessful = (message) => {
     try {
       toast.success(`${message}`, {
@@ -83,51 +109,67 @@ export default function Register() {
       console.log(error);
     }
   };
-  const register = async (e) => {
+  const login = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { user, session, error } = await auth
-        .createUserWithEmailAndPassword(email, password)
-        .catch((error, response) => {
-          const err = error.toString();
-          const isError =
-            err ===
-            "FirebaseError: Firebase: The email address is already in use by another account. (auth/email-already-in-use)."
-              ? true
-              : false;
-
-          if (isError) {
-            notifyErrorGlobal("Email already in use");
-          } else {
-            notifyErrorGlobal("Something went wrong");
-          }
-          setLoading(false);
+      auth
+        .signInWithEmailAndPassword(email, password)
+        .catch((error) => {
+          if (error) setLoading(false);
+          const errorTemp = error.message;
+          setError(errorTemp);
+          navigateTo("/login");
+          //rerender the page and show error
+          errorData === "INVALID_EMAIL" ||
+          "EMAIL_NOT_FOUND" ||
+          "INVALID_PASSWORD" ||
+          "USER_DISABLED"
+            ? notifyErrorGlobal("Invalid Email or Password")
+            : notifyErrorGlobal("Something went wrong");
           setTimeout(() => {
             window.location.reload();
-          }, 2300);
+          }, 2000);
         })
-        .then(() => {
+        .finally(() => {
           setLoading(false);
-          auth.currentUser
-            .updateProfile({
-              displayName: username,
-            })
-            .then(() => {
-              setLoading(true);
-              console.log(auth.currentUser.displayName);
-            })
-            .finally(() => {
-              navigateTo("/");
-              setLoading(false);
-            });
+        })
+        .then((response) => {
+          if (!response) {
+            console.log(response.error);
+            setLoading(false);
+            return;
+            // window.location.reload();
+          }
+          if (response.user !== null) {
+            setLoading(false);
+            notifySuccessful("Login Successful");
+            navigateTo("/dashboard");
+          }
         });
+      // } catch (error) {
+      //   console.log(error);
+      //   setLoading(false);
+      //   error.message === "INVALID_EMAIL" ||
+      //   "EMAIL_NOT_FOUND" ||
+      //   "INVALID_PASSWORD" ||
+      //   "USER_DISABLED"
+      //     ? notifyErrorGlobal("Invalid Email or Password")
+      //     : notifyErrorGlobal("Something went wrong");
+      //   notifyErrorGlobal(error.message);
+      //   setLoading(true);
+      //   navigateTo("/login");
+      // }
+      // };
     } catch (error) {
-      console.log("error", error);
+      console.log(error);
+      setLoading(false);
     }
   };
+  const goToHome = () => {
+    navigateTo("/", { state: { message: "Logged in successfully" } });
+  };
   React.useEffect(() => {
-    document.title = "Kutturl | Register";
     const split = document.getElementById("screen");
     const loadingLottie = document.getElementById("loading");
     const rightSide = document.getElementById("form");
@@ -163,25 +205,18 @@ export default function Register() {
       <div className="circle"></div>
       <div className="split" id="screen">
         <div className="left" id="left">
-          <object data="logo-center-old.svg" />
+          <object
+            id="logo-auth"
+            style={{ cursor: "pointer" }}
+            onClick={goToHome}
+            draggable={false}
+            data={"logo-center-old.svg"}
+          />
         </div>
         <div className="right">
           <form>
             <div className="form-group" id="form">
-              <label for="username" id="emailLabel">
-                Username
-              </label>
-              <input
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                }}
-                type="text"
-                className="form-control"
-                id="UsernameForm"
-                aria-describedby="emailHelp"
-                placeholder="Enter username"
-              />
-              <label for="email" id="emailLabel">
+              <label htmlFor="email" id="emailLabel">
                 Email address
               </label>
               <input
@@ -194,7 +229,7 @@ export default function Register() {
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
               />
-              <label for="password" id="passwordLabel">
+              <label htmlFor="password" id="passwordLabel">
                 Password
               </label>
               <input
@@ -207,17 +242,17 @@ export default function Register() {
                 placeholder="Password"
               />
 
-              <button onClick={(e) => register(e)} type="submit" className="registerButton">
-                Create account
+              <button onClick={(e) => login(e)} className="btn btn-primary">
+                <p>Login</p>
               </button>
               <small>
-                Have an account already?{" "}
+                New here?{" "}
                 <a
                   onClick={() => {
-                    window.location.href = "/login";
+                    window.location.href = "/register";
                   }}
                 >
-                  Login here
+                  Make a new account today
                 </a>
               </small>
             </div>

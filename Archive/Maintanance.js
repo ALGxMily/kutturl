@@ -1,6 +1,6 @@
 import React from "react";
 import Lottie from "lottie-react";
-import maintanance from "./lottie/loading_maint.json";
+import maintanance from "../src/lottie/loading_maint.json";
 import "./Maintanance.css";
 
 export default function Maintanance() {

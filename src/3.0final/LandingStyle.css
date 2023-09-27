@@ -1,0 +1,414 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+/* import Kurb fonts */
+@import url("https://fonts.googleapis.com/css2?family=Exo&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  /* animate everything to smooth it out */
+}
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+.contextItem {
+  color: white;
+  font-family: "Exo", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  transition: 0.5s;
+}
+.background {
+  /* Entire page width */
+  width: 100%;
+  /* Entire page height */
+  height: 100vh;
+  /* Responsive layout */
+  background-image: linear-gradient(to bottom right, #444444, #211d1d);
+  /* To cover the entire screen */
+  background-size: cover;
+  /* To not repeat the image beyond it's scale */
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+.content {
+  width: 100%;
+  /** Sizeable height for the form **/
+  height: 100vh;
+  /** Black color with opacity **/
+  background-color: rgba(0, 0, 0, 0.5);
+  /** Smooth corners **/
+  border-radius: 10px;
+  /** Top, bottom, right, and left spacing between form and it's content **/
+  /** Spacing from the top **/
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(3, 15, 54, 0.632),
+    rgba(7, 10, 39, 0.624)
+  );
+  backdrop-filter: blur(40px);
+  box-shadow: 30px 20px 20px rgba(55, 55, 55, 0.2);
+}
+@media screen and (max-width: 768px) {
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+}
+.header {
+  padding-left: 13vw;
+  padding-top: 2rem;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+@media screen and (max-width: 768px) {
+  .header {
+    padding-left: 5vw;
+    padding-top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+}
+.login {
+  background-color: #15151d;
+  border-radius: 20px;
+  border: 1px solid #d4adfc;
+  padding: 1rem;
+  width: 8%;
+  height: 80%;
+  margin-right: 1rem;
+  color: #ccc;
+  font-family: "Exo", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: 0.5s;
+  margin-bottom: 1rem;
+}
+
+.loadingLogin {
+  opacity: 0.5;
+  filter: blur(2px);
+  animation: pulseColor 2.5s infinite;
+}
+
+@keyframes pulseColor {
+  0% {
+    background-color: #4285f4;
+  }
+  25% {
+    background-color: #ea4335;
+  }
+  50% {
+    background-color: #fbbc05;
+  }
+  75% {
+    background-color: #34a853;
+  }
+  100% {
+    background-color: #4285f4;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .login {
+    background-color: #15151d;
+    border-radius: 20px;
+    border: 1px solid #d4adfc;
+    padding: 1rem;
+    width: 8%;
+    height: 80%;
+    margin-right: 1rem;
+    color: #ccc;
+    font-family: "Exo", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: 0.5s;
+    margin-bottom: 1rem;
+  }
+}
+.login:hover {
+  background-color: #d4adfc;
+  color: #15151d;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.chip {
+  background-color: #20174a;
+  padding: 0.5rem;
+  width: 25%;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (max-width: 768px) {
+  .chip {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+@media screen and (max-width: 1400px) {
+  .chip {
+    width: 40%;
+  }
+}
+@media screen and (max-width: 500px) {
+  .chip {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .chip {
+    width: 100%;
+  }
+}
+.chip p {
+  font-family: "Exo", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  color: #ccc;
+  margin: 0;
+  padding: 0;
+}
+.mainTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 70%;
+  /* bring the class down 40% */
+}
+
+.mainTitle h1 {
+  /* create a bold text with thick borders of #E7A721 color */
+  font-family: "Exo", sans-serif;
+  font-weight: 900;
+  font-size: 5rem;
+  margin: 0;
+  padding: 0;
+  color: #ffffffd1;
+  animation: animate 5s linear infinite;
+  text-align: center;
+}
+.kut {
+  color: #d4adfc;
+  font-weight: "bold";
+  font-size: 5rem;
+}
+@media screen and (max-width: 768px) {
+  .mainTitle h1 {
+    font-size: 3rem;
+  }
+  .mainTitle h1 .kut {
+    color: #d4adfc;
+    font-weight: "bold";
+    font-size: 3rem;
+  }
+}
+
+.textInput {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  transition: 0.5s;
+}
+
+.loading {
+  position: relative;
+  width: 100%;
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  transition: 0.5s;
+}
+.textInputFinal {
+  width: 100%;
+  height: 7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+.textInputFinal input {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border: 1px solid #d4adfc;
+  border-right: none;
+  padding: 1rem;
+  width: 30%;
+  height: 71%;
+  background-color: #15151d;
+  color: #ccc;
+  font-family: "Exo", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.textInput input {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border: 1px solid #d4adfc;
+  border-right: none;
+  padding: 1rem;
+  width: 30%;
+  background-color: #15151d;
+  color: #ccc;
+  font-family: "Exo", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 768px) {
+  .textInput input {
+    width: 60%;
+    padding: 1.2rem;
+  }
+}
+
+.textInput input:focus + .button {
+  outline: none;
+  box-shadow: 0 0 5px #d4adfc;
+}
+/* if textInput is hovered then insert box shadow to button as well */
+.textInput input:focus {
+  outline: none;
+  box-shadow: 0 0 5px #d4adfc;
+}
+
+.button {
+  padding: 1rem;
+  height: calc(100% - 2rem);
+  background-color: #15151d;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border: 1px solid #d4adfc;
+  border-left: none;
+  color: #ccc;
+  font-size: 1rem;
+  font-family: "Exo", sans-serif;
+}
+.button:hover {
+  background-color: #d4adfc;
+  color: #15151d;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  right: 0;
+  left: 0;
+  height: 3rem;
+  background-color: #15151d;
+}
+footer p {
+  color: #ccc;
+  font-family: "Exo", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+footer a {
+  color: #ccc;
+  font-family: "Exo", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 1rem;
+  text-decoration: none;
+}
+
+.circle {
+  width: 700px;
+  height: 800px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom right, #33038d97, #1a0a4a);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-bottom: -5rem;
+  margin-right: -20rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: move 10s linear infinite;
+}
+
+@keyframes move {
+  0% {
+    transform: rotate(0deg);
+    background: linear-gradient(to bottom right, #33038d97, #1a0a4a);
+  }
+  25% {
+    transform: rotate(90deg);
+    background: linear-gradient(to bottom right, #33038d97, #1a0a4a);
+  }
+  50% {
+    transform: rotate(180deg);
+    background: linear-gradient(to bottom right, #33038d97, #1a0a4a);
+  }
+  75% {
+    transform: rotate(270deg);
+    background: linear-gradient(to bottom right, #33038d97, #1a0a4a);
+  }
+  100% {
+    transform: rotate(360deg);
+    background: linear-gradient(to bottom right, #33038d97, #1a0a4a);
+  }
+}
+
+.circle1 {
+  width: 600px;
+  height: 550px;
+  border-radius: 35%;
+
+  background: linear-gradient(to bottom right, #33038d97, #1a0a4a);
+  position: absolute;
+  top: -10rem;
+  left: 5vw;
+  margin-bottom: -5rem;
+  margin-left: -4rem;
+  animation: move 10s linear infinite;
+}
+.circle2 {
+  width: 600px;
+  height: 550px;
+  border-radius: 35%;
+
+  background: linear-gradient(to bottom right, #33038d97, #1a0a4a);
+  position: absolute;
+
+  /* in the middle */
+  top: 20%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  margin-bottom: -5rem;
+  animation: move 10s linear infinite;
+}

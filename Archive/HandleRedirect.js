@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { colors } from "./App";
+import { colors } from "../src/App";
 import {
   useNavigate,
   useParams,
@@ -136,7 +136,7 @@ export default function HandleRedirect() {
         }}
       >
         <Lottie
-          animationData={require("./loading.json")}
+          animationData={require("../src/loading.json")}
           style={{ width: "100px", height: "100px" }}
         />
         <h1

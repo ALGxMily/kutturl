@@ -2,11 +2,26 @@ import AnimatedBg from "react-animated-bg";
 import "./App.css";
 import ButtonShort, { FinalPage } from "./ButtonLoader/ButtonShort";
 import React, { Fragment } from "react";
-import { BrowserRouter as Router, Switch, Route, Link, Routes, useNavigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Routes,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
 import "gridjs/dist/theme/mermaid.css";
-import { Add, Close, Copy, CopyOutline, ExitOutline, Pencil } from "react-ionicons";
+import {
+  Add,
+  Close,
+  Copy,
+  CopyOutline,
+  ExitOutline,
+  Pencil,
+} from "react-ionicons";
 import Lottie from "lottie-react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -17,7 +32,7 @@ import { signOut } from "firebase/auth";
 import { Button, Tab, Toolbar } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Tooltip from "@mui/material/Tooltip";
-import { animateCircles, colors } from "./App";
+import { animateCircles, colors } from "../src/App";
 export default function Dashboard() {
   const [loading, setLoading] = React.useState(false);
   const [username, setUsername] = React.useState("");
@@ -111,7 +126,9 @@ export default function Dashboard() {
   const [dataUser, setData] = React.useState([]);
   const [errorData, setError] = React.useState("");
   const isDev = process.env.NODE_ENV === "development";
-  const public_url = isDev ? "http://localhost:5005" : "https://kuturl.herokuapp.com";
+  const public_url = isDev
+    ? "http://localhost:5005"
+    : "https://kuturl.herokuapp.com";
 
   // React.useEffect(() => {
   //   const handleResize = () => {
@@ -328,10 +345,18 @@ export default function Dashboard() {
       <div className="circle"></div>
       <div className="App">
         <div className="App-header" id="logoHeader">
-          <img style={{ cursor: "pointer" }} onClick={() => navigateTo("/app")} src="logo-center-old.svg" />
+          <img
+            style={{ cursor: "pointer" }}
+            onClick={() => navigateTo("/app")}
+            src="logo-center-old.svg"
+          />
         </div>
       </div>
-      <div className="contentWrapDashboard" id="containerDashboard" style={{ maxHeight: "200vh", overflow: "hidden" }}>
+      <div
+        className="contentWrapDashboard"
+        id="containerDashboard"
+        style={{ maxHeight: "200vh", overflow: "hidden" }}
+      >
         <div className="containerHeaderDashboard">
           <div className="leftHeader">
             <h1>My URLs</h1>
@@ -551,7 +576,12 @@ export default function Dashboard() {
                         </Button>
                       </Tooltip> */}
                     <td>
-                      <Tooltip title="Delete" placement="top" arrow style={{ cursor: "pointer" }}>
+                      <Tooltip
+                        title="Delete"
+                        placement="top"
+                        arrow
+                        style={{ cursor: "pointer" }}
+                      >
                         <Button>
                           <Close
                             style={{
@@ -619,13 +649,13 @@ export default function Dashboard() {
         </div>
       </div>
       <div id="logo">
-      <img src="logo-center-old.svg" />
+        <img src="logo-center-old.svg" />
       </div>
       <Lottie
         id="loading"
         className="loading_before"
         ref={loadingRef}
-        animationData={require("./loading.json")}
+        animationData={require("../src/loading.json")}
         width={100}
         height={100}
       />

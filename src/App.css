@@ -1,3 +1,6 @@
+/*
+
+
 * {
   margin: 0;
   padding: 0;
@@ -571,7 +574,6 @@
   background-color: #121212;
 }
 
-/* Login loading class */
 .loading_before {
   display: none;
 }
@@ -610,7 +612,6 @@
 .upperFooter_loading {
   display: none;
 }
-/* Login page */
 .split {
   display: flex;
   flex-direction: row;
@@ -698,7 +699,6 @@
   margin-left: 1.3vw;
   cursor: pointer;
 }
-/* Homepage loading */
 
 .container_loading {
   display: none;
@@ -781,5 +781,7 @@
   top: 0;
   left: 0;
   pointer-events: none;
-  z-index: 99999999; /* so that it stays on top of all other elements */
+  z-index: 99999999;
 }
+
+*/

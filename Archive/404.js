@@ -2,7 +2,7 @@ import React from "react";
 import { Home, HomeOutline } from "react-ionicons";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { colors } from "./App";
+import { colors } from "../src/App";
 
 export default function NotFound() {
   const navigateTo = useNavigate();

@@ -16,13 +16,7 @@ import {
 } from "react-ionicons";
 import { useNavigate } from "react-router-dom";
 import db from "./firebase";
-import {
-  addDoc,
-  collection,
-  doc,
-  documentId,
-  setDoc,
-} from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function Home() {
   const [loading, setLoading] = React.useState(false);
