@@ -71,10 +71,75 @@ export const RedirectURLpage = () => {
 
   return (
     <>
-      {status === "loading" && <h1>Loading...</h1>}
-      {status === "error" && <h1>{error}</h1>}
-      {status === "success" && <h1>redirecting...</h1>}
-      {status === "redirecting" && <h1>{url}</h1>}
+      {status === "loading" && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            backgroundColor: "#15151d",
+          }}
+        >
+          <h1
+            style={{
+              color: "#fff",
+              fontSize: "3rem",
+              fontWeight: "bold",
+              letterSpacing: "0.2rem",
+              fontFamily: "Exo",
+            }}
+          >
+            Loading...
+          </h1>
+        </div>
+      )}
+      {status === "redirecting" && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            backgroundColor: "#15151d",
+          }}
+        >
+          <h1
+            style={{
+              color: "#fff",
+              fontSize: "3rem",
+              fontWeight: "bold",
+              letterSpacing: "0.2rem",
+              fontFamily: "Exo",
+            }}
+          >
+            Redirecting...
+          </h1>
+        </div>
+      )}
+      {status === "error" && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            backgroundColor: "#15151d",
+          }}
+        >
+          <h1
+            style={{
+              color: "#fff",
+              fontSize: "3rem",
+              fontWeight: "bold",
+              letterSpacing: "0.2rem",
+              fontFamily: "Exo",
+            }}
+          >
+            Error: {error}
+          </h1>
+        </div>
+      )}
     </>
   );
 };
