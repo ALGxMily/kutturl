@@ -6,6 +6,7 @@ import validateLink from "./functions/validation.js";
 export const urlShortner = async (link) => {
   try {
     const { statusLink, errorLink } = validateLink(link);
+    console.log(errorLink);
     if (statusLink) {
       const generatedKey = key();
       const { status, docRef, err } = await saveToDB(link, generatedKey);
