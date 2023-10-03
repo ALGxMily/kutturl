@@ -5,9 +5,14 @@ import { doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const RedirectURLpage = () => {
+  const navigate = useNavigate();
   const { shortId } = useParams();
+  if (shortId === "customise") {
+    navigate("/customise");
+  }
   const [url, setUrl] = useState("");
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState(null);
@@ -48,7 +53,7 @@ export const RedirectURLpage = () => {
       // }
 
       const isShortLinkPresent = querySnapshot.docs.some((doc) => {
-        return doc.data().shortLink === shortId;
+        return doc.data().key === shortId;
       });
 
       if (isShortLinkPresent) {
@@ -56,7 +61,7 @@ export const RedirectURLpage = () => {
         const querySnapshot = await getDocs(collectionRef);
 
         querySnapshot.docs.map((doc) => {
-          if (doc.data().shortLink === shortId) {
+          if (doc.data().key === shortId) {
             setStatus("redirecting");
             setUrl(doc.data().link);
             window.location.replace(doc.data().link);

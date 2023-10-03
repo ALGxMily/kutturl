@@ -22,3 +22,48 @@ export default function validateLink(link) {
 
   return { statusLink: true, errorLink: "" };
 }
+
+export function validateNewKey(key) {
+  if (key.length < 1) {
+    return { statusKey: false, errorKey: "Please enter a key" };
+  }
+  if (key.includes(" ")) {
+    return {
+      statusKey: false,
+      errorKey: "Please enter a valid key",
+    };
+  }
+  if (key.includes(".")) {
+    return {
+      statusKey: false,
+      errorKey: "Please enter a valid key",
+    };
+  }
+  if (key.includes("/")) {
+    return {
+      statusKey: false,
+      errorKey: "Please enter a valid key",
+    };
+  }
+  if (key.includes("http://")) {
+    return {
+      statusKey: false,
+      errorKey: "Please enter a valid key",
+    };
+  }
+  if (key.includes("https://")) {
+    return {
+      statusKey: false,
+      errorKey: "Please enter a valid key",
+    };
+  }
+
+  if (key.length > 10) {
+    return {
+      statusKey: false,
+      errorKey: "Please enter a shorter key",
+    };
+  }
+
+  return { statusKey: true, errorKey: "" };
+}

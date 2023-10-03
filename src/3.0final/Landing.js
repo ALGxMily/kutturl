@@ -5,21 +5,37 @@ import Lottie from "lottie-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { auth, provider } from "./firebase.config";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import { Dropdown } from "@mui/base/Dropdown";
+import { Menu } from "@mui/base/Menu";
+import { MenuButton } from "@mui/base/MenuButton";
+import { MenuItem, menuItemClasses } from "@mui/base/MenuItem";
+import { Modal } from "@mui/base/Modal";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 
 export default function Landing() {
   const [user, setUser] = React.useState(null);
+  const [modalOpen, setModalOpen] = React.useState(false);
   const [userProfilePic, setUserProfilePic] = React.useState(null); // user.photoURL
   const [link, setLink] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [shortLink, setShortLink] = React.useState("");
   const [loadingLogin, setLoadingLogin] = React.useState(false);
+  const [id, setId] = React.useState("");
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  const navigate = useNavigate();
+
   const signIn = () => {
     setLoadingLogin(true);
     document.querySelector(".profileContent").style.display = "none";
     auth
-      .signInWithPopup(provider)
+      .signInWithRedirect(provider)
       .catch((error) => {
         console.log(error);
         document.querySelector(".profileContent").style.display = "flex";
@@ -59,7 +75,22 @@ export default function Landing() {
         document.querySelector(".profileContent").style.display = "flex";
       }
     });
+
+    // keyboard mobile fix
+    const metaViewport = document.querySelector('meta[name="viewport"]');
+    metaViewport.setAttribute(
+      "content",
+      "width=device-width, initial-scale=1.0, maximum-scale=0.85, user-scalable=yes"
+    );
   }, []);
+
+  useEffect(() => {
+    if (modalOpen) {
+      document.querySelector(".content").style.filter = "blur(5px)";
+    } else {
+      document.querySelector(".content").style.filter = "blur(0px)";
+    }
+  }, [modalOpen]);
 
   const notify = () =>
     toast(
@@ -145,12 +176,14 @@ export default function Landing() {
     if (!isLinkValid) {
       setLoading(false);
       errorLink();
+      console.log("invalid link1!!");
       return;
     }
     setLoading(true);
-    const newLink = await (await urlShortner(link)).shortLink;
+    const newLink = await (await urlShortner(link, auth.currentUser)).shortLink;
     document.querySelector(".textInput").style.display = "none";
     setLoading(false);
+    setId(newLink);
     setShortLink("kutturl.com/" + newLink);
     successLink();
   };
@@ -161,7 +194,101 @@ export default function Landing() {
         <div className="circle"></div>
         <div className="circle1"></div>
         <div className="circle2"></div>
+
         <div className="content">
+          <Modal
+            open={modalOpen}
+            onClose={() => {
+              setModalOpen(false);
+            }}
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%,-50%)",
+              backgroundColor: "#20174a",
+              borderRadius: 23,
+              outline: "none",
+              border: "none",
+              padding: "1rem",
+              width: "fit-content",
+              height: "fit-content",
+            }}
+          >
+            <div className="modalWrapper">
+              <div
+                className="modal"
+                style={{
+                  backgroundColor: "#20174a",
+                  borderRadius: 23,
+                  outline: "none",
+                  border: "none",
+                  padding: "1rem",
+                  width: "fit-content",
+                  height: "fit-content",
+                }}
+              >
+                <h1
+                  style={{
+                    fontFamily: "Exo, sans-serif",
+                    color: "#D4ADFC",
+                    fontSize: "1.6rem",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Are you sure you want to sign out?
+                </h1>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    justifyContent: "space-evenly",
+                    marginTop: "1rem",
+                  }}
+                >
+                  <button
+                    onClick={() => {
+                      signOut();
+                      setModalOpen(false);
+                    }}
+                    className="button"
+                    style={{
+                      borderRadius: "10px",
+                      outline: "none",
+                      borderRight: "none",
+                      border: "none",
+                      padding: "1rem",
+                      width: "fit-content",
+                      height: "fit-content",
+                      paddingLeft: "1.5rem",
+                      paddingRight: "1.5rem",
+                    }}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    onClick={() => {
+                      setModalOpen(false);
+                    }}
+                    className="button"
+                    style={{
+                      borderRadius: "10px",
+                      outline: "none",
+                      borderRight: "none",
+                      border: "none",
+                      padding: "1rem",
+                      width: "fit-content",
+                      height: "fit-content",
+                      paddingLeft: "1.5rem",
+                      paddingRight: "1.5rem",
+                    }}
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Modal>
           <ToastContainer />
           <div className="header">
             <img
@@ -181,9 +308,6 @@ export default function Landing() {
                 cursor: "pointer",
                 borderRadius: 23,
                 backgroundColor: "#20174a",
-              }}
-              onClick={() => {
-                user ? signOut() : signIn();
               }}
             >
               {loadingLogin && (
@@ -207,12 +331,16 @@ export default function Landing() {
               >
                 {!user && (
                   <>
-                    <p>
+                    <p className="profileText">
                       <span
+                        className="profileText"
                         style={{
                           fontFamily: "Exo, sans-serif",
                           color: "#D4ADFC",
                           fontWeight: "bold",
+                        }}
+                        onClick={() => {
+                          signIn();
                         }}
                       >
                         Not logged in
@@ -222,18 +350,104 @@ export default function Landing() {
                   </>
                 )}
                 {user ? (
-                  <img
-                    src={userProfilePic}
-                    alt="profile"
-                    className="profilePic"
-                    width={30}
-                    height={30}
-                    style={{
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      cursor: "pointer",
-                    }}
-                  />
+                  <>
+                    <Dropdown>
+                      <MenuButton
+                        style={{
+                          fontFamily: "Exo, sans-serif",
+                          color: "#D4ADFC",
+                          fontWeight: "bold",
+                          boxSizing: "border-box",
+                          backgroundColor: "#20174a",
+                          border: "none",
+                          outline: "none",
+                        }}
+                      >
+                        <img
+                          src={userProfilePic}
+                          alt="profile"
+                          className="profilePic"
+                          width={30}
+                          height={30}
+                          style={{
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </MenuButton>
+                      <Menu
+                        role="menu"
+                        style={{
+                          borderRadius: 23,
+                          padding: ".6rem",
+                          backgroundColor: "#20174a",
+                          border: "none",
+                          outline: "none",
+                        }}
+                      >
+                        {" "}
+                        <MenuItem
+                          onClick={() => {
+                            navigate("/dashboard");
+                          }}
+                          style={{
+                            fontFamily: "Exo, sans-serif",
+                            color: "#D4ADFC",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                            boxSizing: "border-box",
+                            padding: "2px",
+                            margin: "2px 0px",
+                            minWidth: "100px",
+                            overflow: "auto",
+                            outline: "none",
+                            textAlign: "center",
+                            borderBottom: "1px solid #D4ADFC",
+                          }}
+                        >
+                          Dashboard
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            setModalOpen(true);
+                          }}
+                          style={{
+                            fontFamily: "Exo, sans-serif",
+                            color: "#D4ADFC",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                            boxSizing: "border-box",
+                            padding: "2px",
+                            margin: "2px 0px",
+                            minWidth: "100px",
+                            borderRadius: "12px",
+                            overflow: "auto",
+                            outline: "none",
+                            textAlign: "center",
+                          }}
+                        >
+                          Sign out
+                        </MenuItem>
+                      </Menu>
+                    </Dropdown>
+
+                    {/* <div className="menu">
+                      <p
+                        onClick={() => {
+                          signOut();
+                        }}
+                        style={{
+                          fontFamily: "Exo, sans-serif",
+                          color: "#D4ADFC",
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Sign out
+                      </p>
+                    </div> */}
+                  </>
                 ) : (
                   <img
                     src='https://upload.wikimedia.org/wikipedia/commons/5/53/Google_"G"_Logo.svg'
@@ -247,6 +461,9 @@ export default function Landing() {
                       cursor: "pointer",
                       backgroundColor: "#20174a",
                     }}
+                    onClick={() => {
+                      signIn();
+                    }}
                   />
                 )}
               </div>
@@ -258,7 +475,7 @@ export default function Landing() {
               {!user && (
                 <p>
                   <p>
-                    Create an account to generate{" "}
+                    Create an account to{" "}
                     <span
                       style={{
                         color: "#D4ADFC",
@@ -266,9 +483,9 @@ export default function Landing() {
                         fontSize: "1rem",
                       }}
                     >
-                      unlimited
+                      customise
                     </span>{" "}
-                    links!
+                    your links!
                   </p>
                 </p>
               )}
@@ -289,7 +506,7 @@ export default function Landing() {
             </div>
             <h1>
               Tired of long links? <br />
-              Just <span className="kut">kut</span> it!
+              Just <span className="kut">kutt</span> it!
             </h1>
             <div className="textInput">
               <input
@@ -326,17 +543,22 @@ export default function Landing() {
                   className="input"
                   color="#fff"
                   value={shortLink}
-                  disabled
                   onClick={() => {
-                    // open link in new tab
+                    copyFunc(shortLink);
+                    document.querySelector(".textInputFinal .input").select();
+                    // remove outline from input on focus
+                    document.querySelector(".textInputFinal .input").blur();
+                  }}
+                  onDoubleClick={() => {
+                    window.open("https://" + shortLink);
                   }}
                 />
-
                 <button
                   onClick={() => {
                     copyFunc(shortLink);
                   }}
                   className="button"
+                  id="copyLink"
                   style={{
                     borderRadius: "0",
                     borderRight: "none",
@@ -349,6 +571,7 @@ export default function Landing() {
                     window.open("https://" + shortLink);
                   }}
                   className="button"
+                  id="openLink"
                   style={{
                     borderRadius: "0",
                     borderRight: "none",
@@ -357,17 +580,18 @@ export default function Landing() {
                   Open link
                 </button>
                 <button
-                  disabled
+                  disabled={!user}
                   onClick={() => {
-                    // copy function
+                    navigate("/customise/" + id);
                   }}
                   className="button"
+                  id="customiseButton"
                   style={{
-                    opacity: "0.5",
-                    cursor: "not-allowed",
+                    opacity: !user ? "0.5" : "1",
+                    cursor: !user ? "not-allowed" : "pointer",
                   }}
                 >
-                  🔒 Customise
+                  {user ? "🪄Customise " : "🔒Customise"}
                 </button>
               </div>
             )}
