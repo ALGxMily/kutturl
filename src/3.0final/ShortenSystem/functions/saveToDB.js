@@ -6,7 +6,7 @@ import key from "./genKey.js";
 
 export const addLink = async (link, key, user) => {
   const collectionRef = collection(db, "links");
-  const userUid = auth.currentUser.uid;
+  const userUid = auth.currentUser?.uid;
   let status;
   let docRef;
   console.log("addLink", link, key, user);
