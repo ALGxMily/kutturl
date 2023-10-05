@@ -9,19 +9,17 @@ export const addLink = async (link, key, user) => {
   const userUid = auth.currentUser?.uid;
   let status;
   let docRef;
-  console.log("addLink", link, key, user);
   // save to db once
   try {
     await addDoc(collectionRef, {
       link: link,
       key: key,
-      user: userUid,
+      user: userUid ? userUid : null,
       createdAt: serverTimestamp(),
     })
       .then((docR) => {
         status = true;
         docRef = docR;
-        console.log("Document written with ID: ", docRef.id);
       })
       .catch((error) => {
         status = false;

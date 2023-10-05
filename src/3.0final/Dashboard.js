@@ -1,13 +1,37 @@
 import React from "react";
 import { getAllShortLinks } from "./ShortenSystem/functions/getAllShortLinks";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import TablePagination from "@mui/material/TablePagination";
 
 export default function Dashboard() {
   const [shortLinks, setShortLinks] = React.useState([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(3);
+  const [dates, setDates] = React.useState([]);
 
   const getLinks = async () => {
     const links = await getAllShortLinks();
     setShortLinks(links);
     console.log(links);
+  };
+
+  const getDates = () => {
+    const dates = shortLinks.map((shortLink) => {
+      return shortLink.data.createdAt.toDate().toDateString();
+    });
+
+    //order by date
+    const orderedDates = dates.sort((a, b) => {
+      return new Date(b) - new Date(a);
+    });
+
+    setDates(orderedDates);
   };
 
   React.useEffect(() => {
@@ -20,7 +44,10 @@ export default function Dashboard() {
         <div className="circle"></div>
         <div className="circle1"></div>
         <div className="circle2"></div>
-        <div className="content">
+        <div
+          className="content"
+          style={{ overflowX: "scroll", height: "100vh" }}
+        >
           <header className="header">
             <svg
               width="235"
@@ -63,7 +90,117 @@ export default function Dashboard() {
               />
             </svg>
           </header>
-          <div className="mainTable"></div>
+          <TableContainer
+            component={Paper}
+            sx={{
+              width: "80%",
+              height: "auto",
+              overflow: "hidden",
+              verticalAlign: "middle",
+              borderRadius: "10px",
+              boxShadow: "0 0 10px rgba(0, 0, 0, 0.15)",
+              margin: "0 auto",
+              marginTop: "50px",
+            }}
+          >
+            <Table
+              aria-label="simple table"
+              style={{
+                backgroundColor: "#4A3A66",
+                opacity: "0.8",
+                borderRadius: "10px",
+                scrollBehavior: "smooth",
+                shadow: "0 0 10px rgba(0, 0, 0, 0.15)",
+              }}
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    style={{
+                      color: "#D4ADFC",
+                      fontWeight: "bold",
+                      fontSize: "20px",
+                    }}
+                  >
+                    Short Link
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: "#D4ADFC",
+                      fontWeight: "bold",
+                      fontSize: "20px",
+                    }}
+                  >
+                    Created At
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {shortLinks
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((shortLink) => (
+                    <TableRow
+                      key={shortLink.data.key}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        style={{
+                          color: "#D4ADFC",
+                          fontWeight: "bold",
+                          fontSize: "20px",
+                        }}
+                      >
+                        <a
+                          href={`https://kutturl.com/${shortLink.data.key}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            color: "#D4ADFC",
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                          }}
+                        >
+                          {`https://kutturl.com/${shortLink.data.key}`}
+                        </a>
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          color: "#D4ADFC",
+                          fontWeight: "bold",
+                          fontSize: "20px",
+                        }}
+                      >
+                        {shortLink.data.createdAt.toDate().toDateString()}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                <TablePagination
+                  rowsPerPageOptions={[3, 5, 10]}
+                  component="div"
+                  count={shortLinks.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={(e, newPage) => setPage(newPage)}
+                  onRowsPerPageChange={(e) => {
+                    setRowsPerPage(+e.target.value);
+                    setPage(0);
+                  }}
+                  onEnded={() => {
+                    console.log("end");
+                    setPage(0);
+                  }}
+                  style={{
+                    color: "#D4ADFC",
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                  }}
+                />
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
       </div>
     </div>
