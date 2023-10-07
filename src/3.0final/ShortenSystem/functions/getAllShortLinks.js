@@ -19,7 +19,7 @@ export const getAllShortLinks = async () => {
   });
 
   shortLinks = shortLinks.filter((shortLink) => {
-    return shortLink.data.user === user.uid;
+    return shortLink.data.user === user?.uid;
   });
 
   return shortLinks;

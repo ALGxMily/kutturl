@@ -1,19 +1,15 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { getAllShortLinks } from "./ShortenSystem/functions/getAllShortLinks";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import TablePagination from "@mui/material/TablePagination";
+import deleteLink, {
+  deleteOldLink,
+} from "./ShortenSystem/functions/deleteLink";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const [shortLinks, setShortLinks] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(3);
-  const [dates, setDates] = React.useState([]);
+  const navigate = useNavigate();
 
   const getLinks = async () => {
     const links = await getAllShortLinks();
@@ -21,23 +17,20 @@ export default function Dashboard() {
     console.log(links);
   };
 
-  const getDates = () => {
-    const dates = shortLinks.map((shortLink) => {
-      return shortLink.data.createdAt.toDate().toDateString();
-    });
-
-    //order by date
-    const orderedDates = dates.sort((a, b) => {
-      return new Date(b) - new Date(a);
-    });
-
-    setDates(orderedDates);
-  };
-
   React.useEffect(() => {
-    getLinks();
+    const fetchData = async () => {
+      await getLinks();
+      await deleteOldLinks();
+    };
+    fetchData();
   }, []);
 
+  const deleteOldLinks = async () => {
+    const links = await getAllShortLinks();
+    links.forEach((link) => {
+      deleteOldLink(link.id);
+    });
+  };
   return (
     <div className="wrapper">
       <div className="background">
@@ -90,117 +83,279 @@ export default function Dashboard() {
               />
             </svg>
           </header>
-          <TableContainer
-            component={Paper}
-            sx={{
-              width: "80%",
-              height: "auto",
-              overflow: "hidden",
-              verticalAlign: "middle",
-              borderRadius: "10px",
-              boxShadow: "0 0 10px rgba(0, 0, 0, 0.15)",
-              margin: "0 auto",
-              marginTop: "50px",
-            }}
-          >
-            <Table
-              aria-label="simple table"
+          <main>
+            <div
+              className="main__content"
               style={{
-                backgroundColor: "#4A3A66",
-                opacity: "0.8",
-                borderRadius: "10px",
-                scrollBehavior: "smooth",
-                shadow: "0 0 10px rgba(0, 0, 0, 0.15)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "80%",
+                margin: "0 auto",
               }}
             >
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    style={{
-                      color: "#D4ADFC",
-                      fontWeight: "bold",
-                      fontSize: "20px",
-                    }}
-                  >
-                    Short Link
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      color: "#D4ADFC",
-                      fontWeight: "bold",
-                      fontSize: "20px",
-                    }}
-                  >
-                    Created At
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-
-              <TableBody>
-                {shortLinks
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((shortLink) => (
-                    <TableRow
-                      key={shortLink.data.key}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        style={{
-                          color: "#D4ADFC",
-                          fontWeight: "bold",
-                          fontSize: "20px",
-                        }}
-                      >
-                        <a
-                          href={`https://kutturl.com/${shortLink.data.key}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            color: "#D4ADFC",
-                            fontWeight: "bold",
-                            fontSize: "20px",
-                          }}
-                        >
-                          {`https://kutturl.com/${shortLink.data.key}`}
-                        </a>
-                      </TableCell>
-                      <TableCell
-                        style={{
-                          color: "#D4ADFC",
-                          fontWeight: "bold",
-                          fontSize: "20px",
-                        }}
-                      >
-                        {shortLink.data.createdAt.toDate().toDateString()}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                <TablePagination
-                  rowsPerPageOptions={[3, 5, 10]}
-                  component="div"
-                  count={shortLinks.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={(e, newPage) => setPage(newPage)}
-                  onRowsPerPageChange={(e) => {
-                    setRowsPerPage(+e.target.value);
-                    setPage(0);
-                  }}
-                  onEnded={() => {
-                    console.log("end");
-                    setPage(0);
-                  }}
+              <div
+                className="main__content__title"
+                style={{ marginBottom: "2rem" }}
+              >
+                <h1
                   style={{
-                    color: "#D4ADFC",
-                    fontWeight: "bold",
-                    fontSize: "20px",
+                    fontSize: "2rem",
+                    fontWeight: "600",
+                    color: "#d4adfc",
+                    textAlign: "center",
+                    fontFamily: "Exo, sans-serif",
                   }}
-                />
-              </TableBody>
-            </Table>
-          </TableContainer>
+                >
+                  Dashboard
+                </h1>
+              </div>
+              <div
+                className="main__content__table"
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <table
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    borderSpacing: "0",
+                  }}
+                >
+                  <thead
+                    style={{
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      fontWeight: "600",
+                    }}
+                  >
+                    <tr
+                      style={{
+                        height: "3rem",
+                        textAlign: "left",
+                      }}
+                    >
+                      <th
+                        style={{
+                          paddingLeft: "1rem",
+                          paddingRight: "1rem",
+                        }}
+                      >
+                        Short Link
+                      </th>
+                      <th
+                        style={{
+                          paddingLeft: "1rem",
+                          paddingRight: "1rem",
+                        }}
+                      >
+                        Customise
+                      </th>
+                      <th
+                        style={{
+                          paddingLeft: "1rem",
+                          paddingRight: "1rem",
+                        }}
+                      >
+                        Original Link
+                      </th>
+                      <th
+                        style={{
+                          paddingLeft: "1rem",
+                          paddingRight: "1rem",
+                        }}
+                      >
+                        Clicks
+                      </th>
+                      <th
+                        style={{
+                          paddingLeft: "1rem",
+                          paddingRight: "1rem",
+                        }}
+                      >
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    style={{
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {shortLinks
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((shortLink) => {
+                        return (
+                          <tr
+                            key={shortLink.id}
+                            style={{
+                              height: "3rem",
+                              textAlign: "left",
+                            }}
+                          >
+                            <td
+                              style={{
+                                paddingLeft: "1rem",
+                                paddingRight: "1rem",
+                              }}
+                            >
+                              <a
+                                style={{
+                                  color: "#000",
+                                  textDecoration: "none",
+                                }}
+                                href={`/${shortLink.data.key}`}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {`kutturl.com/${shortLink.data.key}`}
+                              </a>
+                            </td>
+                            <td
+                              style={{
+                                paddingLeft: "1rem",
+                                paddingRight: "1rem",
+                                cursor: "pointer",
+                              }}
+                              onClick={async () => {
+                                navigate(`/customise/${shortLink.data.key}`);
+                              }}
+                            >
+                              🪄
+                            </td>
+                            <td
+                              style={{
+                                paddingLeft: "1rem",
+                                paddingRight: "1rem",
+                              }}
+                            >
+                              <a
+                                style={{
+                                  color: "#000",
+                                  textDecoration: "none",
+                                }}
+                                href={shortLink.data.link}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {shortLink.data.link.length > 50 ? (
+                                  <>
+                                    {shortLink.data.link.slice(0, 60)}
+                                    ...
+                                  </>
+                                ) : (
+                                  shortLink.data.link
+                                )}
+                              </a>
+                            </td>
+                            <td
+                              style={{
+                                paddingLeft: "1rem",
+                                paddingRight: "1rem",
+                              }}
+                            >
+                              {shortLink.data.clicks}
+                            </td>
+                            <td
+                              style={{
+                                paddingLeft: "1rem",
+                                paddingRight: "1rem",
+                              }}
+                            >
+                              <button
+                                onClick={async () => {
+                                  shortLinks.splice(
+                                    shortLinks.indexOf(shortLink),
+                                    1
+                                  );
+                                  setShortLinks([...shortLinks]);
+                                  await deleteLink(shortLink.id);
+                                }}
+                                style={{
+                                  backgroundColor: "#fff",
+                                  color: "#000",
+                                  border: "none",
+                                  padding: "0.5rem 1rem",
+                                  borderRadius: "0.5rem",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+                <div
+                  className="main__content__table__pagination"
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    marginTop: "2rem",
+                  }}
+                >
+                  <button
+                    onClick={() => {
+                      if (page > 0) {
+                        setPage(page - 1);
+                      }
+                    }}
+                    style={{
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      border: "none",
+                      padding: "0.5rem 1rem",
+                      borderRadius: "0.5rem",
+                      cursor: "pointer",
+                      opacity: page === 0 ? 0.5 : 1,
+                    }}
+                    disabled={page === 0}
+                  >
+                    Previous
+                  </button>
+                  <button
+                    style={{
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      border: "none",
+                      padding: "0.5rem 1rem",
+                      borderRadius: "0.5rem",
+                      cursor: "pointer",
+                      opacity:
+                        page >= Math.floor(shortLinks.length / rowsPerPage) - 1
+                          ? 0.5
+                          : 1,
+                    }}
+                    onClick={() => {
+                      if (
+                        page <
+                        Math.floor(shortLinks.length / rowsPerPage) - 1
+                      ) {
+                        setPage(page + 1);
+                      }
+                    }}
+                    disabled={
+                      page >= Math.floor(shortLinks.length / rowsPerPage) - 1
+                    }
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          </main>
         </div>
       </div>
     </div>

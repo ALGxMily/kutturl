@@ -17,6 +17,7 @@ import {
   Link,
   useNavigate,
 } from "react-router-dom";
+import { saveUser } from "./ShortenSystem/functions/saveToDB";
 
 export default function Landing() {
   const [user, setUser] = React.useState(null);
@@ -62,10 +63,13 @@ export default function Landing() {
   useEffect(() => {
     document.querySelector(".profileContent").style.display = "none";
     setLoadingLogin(true);
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUser(user);
-        setUserProfilePic(user.photoURL);
+        const { status, data } = await saveUser(user);
+
+        setUserProfilePic(data?.userPhoto);
+
         setLoadingLogin(false);
         document.querySelector(".profileContent").style.display = "flex";
       } else {
@@ -172,20 +176,26 @@ export default function Landing() {
   };
 
   const shortenLink = async () => {
-    const isLinkValid = (await urlShortner(link)).statusLink;
-    if (!isLinkValid) {
+    try {
+      const isLinkValid = (await urlShortner(link)).statusLink;
+      if (!isLinkValid) {
+        setLoading(false);
+        errorLink();
+        console.log("invalid link1!!");
+        return;
+      }
+      setLoading(true);
+      const newLink = await (
+        await urlShortner(link, auth.currentUser)
+      ).shortLink;
+      document.querySelector(".textInput").style.display = "none";
       setLoading(false);
-      errorLink();
-      console.log("invalid link1!!");
-      return;
+      setId(newLink);
+      setShortLink("kutturl.com/" + newLink);
+      successLink();
+    } catch (e) {
+      console.log(e);
     }
-    setLoading(true);
-    const newLink = await (await urlShortner(link, auth.currentUser)).shortLink;
-    document.querySelector(".textInput").style.display = "none";
-    setLoading(false);
-    setId(newLink);
-    setShortLink("kutturl.com/" + newLink);
-    successLink();
   };
 
   return (
