@@ -4,7 +4,7 @@ import firebase from "firebase/compat/app";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCtAs1O6uIsy-L1GYbQsRvOeao4o9oTP58",
-  authDomain: "kuturl.firebaseapp.com",
+  authDomain: process.env.NODE_ENV === "development" ? "kuturl.firebaseapp.com" : "kutturl.com", // Use custom domain in prod
   databaseURL: "https://kuturl-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "kuturl",
   storageBucket: "kuturl.appspot.com",
