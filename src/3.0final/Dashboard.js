@@ -217,7 +217,7 @@ export default function Dashboard() {
                                 target="_blank"
                                 rel="noreferrer"
                               >
-                                {`kutturl.com/${shortLink.data.key}`}
+                                {`${window.location.origin}/${shortLink.data.key}`}
                               </a>
                             </td>
                             <td
@@ -361,3 +361,9 @@ export default function Dashboard() {
     </div>
   );
 }
+
+// If you see "Firefox can’t establish a connection to the server at wss://..."
+// after login, it usually means your frontend is trying to connect to a backend
+// WebSocket server that isn't running or is unreachable. 
+// Make sure your backend server is running and accessible at the correct address/port.
+// If using a cloud IDE or codespace, check port forwarding settings.

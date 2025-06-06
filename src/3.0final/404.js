@@ -87,23 +87,13 @@ export default function NotFound() {
                 maxHeight: "50px",
                 paddingLeft: "1.5rem",
                 paddingRight: "1.5rem",
+                fontFamily: "Exo, sans-serif",
+                fontWeight: "bold",
+                cursor: "pointer",
               }}
+              onClick={() => (window.location.href = "/")}
             >
-              <a
-                href="/"
-                style={{
-                  textDecoration: "none",
-                  fontFamily: "Exo, sans-serif",
-                  fontWeight: "bold",
-                  height: "100px",
-                  border: "none",
-                  borderRadius: "10px",
-                  padding: "1rem",
-                  cursor: "pointer",
-                }}
-              >
-                Go back
-              </a>
+              Go back
             </button>
           </div>
         </div>

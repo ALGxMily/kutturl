@@ -64,6 +64,7 @@ export const RedirectURLpage = () => {
           if (doc.data().key === shortId) {
             setStatus("redirecting");
             setUrl(doc.data().link);
+            // Use the original link for redirect, not kutturl.com
             window.location.replace(doc.data().link);
           }
         });

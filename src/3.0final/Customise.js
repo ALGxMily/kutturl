@@ -35,7 +35,7 @@ export default function Customise() {
   const signIn = () => {
     setLoadingLogin(true);
     auth
-      .signInWithPopup(provider)
+      .signInWithPopup(provider) // already correct, just ensure it's not signInWithRedirect
       .catch((error) => {
         console.log(error);
         setLoadingLogin(false);
@@ -46,7 +46,6 @@ export default function Customise() {
       })
       .finally(() => {
         setLoadingLogin(false);
-
         auth.setPersistence("session");
       });
   };

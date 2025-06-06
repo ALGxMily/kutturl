@@ -36,7 +36,7 @@ export default function Landing() {
     setLoadingLogin(true);
     document.querySelector(".profileContent").style.display = "none";
     auth
-      .signInWithRedirect(provider)
+      .signInWithPopup(provider) // changed from signInWithRedirect
       .catch((error) => {
         console.log(error);
         document.querySelector(".profileContent").style.display = "flex";
@@ -191,7 +191,7 @@ export default function Landing() {
       document.querySelector(".textInput").style.display = "none";
       setLoading(false);
       setId(newLink);
-      setShortLink("kutturl.com/" + newLink);
+      setShortLink(window.location.origin + "/" + newLink);
       successLink();
     } catch (e) {
       console.log(e);
@@ -560,7 +560,7 @@ export default function Landing() {
                     document.querySelector(".textInputFinal .input").blur();
                   }}
                   onDoubleClick={() => {
-                    window.open("https://" + shortLink);
+                    window.open(shortLink);
                   }}
                 />
                 <button
@@ -578,7 +578,7 @@ export default function Landing() {
                 </button>
                 <button
                   onClick={() => {
-                    window.open("https://" + shortLink);
+                    window.open(shortLink);
                   }}
                   className="button"
                   id="openLink"
